@@ -1,19 +1,13 @@
 /**
  * ATSOL_SIM
  * elements.mobile
- * AMobile.java
+ * AATCController.java
  */
 package elements.mobile;
-
-import elements.CElementCounter;
-
 /**
  * 
- * The Mobile abstract class
+ * Dtails....
  * 
- * <li> Human </li>
- * <li> Vehicle </li>
- *  
  * 
  * <p>
  * The naming convention
@@ -29,6 +23,7 @@ import elements.CElementCounter;
  *  <li>i...... : Instance variable </li>
  *  <li>l...... : Local variable </li>
  *  <li>s...... : Static variable </li>
+ *  <li>a...... : Argument </li>
  *
  *  <li>VARIABLE_NAME : Constant variable </li>
  * </ul>
@@ -48,7 +43,7 @@ import elements.CElementCounter;
  * @author S. J. Yun
  *
  */
-public abstract class AMobile {
+public abstract class AATCController extends AHuman{
 	/*
 	================================================================
 	
@@ -56,10 +51,11 @@ public abstract class AMobile {
 	
 	================================================================
 	*/
-
-	private int iElementID = CElementCounter.getNumberOfElements();;
 	
 	
+	
+	
+	//private enum nRole{Controller,Planner,
 	/*
 	================================================================
 	
@@ -67,22 +63,6 @@ public abstract class AMobile {
 	
 	================================================================
 	 */
-	
-	/**
-	 * getID
-	 * 
-	 * Getting Object ID in Simulation
-	 * 
-	 * @date : May 9, 2017
-	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
-	 *
-	 * @version : 
-	 * May 9, 2017 : Coded by S. J. Yun.
-	 */
-	public int getElementID(){
-		return iElementID;
-		
-	}
 
 	/*
 	================================================================
