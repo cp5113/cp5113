@@ -11,10 +11,10 @@ public class Hello_World {
 		CAreaController Con3 = new CAreaController();
 		CAreaController Con4 = new CAreaController();
 		
-		System.out.println(Con1);
-		System.out.println(Con2);
-		System.out.println(Con3);
-		System.out.println(Con4);
+		System.out.println(Con1.getElementID());
+		System.out.println(Con2.getElementID());
+		System.out.println(Con3.getElementID());
+		System.out.println(Con4.getElementID());
 		
 	}
 

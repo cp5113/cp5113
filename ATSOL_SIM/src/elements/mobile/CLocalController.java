@@ -1,7 +1,7 @@
 /**
  * ATSOL_SIM
  * elements.mobile
- * CAreaController.java
+ * CLocalController.java
  */
 package elements.mobile;
 /**
@@ -24,6 +24,7 @@ package elements.mobile;
  *  <li>l...... : Local variable </li>
  *  <li>s...... : Static variable </li>
  *  <li>a...... : Argument </li>
+ *  <li>n...... : ENUM </li>
  *
  *  <li>VARIABLE_NAME : Constant variable </li>
  * </ul>
@@ -43,9 +44,7 @@ package elements.mobile;
  * @author S. J. Yun
  *
  */
-public class CAreaController extends AATCController implements IATCController{
-
-
+public class CLocalController extends AATCController implements IATCController{
 	/*
 	================================================================
 	
@@ -69,6 +68,7 @@ public class CAreaController extends AATCController implements IATCController{
 		// TODO Auto-generated method stub
 		
 	}
+
 	/*
 	================================================================
 	

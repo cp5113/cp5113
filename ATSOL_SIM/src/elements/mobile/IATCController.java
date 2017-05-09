@@ -1,7 +1,7 @@
 /**
  * ATSOL_SIM
  * elements.mobile
- * CAreaController.java
+ * IATCController.java
  */
 package elements.mobile;
 /**
@@ -24,6 +24,7 @@ package elements.mobile;
  *  <li>l...... : Local variable </li>
  *  <li>s...... : Static variable </li>
  *  <li>a...... : Argument </li>
+ *  <li>n...... : ENUM </li>
  *
  *  <li>VARIABLE_NAME : Constant variable </li>
  * </ul>
@@ -43,9 +44,7 @@ package elements.mobile;
  * @author S. J. Yun
  *
  */
-public class CAreaController extends AATCController implements IATCController{
-
-
+public interface IATCController {
 	/*
 	================================================================
 	
@@ -61,14 +60,20 @@ public class CAreaController extends AATCController implements IATCController{
 	
 	================================================================
 	 */
-	/** (non-Javadoc)
-	 * @see elements.mobile.IATCController#controlAircraft()
+	
+	/**
+	 * controlAircraft
+	 * 
+	 * Make controller work
+	 * 
+	 * @date : May 9, 2017
+	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
+	 *
+	 * @version : 
+	 * May 9, 2017 : Coded by S. J. Yun.
 	 */
-	@Override
-	public void controlAircraft() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void controlAircraft();
+	
 	/*
 	================================================================
 	
@@ -84,6 +89,7 @@ public class CAreaController extends AATCController implements IATCController{
 	
 	================================================================
 	 */
+
 }
 
 
