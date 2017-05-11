@@ -1,18 +1,13 @@
 /**
  * ATSOL_SIM
- * elements.mobile
- * AMobile.java
+ * elements
+ * AElement.java
  */
 package elements.mobile;
-
-
 /**
  * 
- * The Mobile abstract class
+ * Dtails....
  * 
- * <li> Human </li>
- * <li> Vehicle </li>
- *  
  * 
  * <p>
  * The naming convention
@@ -47,7 +42,7 @@ package elements.mobile;
  * @author S. J. Yun
  *
  */
-public abstract class AMobile {
+public class CElementMobileCounter {
 	/*
 	================================================================
 	
@@ -55,10 +50,7 @@ public abstract class AMobile {
 	
 	================================================================
 	*/
-
-	private int iElementID = CElementMobileCounter.getNumberOfElements();;
-	
-	
+	private static int iNumberOfElements = 0;
 	/*
 	================================================================
 	
@@ -66,11 +58,13 @@ public abstract class AMobile {
 	
 	================================================================
 	 */
-	
+
 	/**
-	 * getID
+	 * getiNumberOfElements
 	 * 
-	 * Getting Object ID in Simulation
+	 * Do What
+	 * 
+	 * @return iNumberOfElements int
 	 * 
 	 * @date : May 9, 2017
 	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
@@ -78,11 +72,29 @@ public abstract class AMobile {
 	 * @version : 
 	 * May 9, 2017 : Coded by S. J. Yun.
 	 */
-	public int getElementID(){
-		return iElementID;
-		
+	public static int getNumberOfElements() {
+		return iNumberOfElements++;
 	}
 
+	/**
+	 * setiNumberOfElements
+	 * 
+	 * Do What
+	 * 
+	 * @param aINumberOfElements the iNumberOfElements to set
+	 * 
+	 * @date : May 9, 2017
+	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
+	 *
+	 * @version : 
+	 * May 9, 2017 : Coded by S. J. Yun.
+	 */
+	@SuppressWarnings("unused")
+	private static void setNumberOfElements(int aINumberOfElements) {
+		iNumberOfElements = aINumberOfElements;
+	}
+	
+	
 	/*
 	================================================================
 	

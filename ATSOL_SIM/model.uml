@@ -1,6 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:PapyrusJava="http://www.eclipse.org/papyrus/PapyrusJava/1" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">
   <uml:Model xmi:id="_i3GxADVMEeeqerMD01nGgA" name="RootElement">
+    <packageImport xmi:type="uml:PackageImport" xmi:id="_vM8i8DVlEeeqerMD01nGgA">
+      <importedPackage xmi:type="uml:Profile" href="pathmap://PAPYRUS_ACTIONLANGUAGE_PROFILE/ActionLanguage-Profile.profile.uml#ActionLanguage"/>
+    </packageImport>
+    <packageImport xmi:type="uml:PackageImport" xmi:id="_vi7aADVlEeeqerMD01nGgA">
+      <importedPackage xmi:type="uml:Profile" href="pathmap://UML_PROFILES/Ecore.profile.uml#_0"/>
+    </packageImport>
+    <packageImport xmi:type="uml:PackageImport" xmi:id="_v2daADVlEeeqerMD01nGgA">
+      <importedPackage xmi:type="uml:Profile" href="pathmap://OCL_PROFILES/OCLforUML.profile.uml#_0"/>
+    </packageImport>
+    <packageImport xmi:type="uml:PackageImport" xmi:id="_wCMI4DVlEeeqerMD01nGgA">
+      <importedPackage xmi:type="uml:Profile" href="pathmap://Codegen_PROFILES/Codegen.profile.uml#_fPDsIBa-EearhdjjJ6cVzQ"/>
+    </packageImport>
+    <packageImport xmi:type="uml:PackageImport" xmi:id="_wUjrQDVlEeeqerMD01nGgA">
+      <importedPackage xmi:type="uml:Profile" href="pathmap://PAPYRUS_INTERNAL_PROFILES/PapyrusInternal.profile.uml#_dL4lkPXAEeGSQON-DQ-5eg"/>
+    </packageImport>
+    <packageImport xmi:type="uml:PackageImport" xmi:id="_wUjrQTVlEeeqerMD01nGgA">
+      <importedPackage xmi:type="uml:Profile" href="pathmap://PAPYRUS_INTERNAL_PROFILES/PapyrusInternal.profile.uml#_16oYAD-SEeKj6r7ThQagKA"/>
+    </packageImport>
+    <packageImport xmi:type="uml:PackageImport" xmi:id="_wjbNsDVlEeeqerMD01nGgA">
+      <importedPackage xmi:type="uml:Profile" href="pathmap://PapyrusJava_PROFILES/PapyrusJava.profile.uml#_j9REUByGEduN1bTiWJ0lyw"/>
+    </packageImport>
+    <packageImport xmi:type="uml:PackageImport" xmi:id="_wx02EDVlEeeqerMD01nGgA">
+      <importedPackage xmi:type="uml:Profile" href="pathmap://UML_PROFILES/Standard.profile.uml#_0"/>
+    </packageImport>
+    <packageImport xmi:type="uml:PackageImport" xmi:id="_xAFUgDVlEeeqerMD01nGgA">
+      <importedPackage xmi:type="uml:Profile" href="pathmap://PAPYRUS_BACKUP_PROFILE/backup-profile.profile.uml#_74TbUKFzEeS_KNX0nfvIVQ"/>
+    </packageImport>
     <packagedElement xmi:type="uml:Package" xmi:id="_w3oFcDVMEeeqerMD01nGgA" name="ATSOL_SIM">
       <packagedElement xmi:type="uml:Package" xmi:id="_yNE4oDVQEeeqerMD01nGgA" name="elements">
         <packagedElement xmi:type="uml:Package" xmi:id="_yNHU4DVQEeeqerMD01nGgA" name="mobile">
@@ -174,20 +201,6 @@
             <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_oyyTADVREeeqerMD01nGgA" name="MALE"/>
             <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_oyyTATVREeeqerMD01nGgA" name="FEMALE"/>
           </packagedElement>
-          <packagedElement xmi:type="uml:Class" xmi:id="_yNa24DVQEeeqerMD01nGgA" name="CApproachController" visibility="public">
-            <generalization xmi:type="uml:Generalization" xmi:id="_yNa24TVQEeeqerMD01nGgA" general="_yNIjADVQEeeqerMD01nGgA"/>
-            <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_yNa24zVQEeeqerMD01nGgA" name="CApproachController implements IATCController" client="_yNa24DVQEeeqerMD01nGgA" supplier="_yNa24jVQEeeqerMD01nGgA" contract="_yNa24jVQEeeqerMD01nGgA"/>
-            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_yNa25TVQEeeqerMD01nGgA" name="controlAircraft" specification="_yNa25DVQEeeqerMD01nGgA">
-              <language>JAVA</language>
-              <body>&#xD;
-// TODO Auto-generated method stub&#xD;
-</body>
-            </ownedBehavior>
-            <ownedOperation xmi:type="uml:Operation" xmi:id="_yNa25DVQEeeqerMD01nGgA" name="controlAircraft" visibility="public" method="_yNa25TVQEeeqerMD01nGgA"/>
-          </packagedElement>
-          <packagedElement xmi:type="uml:Interface" xmi:id="_yNa24jVQEeeqerMD01nGgA" name="IATCController" visibility="public">
-            <ownedOperation xmi:type="uml:Operation" xmi:id="_yNgWcDVQEeeqerMD01nGgA" name="controlAircraft" visibility="public"/>
-          </packagedElement>
           <packagedElement xmi:type="uml:Class" xmi:id="_yNcsEDVQEeeqerMD01nGgA" name="CAreaController" visibility="public">
             <generalization xmi:type="uml:Generalization" xmi:id="_yNcsETVQEeeqerMD01nGgA" general="_yNIjADVQEeeqerMD01nGgA"/>
             <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_yNcsEjVQEeeqerMD01nGgA" name="CAreaController implements IATCController" client="_yNcsEDVQEeeqerMD01nGgA" supplier="_yNa24jVQEeeqerMD01nGgA" contract="_yNa24jVQEeeqerMD01nGgA"/>
@@ -210,6 +223,20 @@
             </ownedBehavior>
             <ownedOperation xmi:type="uml:Operation" xmi:id="_yNehQjVQEeeqerMD01nGgA" name="controlAircraft" visibility="public" method="_yNehQzVQEeeqerMD01nGgA"/>
           </packagedElement>
+          <packagedElement xmi:type="uml:Interface" xmi:id="_yNa24jVQEeeqerMD01nGgA" name="IATCController" visibility="public" isAbstract="true">
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_yNgWcDVQEeeqerMD01nGgA" name="controlAircraft" visibility="public"/>
+          </packagedElement>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Class" xmi:id="_yNa24DVQEeeqerMD01nGgA" name="CApproachController" visibility="public">
+          <generalization xmi:type="uml:Generalization" xmi:id="_yNa24TVQEeeqerMD01nGgA" general="_yNIjADVQEeeqerMD01nGgA"/>
+          <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_yNa24zVQEeeqerMD01nGgA" name="CApproachController implements IATCController" client="_yNa24DVQEeeqerMD01nGgA" supplier="_yNa24jVQEeeqerMD01nGgA" contract="_yNa24jVQEeeqerMD01nGgA"/>
+          <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_yNa25TVQEeeqerMD01nGgA" name="controlAircraft" specification="_yNa25DVQEeeqerMD01nGgA">
+            <language>JAVA</language>
+            <body>&#xD;
+// TODO Auto-generated method stub&#xD;
+</body>
+          </ownedBehavior>
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_yNa25DVQEeeqerMD01nGgA" name="controlAircraft" visibility="public" method="_yNa25TVQEeeqerMD01nGgA"/>
         </packagedElement>
       </packagedElement>
     </packagedElement>
@@ -231,6 +258,7 @@
         </eAnnotations>
       </node>
     </packagedElement>
+    <packagedElement xmi:type="uml:Interaction" xmi:id="_axKGIDVjEeeqerMD01nGgA" name="Interaction1"/>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_slRfcDVMEeeqerMD01nGgA">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_slVw4DVMEeeqerMD01nGgA" source="http://www.eclipse.org/uml2/2.0.0/UML">
         <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/PapyrusJava/1#/"/>

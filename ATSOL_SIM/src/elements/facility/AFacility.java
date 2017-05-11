@@ -1,18 +1,13 @@
 /**
  * ATSOL_SIM
- * elements.mobile
- * AMobile.java
+ * elements.facility
+ * AFacility.java
  */
-package elements.mobile;
-
-
+package elements.facility;
 /**
  * 
- * The Mobile abstract class
+ * Dtails....
  * 
- * <li> Human </li>
- * <li> Vehicle </li>
- *  
  * 
  * <p>
  * The naming convention
@@ -28,17 +23,19 @@ package elements.mobile;
  *  <li>i...... : Instance variable </li>
  *  <li>l...... : Local variable </li>
  *  <li>s...... : Static variable </li>
+ *  <li>a...... : Argument </li>
+ *  <li>n...... : ENUM </li>
  *
  *  <li>VARIABLE_NAME : Constant variable </li>
  * </ul>
  * </p>
  * 
  * 
- * @date : May 9, 2017
+ * @date : May 10, 2017
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * May 9, 2017 : Coded by S. J. Yun.
+ * May 10, 2017 : Coded by S. J. Yun.
  *
  *
  */
@@ -47,7 +44,7 @@ package elements.mobile;
  * @author S. J. Yun
  *
  */
-public abstract class AMobile {
+abstract public class AFacility {
 	/*
 	================================================================
 	
@@ -55,10 +52,8 @@ public abstract class AMobile {
 	
 	================================================================
 	*/
-
-	private int iElementID = CElementMobileCounter.getNumberOfElements();;
-	
-	
+	private	String 			iName;
+	private	int				iFacilityID = CElementFacilityCounter.getNumberOfElements();				
 	/*
 	================================================================
 	
@@ -66,23 +61,9 @@ public abstract class AMobile {
 	
 	================================================================
 	 */
-	
-	/**
-	 * getID
-	 * 
-	 * Getting Object ID in Simulation
-	 * 
-	 * @date : May 9, 2017
-	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
-	 *
-	 * @version : 
-	 * May 9, 2017 : Coded by S. J. Yun.
-	 */
-	public int getElementID(){
-		return iElementID;
-		
+	public AFacility(){
+		iFacilityID += 1; 
 	}
-
 	/*
 	================================================================
 	
@@ -90,6 +71,10 @@ public abstract class AMobile {
 	
 	================================================================
 	 */
+	
+	public int getFacilityID(){
+		return iFacilityID;
+	}
 
 	/*
 	================================================================

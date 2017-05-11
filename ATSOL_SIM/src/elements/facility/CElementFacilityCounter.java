@@ -3,7 +3,7 @@
  * elements
  * AElement.java
  */
-package elements;
+package elements.facility;
 /**
  * 
  * Dtails....
@@ -42,7 +42,7 @@ package elements;
  * @author S. J. Yun
  *
  */
-public class CElementCounter {
+public class CElementFacilityCounter {
 	/*
 	================================================================
 	
@@ -89,6 +89,7 @@ public class CElementCounter {
 	 * @version : 
 	 * May 9, 2017 : Coded by S. J. Yun.
 	 */
+	@SuppressWarnings("unused")
 	private static void setNumberOfElements(int aINumberOfElements) {
 		iNumberOfElements = aINumberOfElements;
 	}
