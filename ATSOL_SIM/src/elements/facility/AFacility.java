@@ -40,22 +40,22 @@ package elements.facility;
  *
  */
 
+import elements.AElement;
+
 /**
  * @author S. J. Yun
  *
  */
-abstract public class AFacility {
+abstract public class AFacility extends AElement{
 	/*
 	================================================================
 	
 			           Initializing Section
 	
 	================================================================
-	*/
-	private			String 			iName;
+	*/	
 	private	static	int				iFacilityCount 		= 0;
-	private			int				iFacilityID			= getFacilityCount()	;
-	
+		
 	
 	public AFacility(){
 		iFacilityCount++;
@@ -72,10 +72,7 @@ abstract public class AFacility {
 		return iFacilityCount;
 	}
 	 
-	public int getFacilityID(){
-		return iFacilityID;
-	}
-
+	
 	/*
 	================================================================
 	

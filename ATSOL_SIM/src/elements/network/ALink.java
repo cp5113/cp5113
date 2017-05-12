@@ -1,9 +1,9 @@
 /**
  * ATSOL_SIM
  * network
- * ANode.java
+ * ALink.java
  */
-package network;
+package elements.network;
 /**
  * 
  * Dtails....
@@ -40,11 +40,13 @@ package network;
  *
  */
 
+import java.util.ArrayList;
+
 /**
  * @author S. J. Yun
  *
  */
-public abstract class ANode {
+public abstract class ALink  {
 	/*
 	================================================================
 
@@ -52,16 +54,20 @@ public abstract class ANode {
 
 	================================================================
 	 */
-	
-	private	String			iName;
-	private int				iID;
-	
-	private boolean			iIsOccuping	=	false;
-	
-	
-	private	final	int		iCapacity	= 1;
-	
 
+	private boolean					iIsOccuping	=	false;
+	
+	
+	private int						iCapacity	=	Integer.MAX_VALUE;
+	
+	private ANode					iOrigin,iDestination;
+	private ArrayList<ALink>		iAdjacentLink = new ArrayList<ALink>();
+	private	double					iDistance	=	0.0;
+	
+	
+	
+	
+	
 	/*
 	================================================================
 

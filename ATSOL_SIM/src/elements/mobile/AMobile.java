@@ -5,6 +5,7 @@
  */
 package elements.mobile;
 
+import elements.AElement;
 
 /**
  * 
@@ -47,7 +48,7 @@ package elements.mobile;
  * @author S. J. Yun
  *
  */
-public abstract class AMobile {
+public abstract class AMobile extends AElement{
 	/*
 	================================================================
 	
@@ -56,8 +57,7 @@ public abstract class AMobile {
 	================================================================
 	*/	
 	private	static	int		iMobileCount 		= 0;
-	private			int		iMobileID			= getMobileCount()	;
-	
+		
 	public AMobile(){
 		iMobileCount++;
 	}
@@ -75,21 +75,7 @@ public abstract class AMobile {
 	}
 	
 	
-	/**
-	 * getID
-	 * 
-	 * Getting Object ID in Simulation
-	 * 
-	 * @date : May 9, 2017
-	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
-	 *
-	 * @version : 
-	 * May 9, 2017 : Coded by S. J. Yun.
-	 */
-	public int getMobileID(){
-		return iMobileID;
-		
-	}
+	
 
 	/*
 	================================================================

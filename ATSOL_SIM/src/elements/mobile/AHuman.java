@@ -51,7 +51,7 @@ public abstract class AHuman extends AMobile{
 	
 	================================================================
 	*/
-	private String 		iName;
+	
 	private int			iAge;
 	private int			iExperienceDay;
 	
@@ -66,22 +66,6 @@ public abstract class AHuman extends AMobile{
 	
 	================================================================
 	 */
-	/**
-	 * getName
-	 * 
-	 * Do What
-	 * 
-	 * @return iName String
-	 * 
-	 * @date : May 9, 2017
-	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
-	 *
-	 * @version : 
-	 * May 9, 2017 : Coded by S. J. Yun.
-	 */
-	public String getName() {
-		return iName;
-	}
 
 	/**
 	 * getAge
@@ -135,22 +119,6 @@ public abstract class AHuman extends AMobile{
 		return nSkill;
 	}
 	
-	/**
-	 * setName
-	 * 
-	 * Do What
-	 * 
-	 * @param aIName the iName to set
-	 * 
-	 * @date : May 9, 2017
-	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
-	 *
-	 * @version : 
-	 * May 9, 2017 : Coded by S. J. Yun.
-	 */
-	public void setName(String aIName) {
-		iName = aIName;
-	}
 
 	
 	/**
