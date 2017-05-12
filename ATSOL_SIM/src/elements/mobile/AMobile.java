@@ -54,10 +54,13 @@ public abstract class AMobile {
 			           Initializing Section
 	
 	================================================================
-	*/
-
-	private int iElementID = CElementMobileCounter.getNumberOfElements();;
+	*/	
+	private	static	int		iMobileCount 		= 0;
+	private			int		iMobileID			= getMobileCount()	;
 	
+	public AMobile(){
+		iMobileCount++;
+	}
 	
 	/*
 	================================================================
@@ -66,6 +69,11 @@ public abstract class AMobile {
 	
 	================================================================
 	 */
+	
+	public int getMobileCount(){		
+		return iMobileCount;
+	}
+	
 	
 	/**
 	 * getID
@@ -78,8 +86,8 @@ public abstract class AMobile {
 	 * @version : 
 	 * May 9, 2017 : Coded by S. J. Yun.
 	 */
-	public int getElementID(){
-		return iElementID;
+	public int getMobileID(){
+		return iMobileID;
 		
 	}
 

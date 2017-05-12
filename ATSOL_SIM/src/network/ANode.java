@@ -1,9 +1,9 @@
 /**
  * ATSOL_SIM
- * elements
- * AElement.java
+ * network
+ * ANode.java
  */
-package elements.facility;
+package network;
 /**
  * 
  * Dtails....
@@ -23,17 +23,19 @@ package elements.facility;
  *  <li>i...... : Instance variable </li>
  *  <li>l...... : Local variable </li>
  *  <li>s...... : Static variable </li>
+ *  <li>a...... : Argument </li>
+ *  <li>n...... : ENUM </li>
  *
  *  <li>VARIABLE_NAME : Constant variable </li>
  * </ul>
  * </p>
  * 
  * 
- * @date : May 9, 2017
+ * @date : May 11, 2017
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * May 9, 2017 : Coded by S. J. Yun.
+ * May 11, 2017 : Coded by S. J. Yun.
  *
  *
  */
@@ -42,72 +44,45 @@ package elements.facility;
  * @author S. J. Yun
  *
  */
-public class CElementFacilityCounter {
+public abstract class ANode {
 	/*
 	================================================================
-	
+
 			           Initializing Section
-	
+
 	================================================================
-	*/
-	private static int iNumberOfElements = 0;
+	 */
+	
+	private	String			iName;
+	private int				iID;
+	
+	private boolean			iIsOccuping	=	false;
+	
+	
+	private	final	int		iCapacity	= 1;
+	
+
 	/*
 	================================================================
-	
+
 						Methods Section
-	
+
 	================================================================
 	 */
 
-	/**
-	 * getiNumberOfElements
-	 * 
-	 * Do What
-	 * 
-	 * @return iNumberOfElements int
-	 * 
-	 * @date : May 9, 2017
-	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
-	 *
-	 * @version : 
-	 * May 9, 2017 : Coded by S. J. Yun.
-	 */
-	public static int getNumberOfElements() {
-		return iNumberOfElements++;
-	}
-
-	/**
-	 * setiNumberOfElements
-	 * 
-	 * Do What
-	 * 
-	 * @param aINumberOfElements the iNumberOfElements to set
-	 * 
-	 * @date : May 9, 2017
-	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
-	 *
-	 * @version : 
-	 * May 9, 2017 : Coded by S. J. Yun.
-	 */
-	@SuppressWarnings("unused")
-	private static void setNumberOfElements(int aINumberOfElements) {
-		iNumberOfElements = aINumberOfElements;
-	}
-	
-	
 	/*
 	================================================================
-	
+
 						Listeners Section
-	
+
 	================================================================
 	 */
 
 	/*
 	================================================================
-	
+
 							The Others
-	
+
 	================================================================
 	 */
 }

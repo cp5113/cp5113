@@ -52,8 +52,15 @@ abstract public class AFacility {
 	
 	================================================================
 	*/
-	private	String 			iName;
-	private	int				iFacilityID = CElementFacilityCounter.getNumberOfElements();				
+	private			String 			iName;
+	private	static	int				iFacilityCount 		= 0;
+	private			int				iFacilityID			= getFacilityCount()	;
+	
+	
+	public AFacility(){
+		iFacilityCount++;
+	}
+	
 	/*
 	================================================================
 	
@@ -61,9 +68,14 @@ abstract public class AFacility {
 	
 	================================================================
 	 */
-	public AFacility(){
-		iFacilityID += 1; 
+	public int getFacilityCount(){		
+		return iFacilityCount;
 	}
+	 
+	public int getFacilityID(){
+		return iFacilityID;
+	}
+
 	/*
 	================================================================
 	
@@ -72,9 +84,6 @@ abstract public class AFacility {
 	================================================================
 	 */
 	
-	public int getFacilityID(){
-		return iFacilityID;
-	}
 
 	/*
 	================================================================
