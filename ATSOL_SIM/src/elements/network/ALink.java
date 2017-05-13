@@ -42,11 +42,14 @@ package elements.network;
 
 import java.util.ArrayList;
 
+import elements.AElement;
+import elements.util.geo.CDegree;
+
 /**
  * @author S. J. Yun
  *
  */
-public abstract class ALink  {
+public abstract class ALink extends AElement {
 	/*
 	================================================================
 
@@ -59,11 +62,13 @@ public abstract class ALink  {
 	
 	
 	private int						iCapacity	=	Integer.MAX_VALUE;
+		
 	
 	private ANode					iOrigin,iDestination;
 	private ArrayList<ALink>		iAdjacentLink = new ArrayList<ALink>();
 	private	double					iDistance	=	0.0;
-	
+	private CDegree					iDegree;
+	private CDegree					iOppositeDegree;
 	
 	
 	
@@ -75,7 +80,7 @@ public abstract class ALink  {
 
 	================================================================
 	 */
-
+	
 	/*
 	================================================================
 

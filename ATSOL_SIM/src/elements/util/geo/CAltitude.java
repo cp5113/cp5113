@@ -1,9 +1,9 @@
 /**
  * ATSOL_SIM
- * elements.mobile
- * IATCController.java
+ * elements.util.geo
+ * CAltitude.java
  */
-package elements.mobile;
+package elements.util.geo;
 /**
  * 
  * Dtails....
@@ -31,11 +31,11 @@ package elements.mobile;
  * </p>
  * 
  * 
- * @date : May 9, 2017
+ * @date : May 12, 2017
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * May 9, 2017 : Coded by S. J. Yun.
+ * May 12, 2017 : Coded by S. J. Yun.
  *
  *
  */
@@ -44,7 +44,7 @@ package elements.mobile;
  * @author S. J. Yun
  *
  */
-public interface IATCController {
+public class CAltitude {
 	/*
 	================================================================
 	
@@ -52,7 +52,12 @@ public interface IATCController {
 	
 	================================================================
 	*/
+	private	double 	iAltitude;
+	
+	private EUnit	iUnit	= EUnit.FEET;
 
+
+	
 	/*
 	================================================================
 	
@@ -60,20 +65,73 @@ public interface IATCController {
 	
 	================================================================
 	 */
-	
 	/**
-	 * controlAircraft
+	 * getiAltitude
 	 * 
-	 * Make controller work
+	 * Do What
 	 * 
-	 * @date : May 9, 2017
+	 * @return iAltitude double
+	 * 
+	 * @date : May 12, 2017
 	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
 	 *
 	 * @version : 
-	 * May 9, 2017 : Coded by S. J. Yun.
+	 * May 12, 2017 : Coded by S. J. Yun.
 	 */
-	public void controlAircraft();
-	
+	public double getAltitude() {
+		return iAltitude;
+	}
+
+	/**
+	 * getiUnit
+	 * 
+	 * Do What
+	 * 
+	 * @return iUnit EUnit
+	 * 
+	 * @date : May 12, 2017
+	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
+	 *
+	 * @version : 
+	 * May 12, 2017 : Coded by S. J. Yun.
+	 */
+	public EUnit getUnit() {
+		return iUnit;
+	}
+
+	/**
+	 * setiAltitude
+	 * 
+	 * Do What
+	 * 
+	 * @param aIAltitude the iAltitude to set
+	 * 
+	 * @date : May 12, 2017
+	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
+	 *
+	 * @version : 
+	 * May 12, 2017 : Coded by S. J. Yun.
+	 */
+	public synchronized void setAltitude(double aIAltitude) {
+		iAltitude = aIAltitude;
+	}
+
+	/**
+	 * setiUnit
+	 * 
+	 * Do What
+	 * 
+	 * @param aIUnit the iUnit to set
+	 * 
+	 * @date : May 12, 2017
+	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
+	 *
+	 * @version : 
+	 * May 12, 2017 : Coded by S. J. Yun.
+	 */
+	public void setUnit(EUnit aIUnit) {
+		iUnit = aIUnit;
+	}
 	/*
 	================================================================
 	
@@ -89,7 +147,6 @@ public interface IATCController {
 	
 	================================================================
 	 */
-
 }
 
 

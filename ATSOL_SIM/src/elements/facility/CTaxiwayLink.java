@@ -1,7 +1,7 @@
 /**
  * ATSOL_SIM
  * elements.facility
- * AFacility.java
+ * CTaxiwayLink.java
  */
 package elements.facility;
 /**
@@ -31,42 +31,30 @@ package elements.facility;
  * </p>
  * 
  * 
- * @date : May 10, 2017
+ * @date : May 12, 2017
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * May 10, 2017 : Coded by S. J. Yun.
+ * May 12, 2017 : Coded by S. J. Yun.
  *
  *
  */
 
-import elements.AElement;
+import elements.network.ALink;
 
 /**
  * @author S. J. Yun
  *
  */
-abstract public class AFacility extends AElement{
+public class CTaxiwayLink extends ALink{
 	/*
 	================================================================
 	
 			           Initializing Section
 	
 	================================================================
-	*/	
-	
-	private	static	int				iFacilityCount 		= 0;
-	
-	
-	private ELocation				iLocation;		
-	
-	
-	
-	public AFacility(){
-		
-		iFacilityCount++;
-	}
-	
+	*/
+
 	/*
 	================================================================
 	
@@ -74,14 +62,7 @@ abstract public class AFacility extends AElement{
 	
 	================================================================
 	 */
-	public int getFacilityCount(){		
-		return iFacilityCount;
-	}
-	
-	public ELocation getLocation(){		
-		return iLocation;
-	}
-	
+
 	/*
 	================================================================
 	
@@ -89,7 +70,6 @@ abstract public class AFacility extends AElement{
 	
 	================================================================
 	 */
-	
 
 	/*
 	================================================================

@@ -1,9 +1,9 @@
 /**
  * ATSOL_SIM
- * elements.mobile
- * CGroundController.java
+ * elements.facility
+ * CTaxiwayNode.java
  */
-package elements.mobile;
+package elements.facility;
 /**
  * 
  * Dtails....
@@ -31,29 +31,41 @@ package elements.mobile;
  * </p>
  * 
  * 
- * @date : May 10, 2017
+ * @date : May 12, 2017
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * May 10, 2017 : Coded by S. J. Yun.
+ * May 12, 2017 : Coded by S. J. Yun.
  *
  *
  */
+
+import elements.network.ANode;
+import elements.util.geo.CCoordination;
 
 /**
  * @author S. J. Yun
  *
  */
-public class CGroundController extends AATCController implements IATCController {
+public class CTaxiwayNode extends ANode{
 
-	/** (non-Javadoc)
-	 * @see elements.mobile.IATCController#controlAircraft()
+	/**
+	 * The Constructor
+	 * 
+	 * Do What
+	 * 
+	 * @date : May 12, 2017
+	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
+	 *
+	 * @version : 
+	 * May 12, 2017 : Coded by S. J. Yun.
 	 */
-	@Override
-	public void controlAircraft() {
-		// TODO Auto-generated method stub
-		
+	public CTaxiwayNode(String aIName, CCoordination aAiCoordination) {
+		super(aIName, aAiCoordination);
+		// TODO Auto-generated constructor stub
 	}
+
+
 	/*
 	================================================================
 	

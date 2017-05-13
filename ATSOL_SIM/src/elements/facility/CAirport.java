@@ -1,9 +1,9 @@
 /**
  * ATSOL_SIM
- * network
- * ANode.java
+ * elements.facility
+ * CAirport.java
  */
-package elements.network;
+package elements.facility;
 /**
  * 
  * Dtails....
@@ -31,108 +31,88 @@ package elements.network;
  * </p>
  * 
  * 
- * @date : May 11, 2017
+ * @date : May 12, 2017
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * May 11, 2017 : Coded by S. J. Yun.
+ * May 12, 2017 : Coded by S. J. Yun.
  *
  *
  */
 
 import java.util.ArrayList;
 
-import elements.AElement;
+import elements.mobile.human.CGroundController;
+import elements.mobile.human.CLocalController;
 import elements.util.geo.CAltitude;
 import elements.util.geo.CCoordination;
+import elements.util.geo.CDegree;
 
 /**
  * @author S. J. Yun
  *
  */
-public abstract class ANode extends AElement{
+public class CAirport extends AFacility {
 	/*
 	================================================================
-
+	
 			           Initializing Section
-
+	
 	================================================================
-	 */
-	
-	private boolean					iIsOccuping	=	false;
+	*/
 	
 	
-	private	final	int				CAPACITY	= 1;
+	// Basic Information Group
+	private ELocation  		iLocation	= ELocation.GROUND;
 	
-	private CAltitude				iAltitude;
-	private CCoordination			iCoordination;
-	private ArrayList<ANode>		iAdjacentNode = new ArrayList<ANode>();
+	private String			iOwner;
+	
+	private String			iAirportICAO; //4 letters
+	private String			iAirportIATA; //3 letters
+	
+	private	CCoordination	iARP;
+	private CAltitude		iElevation;
+	private CDegree			iVariation;
 	
 	
+	// "Has" Relationship - Facilities and Network
 	
+	private ArrayList<CRunway>						iRunwayList 		= new ArrayList<CRunway>();
+	private ArrayList<CTaxiwayLink> 				iTaxiwayLinkList	= new ArrayList<CTaxiwayLink>();
+	private ArrayList<CTaxiwayNode> 				iTaxiwayNodeList 	= new ArrayList<CTaxiwayNode>();
+	private ArrayList<CGate> 						iGateList		 	= new ArrayList<CGate>();
+	private ArrayList<CApron>	 					iApronList		 	= new ArrayList<CApron>();
 	
-	/**
-	 * The Constructor
-	 * 
-	 * Do What
-	 * 
-	 * @date : May 12, 2017
-	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
-	 *
-	 * @version : 
-	 * May 12, 2017 : Coded by S. J. Yun.
-	 */
-	public ANode(String aIName, CCoordination aiCoordination) {
-		setName(aIName);		
-		iCoordination = aiCoordination;
-	}
+	// "Has" Relationship - Operator
+	private ArrayList<CLocalController>	 			iLocalControllerList		 = new ArrayList<CLocalController>();
+	private ArrayList<CGroundController> 			iGroundControllerList		 = new ArrayList<CGroundController>();
 
-
-
-	/**
-	 * The Constructor
-	 * 
-	 * Do What
-	 * 
-	 * @date : May 12, 2017
-	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
-	 *
-	 * @version : 
-	 * May 12, 2017 : Coded by S. J. Yun.
-	 */
-	public ANode(String aIName, double aXCoordination, double aYCoordination) {
-		super();
-		super.setName(aIName);	
-		iCoordination = new CCoordination(aXCoordination, aYCoordination);
-		
-	}
 	
-
+	
+	
+	
+	
 	/*
 	================================================================
-
+	
 						Methods Section
-
+	
 	================================================================
 	 */
-	
 
-
-	
-	
 	/*
 	================================================================
-
+	
 						Listeners Section
-
+	
 	================================================================
 	 */
 
 	/*
 	================================================================
-
+	
 							The Others
-
+	
 	================================================================
 	 */
 }

@@ -1,9 +1,9 @@
 /**
  * ATSOL_SIM
- * elements.facility
- * AFacility.java
+ * elements.mobile
+ * CGroundController.java
  */
-package elements.facility;
+package elements.mobile.human;
 /**
  * 
  * Dtails....
@@ -40,33 +40,28 @@ package elements.facility;
  *
  */
 
-import elements.AElement;
-
 /**
  * @author S. J. Yun
  *
  */
-abstract public class AFacility extends AElement{
+public class CGroundController extends AATCController implements IATCController {
+
+	/** (non-Javadoc)
+	 * @see elements.mobile.human.IATCController#controlAircraft()
+	 */
+	@Override
+	public void controlAircraft() {
+		// TODO Auto-generated method stub
+		
+	}
 	/*
 	================================================================
 	
 			           Initializing Section
 	
 	================================================================
-	*/	
-	
-	private	static	int				iFacilityCount 		= 0;
-	
-	
-	private ELocation				iLocation;		
-	
-	
-	
-	public AFacility(){
-		
-		iFacilityCount++;
-	}
-	
+	*/
+
 	/*
 	================================================================
 	
@@ -74,14 +69,7 @@ abstract public class AFacility extends AElement{
 	
 	================================================================
 	 */
-	public int getFacilityCount(){		
-		return iFacilityCount;
-	}
-	
-	public ELocation getLocation(){		
-		return iLocation;
-	}
-	
+
 	/*
 	================================================================
 	
@@ -89,7 +77,6 @@ abstract public class AFacility extends AElement{
 	
 	================================================================
 	 */
-	
 
 	/*
 	================================================================

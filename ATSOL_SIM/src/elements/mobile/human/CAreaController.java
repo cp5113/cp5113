@@ -3,7 +3,7 @@
  * elements.mobile
  * CAreaController.java
  */
-package elements.mobile;
+package elements.mobile.human;
 /**
  * 
  * Dtails....
@@ -62,7 +62,7 @@ public class CAreaController extends AATCController implements IATCController{
 	================================================================
 	 */
 	/** (non-Javadoc)
-	 * @see elements.mobile.IATCController#controlAircraft()
+	 * @see elements.mobile.human.IATCController#controlAircraft()
 	 */
 	@Override
 	public void controlAircraft() {

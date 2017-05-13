@@ -1,9 +1,9 @@
 /**
  * ATSOL_SIM
  * elements.mobile
- * AATCController.java
+ * IATCController.java
  */
-package elements.mobile;
+package elements.mobile.human;
 /**
  * 
  * Dtails....
@@ -24,6 +24,7 @@ package elements.mobile;
  *  <li>l...... : Local variable </li>
  *  <li>s...... : Static variable </li>
  *  <li>a...... : Argument </li>
+ *  <li>n...... : ENUM </li>
  *
  *  <li>VARIABLE_NAME : Constant variable </li>
  * </ul>
@@ -43,7 +44,7 @@ package elements.mobile;
  * @author S. J. Yun
  *
  */
-public abstract class AATCController extends AHuman{
+public interface IATCController {
 	/*
 	================================================================
 	
@@ -51,11 +52,7 @@ public abstract class AATCController extends AHuman{
 	
 	================================================================
 	*/
-	
-	
-	
-	
-	//private enum nRole{Controller,Planner,
+
 	/*
 	================================================================
 	
@@ -63,7 +60,20 @@ public abstract class AATCController extends AHuman{
 	
 	================================================================
 	 */
-
+	
+	/**
+	 * controlAircraft
+	 * 
+	 * Make controller work
+	 * 
+	 * @date : May 9, 2017
+	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
+	 *
+	 * @version : 
+	 * May 9, 2017 : Coded by S. J. Yun.
+	 */
+	public void controlAircraft();
+	
 	/*
 	================================================================
 	
@@ -79,6 +89,7 @@ public abstract class AATCController extends AHuman{
 	
 	================================================================
 	 */
+
 }
 
 

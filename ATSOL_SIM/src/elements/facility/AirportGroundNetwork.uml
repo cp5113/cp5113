@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:PapyrusJava="http://www.eclipse.org/papyrus/PapyrusJava/1" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:standard="http://www.eclipse.org/uml2/5.0.0/UML/Profile/Standard" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">
+  <uml:Model xmi:id="_VgsjsDbEEeesp9IyNb_UpQ" name="RootElement">
+    <packagedElement xmi:type="uml:Package" xmi:id="_dJe6ADbEEeesp9IyNb_UpQ" name="ATSOL_SIM">
+      <packagedElement xmi:type="uml:Package" xmi:id="_dS-0QDbEEeesp9IyNb_UpQ" name="elements">
+        <packagedElement xmi:type="uml:Package" xmi:id="_dTACYDbEEeesp9IyNb_UpQ" name="facility">
+          <packagedElement xmi:type="uml:Class" xmi:id="_dTE64DbEEeesp9IyNb_UpQ" name="AFacility" visibility="public" isAbstract="true">
+            <generalization xmi:type="uml:Generalization" xmi:id="_dZ57oDbEEeesp9IyNb_UpQ" general="_dTJzYDbEEeesp9IyNb_UpQ"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_daULUDbEEeesp9IyNb_UpQ" name="iFacilityCount" visibility="private" isStatic="true" isUnique="false">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://PapyrusJava_LIBRARIES/JavaLibrary.uml#_7wRIABydEduyofBvg4RL2w"/>
+              <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_daX1sDbEEeesp9IyNb_UpQ" name="defaultValue">
+                <language>JAVA</language>
+                <body>0</body>
+              </defaultValue>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_J6zCIDbFEeesp9IyNb_UpQ" name="iOwner" visibility="private" isReadOnly="true">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_92u94DbFEeesp9IyNb_UpQ" name="iLocation" visibility="private" type="_R9CaQDbFEeesp9IyNb_UpQ"/>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_daubADbEEeesp9IyNb_UpQ" name="AFacility" specification="_daejYDbEEeesp9IyNb_UpQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    iFacilityCount++;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_da2W0DbEEeesp9IyNb_UpQ" name="getFacilityCount" specification="_dayFYDbEEeesp9IyNb_UpQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    return iFacilityCount;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_daejYDbEEeesp9IyNb_UpQ" name="AFacility" visibility="public" method="_daubADbEEeesp9IyNb_UpQ"/>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_dayFYDbEEeesp9IyNb_UpQ" name="getFacilityCount" visibility="public" method="_da2W0DbEEeesp9IyNb_UpQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_da0hoDbEEeesp9IyNb_UpQ" direction="return">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://PapyrusJava_LIBRARIES/JavaLibrary.uml#_7wRIABydEduyofBvg4RL2w"/>
+              </ownedParameter>
+            </ownedOperation>
+            <nestedClassifier xmi:type="uml:PrimitiveType" xmi:id="_l3gaEDbEEeesp9IyNb_UpQ" name="PrimitiveType1"/>
+            <nestedClassifier xmi:type="uml:PrimitiveType" xmi:id="_mAFuUDbEEeesp9IyNb_UpQ" name="PrimitiveType2"/>
+            <nestedClassifier xmi:type="uml:PrimitiveType" xmi:id="_mBgqoDbEEeesp9IyNb_UpQ" name="PrimitiveType3"/>
+          </packagedElement>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_ynQ0wDbFEeesp9IyNb_UpQ" name="mobile">
+          <packagedElement xmi:type="uml:Enumeration" xmi:id="_ynSp8DbFEeesp9IyNb_UpQ" name="ESkill" visibility="public">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_ynUfIDbFEeesp9IyNb_UpQ" name="value" visibility="private" isUnique="false">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://PapyrusJava_LIBRARIES/JavaLibrary.uml#_7wRIABydEduyofBvg4RL2w"/>
+            </ownedAttribute>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_ynVGMDbFEeesp9IyNb_UpQ" name="getValue" visibility="public">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_ynVGMTbFEeesp9IyNb_UpQ" direction="return">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://PapyrusJava_LIBRARIES/JavaLibrary.uml#_7wRIABydEduyofBvg4RL2w"/>
+              </ownedParameter>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_ynVtQDbFEeesp9IyNb_UpQ" name="setValue" visibility="public">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_ynW7YDbFEeesp9IyNb_UpQ" name="aValue">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://PapyrusJava_LIBRARIES/JavaLibrary.uml#_7wRIABydEduyofBvg4RL2w"/>
+              </ownedParameter>
+            </ownedOperation>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_ynTRADbFEeesp9IyNb_UpQ" name="LOW"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_ynTRATbFEeesp9IyNb_UpQ" name="LOW_MIDDLE"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_ynT4EDbFEeesp9IyNb_UpQ" name="MIDDLE"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_ynT4ETbFEeesp9IyNb_UpQ" name="MIDDLE_HIGH"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_ynT4EjbFEeesp9IyNb_UpQ" name="HIGH"/>
+          </packagedElement>
+        </packagedElement>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="_dTHXIDbEEeesp9IyNb_UpQ" name="importedTypes">
+      <packagedElement xmi:type="uml:Package" xmi:id="_dTJMUDbEEeesp9IyNb_UpQ" name="elements">
+        <packagedElement xmi:type="uml:Class" xmi:id="_dTJzYDbEEeesp9IyNb_UpQ" name="AElement"/>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Enumeration" xmi:id="_R9CaQDbFEeesp9IyNb_UpQ" name="ELocation">
+      <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_XvPpcDbFEeesp9IyNb_UpQ" name="AIRSIDE" visibility="public"/>
+      <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_a3FkIDbFEeesp9IyNb_UpQ" name="LANDSIDE" visibility="public"/>
+      <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_cIwnYDbFEeesp9IyNb_UpQ" name="TERMINAL" visibility="public"/>
+      <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_c1a5EDbFEeesp9IyNb_UpQ" name="AIRSPACE" visibility="public"/>
+    </packagedElement>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_dRKPUDbEEeesp9IyNb_UpQ">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_dRaG8DbEEeesp9IyNb_UpQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/PapyrusJava/1#/"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="pathmap://PapyrusJava_PROFILES/PapyrusJava.profile.uml#_j9REUByGEduN1bTiWJ0lyw"/>
+    </profileApplication>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_dR7EUDbEEeesp9IyNb_UpQ">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_dR8ScDbEEeesp9IyNb_UpQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/Codegen/1#/"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="pathmap://Codegen_PROFILES/Codegen.profile.uml#_fPDsIBa-EearhdjjJ6cVzQ"/>
+    </profileApplication>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_dSTe0DbEEeesp9IyNb_UpQ">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_dSVUADbEEeesp9IyNb_UpQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/uml2/5.0.0/UML/Profile/Standard#/"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="pathmap://UML_PROFILES/Standard.profile.uml#_0"/>
+    </profileApplication>
+  </uml:Model>
+  <PapyrusJava:External xmi:id="_dZ4tgDbEEeesp9IyNb_UpQ" name="elements.AElement" base_Classifier="_dTJzYDbEEeesp9IyNb_UpQ"/>
+  <standard:Create xmi:id="_dakC8DbEEeesp9IyNb_UpQ" base_BehavioralFeature="_daejYDbEEeesp9IyNb_UpQ"/>
+</xmi:XMI>

@@ -1,9 +1,9 @@
 /**
  * ATSOL_SIM
- * elements.facility
- * AFacility.java
+ * elements.mobile
+ * AATCController.java
  */
-package elements.facility;
+package elements.mobile.human;
 /**
  * 
  * Dtails....
@@ -24,49 +24,38 @@ package elements.facility;
  *  <li>l...... : Local variable </li>
  *  <li>s...... : Static variable </li>
  *  <li>a...... : Argument </li>
- *  <li>n...... : ENUM </li>
  *
  *  <li>VARIABLE_NAME : Constant variable </li>
  * </ul>
  * </p>
  * 
  * 
- * @date : May 10, 2017
+ * @date : May 9, 2017
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * May 10, 2017 : Coded by S. J. Yun.
+ * May 9, 2017 : Coded by S. J. Yun.
  *
  *
  */
-
-import elements.AElement;
 
 /**
  * @author S. J. Yun
  *
  */
-abstract public class AFacility extends AElement{
+public abstract class AATCController extends AHuman{
 	/*
 	================================================================
 	
 			           Initializing Section
 	
 	================================================================
-	*/	
-	
-	private	static	int				iFacilityCount 		= 0;
-	
-	
-	private ELocation				iLocation;		
+	*/
 	
 	
 	
-	public AFacility(){
-		
-		iFacilityCount++;
-	}
 	
+	//private enum nRole{Controller,Planner,
 	/*
 	================================================================
 	
@@ -74,14 +63,7 @@ abstract public class AFacility extends AElement{
 	
 	================================================================
 	 */
-	public int getFacilityCount(){		
-		return iFacilityCount;
-	}
-	
-	public ELocation getLocation(){		
-		return iLocation;
-	}
-	
+
 	/*
 	================================================================
 	
@@ -89,7 +71,6 @@ abstract public class AFacility extends AElement{
 	
 	================================================================
 	 */
-	
 
 	/*
 	================================================================

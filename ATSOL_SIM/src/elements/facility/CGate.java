@@ -1,9 +1,9 @@
 /**
  * ATSOL_SIM
- * network
- * ANode.java
+ * elements.facility
+ * CGate.java
  */
-package elements.network;
+package elements.facility;
 /**
  * 
  * Dtails....
@@ -31,43 +31,33 @@ package elements.network;
  * </p>
  * 
  * 
- * @date : May 11, 2017
+ * @date : May 12, 2017
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * May 11, 2017 : Coded by S. J. Yun.
+ * May 12, 2017 : Coded by S. J. Yun.
  *
  *
  */
 
-import java.util.ArrayList;
-
-import elements.AElement;
-import elements.util.geo.CAltitude;
+import elements.network.ANode;
 import elements.util.geo.CCoordination;
 
 /**
  * @author S. J. Yun
  *
  */
-public abstract class ANode extends AElement{
+public class CGate extends ANode{
+
+
 	/*
 	================================================================
-
+	
 			           Initializing Section
-
+	
 	================================================================
-	 */
-	
-	private boolean					iIsOccuping	=	false;
-	
-	
-	private	final	int				CAPACITY	= 1;
-	
-	private CAltitude				iAltitude;
-	private CCoordination			iCoordination;
-	private ArrayList<ANode>		iAdjacentNode = new ArrayList<ANode>();
-	
+	*/
+
 	
 	
 	
@@ -82,57 +72,31 @@ public abstract class ANode extends AElement{
 	 * @version : 
 	 * May 12, 2017 : Coded by S. J. Yun.
 	 */
-	public ANode(String aIName, CCoordination aiCoordination) {
-		setName(aIName);		
-		iCoordination = aiCoordination;
+	public CGate(String aIName, CCoordination aAiCoordination) {
+		super(aIName, aAiCoordination);
+		// TODO Auto-generated constructor stub
 	}
-
-
-
-	/**
-	 * The Constructor
-	 * 
-	 * Do What
-	 * 
-	 * @date : May 12, 2017
-	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
-	 *
-	 * @version : 
-	 * May 12, 2017 : Coded by S. J. Yun.
-	 */
-	public ANode(String aIName, double aXCoordination, double aYCoordination) {
-		super();
-		super.setName(aIName);	
-		iCoordination = new CCoordination(aXCoordination, aYCoordination);
-		
-	}
-	
-
 	/*
 	================================================================
-
+	
 						Methods Section
-
+	
 	================================================================
 	 */
-	
 
-
-	
-	
 	/*
 	================================================================
-
+	
 						Listeners Section
-
+	
 	================================================================
 	 */
 
 	/*
 	================================================================
-
+	
 							The Others
-
+	
 	================================================================
 	 */
 }

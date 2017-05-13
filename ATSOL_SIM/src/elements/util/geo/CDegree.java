@@ -1,9 +1,9 @@
 /**
  * ATSOL_SIM
- * elements
- * AElement.java
+ * elements.util.geo
+ * CDegree.java
  */
-package elements;
+package elements.util.geo;
 /**
  * 
  * Dtails....
@@ -44,7 +44,7 @@ package elements;
  * @author S. J. Yun
  *
  */
-public abstract class AElement {
+public class CDegree {
 	/*
 	================================================================
 	
@@ -52,110 +52,10 @@ public abstract class AElement {
 	
 	================================================================
 	*/
-	private	String					iName;
-	private int						iID;
-	private String					iType		= this.getClass().getSimpleName();//this.getClass().getSimpleName().substring(1, this.getClass().getSimpleName().length()-1);
-	/**
-	 * getiName
-	 * 
-	 * Do What
-	 * 
-	 * @return iName String
-	 * 
-	 * @date : May 12, 2017
-	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
-	 *
-	 * @version : 
-	 * May 12, 2017 : Coded by S. J. Yun.
-	 */
-	public String getName() {
-		return iName;
-	}
-	/**
-	 * getiID
-	 * 
-	 * Do What
-	 * 
-	 * @return iID int
-	 * 
-	 * @date : May 12, 2017
-	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
-	 *
-	 * @version : 
-	 * May 12, 2017 : Coded by S. J. Yun.
-	 */
-	public int getID() {
-		return iID;
-	}
-	/**
-	 * getiType
-	 * 
-	 * Do What
-	 * 
-	 * @return iType String
-	 * 
-	 * @date : May 12, 2017
-	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
-	 *
-	 * @version : 
-	 * May 12, 2017 : Coded by S. J. Yun.
-	 */
-	public String getType() {
-		return iType;
-	}
-	/**
-	 * setiName
-	 * 
-	 * Do What
-	 * 
-	 * @param aIName the iName to set
-	 * 
-	 * @date : May 12, 2017
-	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
-	 *
-	 * @version : 
-	 * May 12, 2017 : Coded by S. J. Yun.
-	 */
-	public void setName(String aIName) {
-		iName = aIName;
-	}
-	/**
-	 * setiID
-	 * 
-	 * Do What
-	 * 
-	 * @param aIID the iID to set
-	 * 
-	 * @date : May 12, 2017
-	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
-	 *
-	 * @version : 
-	 * May 12, 2017 : Coded by S. J. Yun.
-	 */
-	public void setID(int aIID) {
-		iID = aIID;
-	}
-	/**
-	 * setiType
-	 * 
-	 * Do What
-	 * 
-	 * @param aIType the iType to set
-	 * 
-	 * @date : May 12, 2017
-	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
-	 *
-	 * @version : 
-	 * May 12, 2017 : Coded by S. J. Yun.
-	 */
-	public void setiType(String aIType) {
-		iType = aIType;
-	}
 	
-	
-	public String toString(){
-		return iName;
-	}
+	private double		iDegree;
+	private EUnit		iUnit = EUnit.DEGREE;
+	private EVariation	iVariation;
 
 	/*
 	================================================================
@@ -165,6 +65,125 @@ public abstract class AElement {
 	================================================================
 	 */
 	
+	/**
+	 * The Constructor
+	 * 
+	 * Do What
+	 * 
+	 * @date : May 12, 2017
+	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
+	 *
+	 * @version : 
+	 * May 12, 2017 : Coded by S. J. Yun.
+	 */
+	public CDegree (double aDegree){
+		iDegree = aDegree;
+	}
+
+	/**
+	 * getiDegree
+	 * 
+	 * Do What
+	 * 
+	 * @return iDegree double
+	 * 
+	 * @date : May 12, 2017
+	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
+	 *
+	 * @version : 
+	 * May 12, 2017 : Coded by S. J. Yun.
+	 */
+	public double getDegree() {
+		return iDegree;
+	}
+
+	/**
+	 * getiUnit
+	 * 
+	 * Do What
+	 * 
+	 * @return iUnit EUnit
+	 * 
+	 * @date : May 12, 2017
+	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
+	 *
+	 * @version : 
+	 * May 12, 2017 : Coded by S. J. Yun.
+	 */
+	public EUnit getUnit() {
+		return iUnit;
+	}
+
+	/**
+	 * setiDegree
+	 * 
+	 * Do What
+	 * 
+	 * @param aIDegree the iDegree to set
+	 * 
+	 * @date : May 12, 2017
+	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
+	 *
+	 * @version : 
+	 * May 12, 2017 : Coded by S. J. Yun.
+	 */
+	public void setDegree(double aIDegree) {
+		iDegree = aIDegree;
+	}
+
+	/**
+	 * setiUnit
+	 * 
+	 * Do What
+	 * 
+	 * @param aIUnit the iUnit to set
+	 * 
+	 * @date : May 12, 2017
+	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
+	 *
+	 * @version : 
+	 * May 12, 2017 : Coded by S. J. Yun.
+	 */
+	public void setUnit(EUnit aIUnit) {
+		iUnit = aIUnit;
+	}
+
+	/**
+	 * getiVariation
+	 * 
+	 * Do What
+	 * 
+	 * @return iVariation EVariation
+	 * 
+	 * @date : May 12, 2017
+	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
+	 *
+	 * @version : 
+	 * May 12, 2017 : Coded by S. J. Yun.
+	 */
+	public EVariation getVariation() {
+		return iVariation;
+	}
+
+	/**
+	 * setiVariation
+	 * 
+	 * Do What
+	 * 
+	 * @param aIVariation the iVariation to set
+	 * 
+	 * @date : May 12, 2017
+	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
+	 *
+	 * @version : 
+	 * May 12, 2017 : Coded by S. J. Yun.
+	 */
+	public void setVariation(EVariation aIVariation) {
+		iVariation = aIVariation;
+	}
+	
+	
+	
 	/*
 	================================================================
 	
@@ -172,7 +191,8 @@ public abstract class AElement {
 	
 	================================================================
 	 */
-
+	
+	
 	/*
 	================================================================
 	

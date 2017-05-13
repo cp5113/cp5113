@@ -57,7 +57,9 @@ public abstract class AMobile extends AElement{
 	================================================================
 	*/	
 	private	static	int		iMobileCount 		= 0;
-		
+	private String			iName				= this.getClass().getSimpleName() + iMobileCount;
+	
+	
 	public AMobile(){
 		iMobileCount++;
 	}
@@ -74,8 +76,13 @@ public abstract class AMobile extends AElement{
 		return iMobileCount;
 	}
 	
+	public String getName(){
+		return iName;
+	}
 	
-	
+	public void setName(String aName){
+		iName = aName;
+	}
 
 	/*
 	================================================================

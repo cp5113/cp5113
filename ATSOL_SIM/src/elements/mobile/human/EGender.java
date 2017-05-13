@@ -3,7 +3,7 @@
  * elements.mobile
  * EGender.java
  */
-package elements.mobile;
+package elements.mobile.human;
 /**
  * 
  * Dtails....

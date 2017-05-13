@@ -1,9 +1,9 @@
 /**
  * ATSOL_SIM
- * elements.mobile
- * CApproachController.java
+ * math.basic
+ * BasicMath.java
  */
-package elements.mobile;
+package math.basic;
 /**
  * 
  * Dtails....
@@ -31,11 +31,11 @@ package elements.mobile;
  * </p>
  * 
  * 
- * @date : May 9, 2017
+ * @date : May 12, 2017
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * May 9, 2017 : Coded by S. J. Yun.
+ * May 12, 2017 : Coded by S. J. Yun.
  *
  *
  */
@@ -44,7 +44,7 @@ package elements.mobile;
  * @author S. J. Yun
  *
  */
-public class CApproachController extends AATCController implements IATCController{
+public class BasicMath {
 	/*
 	================================================================
 	
@@ -60,13 +60,15 @@ public class CApproachController extends AATCController implements IATCControlle
 	
 	================================================================
 	 */
-	/** (non-Javadoc)
-	 * @see elements.mobile.IATCController#controlAircraft()
-	 */
-	@Override
-	public void controlAircraft() {
-		// TODO Auto-generated method stub
+	public static double power(double aBase, int aRaiser){
+		double lOutput=1;
 		
+		for(int i = 0; i<aRaiser;i++){
+			lOutput *= aBase;
+		}
+			
+		
+		return lOutput;
 	}
 
 	/*
@@ -85,7 +87,6 @@ public class CApproachController extends AATCController implements IATCControlle
 	================================================================
 	 */
 }
-
 
 
 

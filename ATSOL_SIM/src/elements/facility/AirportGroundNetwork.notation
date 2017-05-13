@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<notation:Diagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:style="http://www.eclipse.org/papyrus/infra/viewpoints/policy/style" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_b105wDbEEeesp9IyNb_UpQ" type="PapyrusUMLClassDiagram" name="AirportGroundNetwork_classDiagram" measurementUnit="Pixel">
+  <children xmi:type="notation:Shape" xmi:id="_dbM8IDbEEeesp9IyNb_UpQ" type="Class_Shape">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_MacUYDbFEeesp9IyNb_UpQ" source="PapyrusCSSForceValue">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_Mac7cDbFEeesp9IyNb_UpQ" key="canonical" value="true"/>
+    </eAnnotations>
+    <children xmi:type="notation:DecorationNode" xmi:id="_dbVfADbEEeesp9IyNb_UpQ" type="Class_NameLabel"/>
+    <children xmi:type="notation:DecorationNode" xmi:id="_dbWGEDbEEeesp9IyNb_UpQ" type="Class_FloatingNameLabel">
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_dbWGETbEEeesp9IyNb_UpQ" y="5"/>
+    </children>
+    <children xmi:type="notation:BasicCompartment" xmi:id="_dbWGEjbEEeesp9IyNb_UpQ" type="Class_AttributeCompartment">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_MbgrYDbFEeesp9IyNb_UpQ" source="PapyrusCSSForceValue">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_MbgrYTbFEeesp9IyNb_UpQ" key="mutable" value="true"/>
+      </eAnnotations>
+      <children xmi:type="notation:Shape" xmi:id="_gQfuQDbEEeesp9IyNb_UpQ" type="Property_ClassAttributeLabel">
+        <element xmi:type="uml:Property" href="AirportGroundNetwork.uml#_daULUDbEEeesp9IyNb_UpQ"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_gQfuQTbEEeesp9IyNb_UpQ"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_MasMADbFEeesp9IyNb_UpQ" type="Property_ClassAttributeLabel">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_MbgrYjbFEeesp9IyNb_UpQ" source="PapyrusCSSForceValue">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_MbgrYzbFEeesp9IyNb_UpQ" key="mutable" value="true"/>
+        </eAnnotations>
+        <element xmi:type="uml:Property" href="AirportGroundNetwork.uml#_J6zCIDbFEeesp9IyNb_UpQ"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_MasMATbFEeesp9IyNb_UpQ"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_93B40DbFEeesp9IyNb_UpQ" type="Property_ClassAttributeLabel">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_93mgkDbFEeesp9IyNb_UpQ" source="PapyrusCSSForceValue">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_93mgkTbFEeesp9IyNb_UpQ" key="mutable" value="true"/>
+        </eAnnotations>
+        <element xmi:type="uml:Property" href="AirportGroundNetwork.uml#_92u94DbFEeesp9IyNb_UpQ"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_93B40TbFEeesp9IyNb_UpQ"/>
+      </children>
+      <styles xmi:type="notation:TitleStyle" xmi:id="_dbWGEzbEEeesp9IyNb_UpQ"/>
+      <styles xmi:type="notation:SortingStyle" xmi:id="_dbWGFDbEEeesp9IyNb_UpQ"/>
+      <styles xmi:type="notation:FilteringStyle" xmi:id="_dbWGFTbEEeesp9IyNb_UpQ"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_dbWGFjbEEeesp9IyNb_UpQ"/>
+    </children>
+    <children xmi:type="notation:BasicCompartment" xmi:id="_dbWGFzbEEeesp9IyNb_UpQ" type="Class_OperationCompartment">
+      <children xmi:type="notation:Shape" xmi:id="_gQiKgDbEEeesp9IyNb_UpQ" type="Operation_ClassOperationLabel">
+        <element xmi:type="uml:Operation" href="AirportGroundNetwork.uml#_daejYDbEEeesp9IyNb_UpQ"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_gQiKgTbEEeesp9IyNb_UpQ"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_gQixkDbEEeesp9IyNb_UpQ" type="Operation_ClassOperationLabel">
+        <element xmi:type="uml:Operation" href="AirportGroundNetwork.uml#_dayFYDbEEeesp9IyNb_UpQ"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_gQixkTbEEeesp9IyNb_UpQ"/>
+      </children>
+      <styles xmi:type="notation:TitleStyle" xmi:id="_dbWGGDbEEeesp9IyNb_UpQ"/>
+      <styles xmi:type="notation:SortingStyle" xmi:id="_dbWGGTbEEeesp9IyNb_UpQ"/>
+      <styles xmi:type="notation:FilteringStyle" xmi:id="_dbWGGjbEEeesp9IyNb_UpQ"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_dbWGGzbEEeesp9IyNb_UpQ"/>
+    </children>
+    <children xmi:type="notation:BasicCompartment" xmi:id="_dbWtIDbEEeesp9IyNb_UpQ" type="Class_NestedClassifierCompartment" collapsed="true">
+      <children xmi:type="notation:Shape" xmi:id="_gQjYoDbEEeesp9IyNb_UpQ" type="Class_ClassNestedClassifierLabel">
+        <element xmi:type="uml:OpaqueBehavior" href="AirportGroundNetwork.uml#_daubADbEEeesp9IyNb_UpQ"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_gQjYoTbEEeesp9IyNb_UpQ"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_gQj_sDbEEeesp9IyNb_UpQ" type="Class_ClassNestedClassifierLabel">
+        <element xmi:type="uml:OpaqueBehavior" href="AirportGroundNetwork.uml#_da2W0DbEEeesp9IyNb_UpQ"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_gQj_sTbEEeesp9IyNb_UpQ"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_l3yt8DbEEeesp9IyNb_UpQ" type="PrimitiveType_ClassNestedClassifierLabel">
+        <element xmi:type="uml:PrimitiveType" href="AirportGroundNetwork.uml#_l3gaEDbEEeesp9IyNb_UpQ"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_l3yt8TbEEeesp9IyNb_UpQ"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_mAL08DbEEeesp9IyNb_UpQ" type="PrimitiveType_ClassNestedClassifierLabel">
+        <element xmi:type="uml:PrimitiveType" href="AirportGroundNetwork.uml#_mAFuUDbEEeesp9IyNb_UpQ"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_mAL08TbEEeesp9IyNb_UpQ"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_mBp0kDbEEeesp9IyNb_UpQ" type="PrimitiveType_ClassNestedClassifierLabel">
+        <element xmi:type="uml:PrimitiveType" href="AirportGroundNetwork.uml#_mBgqoDbEEeesp9IyNb_UpQ"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_mBp0kTbEEeesp9IyNb_UpQ"/>
+      </children>
+      <styles xmi:type="notation:TitleStyle" xmi:id="_dbWtITbEEeesp9IyNb_UpQ"/>
+      <styles xmi:type="notation:SortingStyle" xmi:id="_dbWtIjbEEeesp9IyNb_UpQ"/>
+      <styles xmi:type="notation:FilteringStyle" xmi:id="_dbWtIzbEEeesp9IyNb_UpQ"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_dbWtJDbEEeesp9IyNb_UpQ"/>
+    </children>
+    <styles xmi:type="notation:CanonicalStyle" xmi:id="_MabGQDbFEeesp9IyNb_UpQ"/>
+    <element xmi:type="uml:Class" href="AirportGroundNetwork.uml#_dTE64DbEEeesp9IyNb_UpQ"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_dbNjMDbEEeesp9IyNb_UpQ" x="192" y="94"/>
+  </children>
+  <children xmi:type="notation:Shape" xmi:id="_R9FdkDbFEeesp9IyNb_UpQ" type="Enumeration_Shape">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_0UVakDbFEeesp9IyNb_UpQ" source="PapyrusCSSForceValue">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_0UVakTbFEeesp9IyNb_UpQ" key="canonical" value="true"/>
+    </eAnnotations>
+    <children xmi:type="notation:DecorationNode" xmi:id="_R9GEoDbFEeesp9IyNb_UpQ" type="Enumeration_NameLabel"/>
+    <children xmi:type="notation:DecorationNode" xmi:id="_R9GEoTbFEeesp9IyNb_UpQ" type="Enumeration_FloatingNameLabel">
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_R9GEojbFEeesp9IyNb_UpQ" y="5"/>
+    </children>
+    <children xmi:type="notation:BasicCompartment" xmi:id="_R9GrsDbFEeesp9IyNb_UpQ" type="Enumeration_LiteralCompartment">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_kcUZADbFEeesp9IyNb_UpQ" source="PapyrusCSSForceValue">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_kcUZATbFEeesp9IyNb_UpQ" key="canonical" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_0VPZgDbFEeesp9IyNb_UpQ" key="mutable" value="true"/>
+      </eAnnotations>
+      <children xmi:type="notation:Shape" xmi:id="_0UXPwDbFEeesp9IyNb_UpQ" type="EnumerationLiteral_LiteralLabel">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_0VPZgTbFEeesp9IyNb_UpQ" source="PapyrusCSSForceValue">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_0VPZgjbFEeesp9IyNb_UpQ" key="mutable" value="true"/>
+        </eAnnotations>
+        <element xmi:type="uml:EnumerationLiteral" href="AirportGroundNetwork.uml#_XvPpcDbFEeesp9IyNb_UpQ"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_0UXPwTbFEeesp9IyNb_UpQ"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_0UXPwjbFEeesp9IyNb_UpQ" type="EnumerationLiteral_LiteralLabel">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_0VPZgzbFEeesp9IyNb_UpQ" source="PapyrusCSSForceValue">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_0VPZhDbFEeesp9IyNb_UpQ" key="mutable" value="true"/>
+        </eAnnotations>
+        <element xmi:type="uml:EnumerationLiteral" href="AirportGroundNetwork.uml#_a3FkIDbFEeesp9IyNb_UpQ"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_0UXPwzbFEeesp9IyNb_UpQ"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_0UX20DbFEeesp9IyNb_UpQ" type="EnumerationLiteral_LiteralLabel">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_0VPZhTbFEeesp9IyNb_UpQ" source="PapyrusCSSForceValue">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_0VPZhjbFEeesp9IyNb_UpQ" key="mutable" value="true"/>
+        </eAnnotations>
+        <element xmi:type="uml:EnumerationLiteral" href="AirportGroundNetwork.uml#_cIwnYDbFEeesp9IyNb_UpQ"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_0UX20TbFEeesp9IyNb_UpQ"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_0UYd4DbFEeesp9IyNb_UpQ" type="EnumerationLiteral_LiteralLabel">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_0VPZhzbFEeesp9IyNb_UpQ" source="PapyrusCSSForceValue">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_0VPZiDbFEeesp9IyNb_UpQ" key="mutable" value="true"/>
+        </eAnnotations>
+        <element xmi:type="uml:EnumerationLiteral" href="AirportGroundNetwork.uml#_c1a5EDbFEeesp9IyNb_UpQ"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_0UYd4TbFEeesp9IyNb_UpQ"/>
+      </children>
+      <styles xmi:type="notation:TitleStyle" xmi:id="_R9GrsTbFEeesp9IyNb_UpQ"/>
+      <styles xmi:type="notation:SortingStyle" xmi:id="_R9GrsjbFEeesp9IyNb_UpQ"/>
+      <styles xmi:type="notation:FilteringStyle" xmi:id="_R9GrszbFEeesp9IyNb_UpQ"/>
+      <styles xmi:type="notation:CanonicalStyle" xmi:id="_kcTx8DbFEeesp9IyNb_UpQ"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_R9GrtDbFEeesp9IyNb_UpQ"/>
+    </children>
+    <styles xmi:type="notation:CanonicalStyle" xmi:id="_0UUzgDbFEeesp9IyNb_UpQ"/>
+    <element xmi:type="uml:Enumeration" href="AirportGroundNetwork.uml#_R9CaQDbFEeesp9IyNb_UpQ"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_R9FdkTbFEeesp9IyNb_UpQ" x="462" y="81"/>
+  </children>
+  <styles xmi:type="notation:StringValueStyle" xmi:id="_b105wTbEEeesp9IyNb_UpQ" name="diagram_compatibility_version" stringValue="1.2.0"/>
+  <styles xmi:type="notation:DiagramStyle" xmi:id="_b105wjbEEeesp9IyNb_UpQ"/>
+  <styles xmi:type="style:PapyrusViewStyle" xmi:id="_b105wzbEEeesp9IyNb_UpQ">
+    <owner xmi:type="uml:Model" href="AirportGroundNetwork.uml#_VgsjsDbEEeesp9IyNb_UpQ"/>
+  </styles>
+  <element xmi:type="uml:Model" href="AirportGroundNetwork.uml#_VgsjsDbEEeesp9IyNb_UpQ"/>
+</notation:Diagram>

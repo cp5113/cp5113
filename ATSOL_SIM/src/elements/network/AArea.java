@@ -1,7 +1,7 @@
 /**
  * ATSOL_SIM
- * network
- * ANode.java
+ * elements.network
+ * AArea.java
  */
 package elements.network;
 /**
@@ -31,108 +31,61 @@ package elements.network;
  * </p>
  * 
  * 
- * @date : May 11, 2017
+ * @date : May 12, 2017
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * May 11, 2017 : Coded by S. J. Yun.
+ * May 12, 2017 : Coded by S. J. Yun.
  *
  *
  */
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 import elements.AElement;
 import elements.util.geo.CAltitude;
-import elements.util.geo.CCoordination;
 
 /**
  * @author S. J. Yun
  *
  */
-public abstract class ANode extends AElement{
+public abstract class AArea extends AElement{
 	/*
 	================================================================
-
+	
 			           Initializing Section
-
+	
 	================================================================
-	 */
+	*/
 	
-	private boolean					iIsOccuping	=	false;
-	
-	
-	private	final	int				CAPACITY	= 1;
-	
-	private CAltitude				iAltitude;
-	private CCoordination			iCoordination;
-	private ArrayList<ANode>		iAdjacentNode = new ArrayList<ANode>();
+	private LinkedList<ANode> 	iVertix = new LinkedList<ANode>();
+	private	CAltitude			iLowLimit;
+	private	CAltitude			iUpperLimit;
 	
 	
-	
-	
-	/**
-	 * The Constructor
-	 * 
-	 * Do What
-	 * 
-	 * @date : May 12, 2017
-	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
-	 *
-	 * @version : 
-	 * May 12, 2017 : Coded by S. J. Yun.
-	 */
-	public ANode(String aIName, CCoordination aiCoordination) {
-		setName(aIName);		
-		iCoordination = aiCoordination;
-	}
-
-
-
-	/**
-	 * The Constructor
-	 * 
-	 * Do What
-	 * 
-	 * @date : May 12, 2017
-	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
-	 *
-	 * @version : 
-	 * May 12, 2017 : Coded by S. J. Yun.
-	 */
-	public ANode(String aIName, double aXCoordination, double aYCoordination) {
-		super();
-		super.setName(aIName);	
-		iCoordination = new CCoordination(aXCoordination, aYCoordination);
-		
-	}
-	
-
 	/*
 	================================================================
-
+	
 						Methods Section
-
+	
 	================================================================
 	 */
-	
-
-
-	
-	
+	public int countNumberOfObjectInArea(){
+		return 0;
+	}
 	/*
 	================================================================
-
+	
 						Listeners Section
-
+	
 	================================================================
 	 */
 
 	/*
 	================================================================
-
+	
 							The Others
-
+	
 	================================================================
 	 */
 }

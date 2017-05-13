@@ -1,9 +1,9 @@
 /**
  * ATSOL_SIM
- * elements.mobile
- * CLocalController.java
+ * elements.facility
+ * CRunway.java
  */
-package elements.mobile;
+package elements.facility;
 /**
  * 
  * Dtails....
@@ -31,20 +31,22 @@ package elements.mobile;
  * </p>
  * 
  * 
- * @date : May 9, 2017
+ * @date : May 12, 2017
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * May 9, 2017 : Coded by S. J. Yun.
+ * May 12, 2017 : Coded by S. J. Yun.
  *
  *
  */
+
+import elements.network.ALink;
 
 /**
  * @author S. J. Yun
  *
  */
-public class CLocalController extends AATCController implements IATCController{
+public class CRunway extends ALink{
 	/*
 	================================================================
 	
@@ -52,7 +54,7 @@ public class CLocalController extends AATCController implements IATCController{
 	
 	================================================================
 	*/
-
+	
 	/*
 	================================================================
 	
@@ -60,14 +62,6 @@ public class CLocalController extends AATCController implements IATCController{
 	
 	================================================================
 	 */
-	/** (non-Javadoc)
-	 * @see elements.mobile.IATCController#controlAircraft()
-	 */
-	@Override
-	public void controlAircraft() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	/*
 	================================================================

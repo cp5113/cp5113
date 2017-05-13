@@ -1,9 +1,9 @@
 /**
  * ATSOL_SIM
- * elements.mobile
- * ESkill.java
+ * elements.util
+ * EUnit.java
  */
-package elements.mobile;
+package elements.util.geo;
 /**
  * 
  * Dtails....
@@ -31,11 +31,11 @@ package elements.mobile;
  * </p>
  * 
  * 
- * @date : May 9, 2017
+ * @date : May 12, 2017
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * May 9, 2017 : Coded by S. J. Yun.
+ * May 12, 2017 : Coded by S. J. Yun.
  *
  *
  */
@@ -44,8 +44,10 @@ package elements.mobile;
  * @author S. J. Yun
  *
  */
-public enum ESkill {
-	LOW,LOW_MIDDLE,MIDDLE,MIDDLE_HIGH,HIGH;
+public enum EUnit {
+
+	WGS84,TM,UTM,METER,FEET,DEGREE;
+	
 	
 	private int value;
 	
@@ -57,11 +59,11 @@ public enum ESkill {
 	 * 
 	 * @return value int
 	 * 
-	 * @date : May 9, 2017
+	 * @date : May 12, 2017
 	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
 	 *
 	 * @version : 
-	 * May 9, 2017 : Coded by S. J. Yun.
+	 * May 12, 2017 : Coded by S. J. Yun.
 	 */
 	public int getValue() {
 		return value;
@@ -74,19 +76,15 @@ public enum ESkill {
 	 * 
 	 * @param aValue the value to set
 	 * 
-	 * @date : May 9, 2017
+	 * @date : May 12, 2017
 	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
 	 *
 	 * @version : 
-	 * May 9, 2017 : Coded by S. J. Yun.
+	 * May 12, 2017 : Coded by S. J. Yun.
 	 */
 	public void setValue(int aValue) {
 		this.value = aValue;
-	}
-	
-	
-	
-}
+	}}
 
 
 

@@ -3,7 +3,7 @@
  * elements.mobile
  * CHuman.java
  */
-package elements.mobile;
+package elements.mobile.human;
 /**
  * 
  * Dtails....
@@ -38,6 +38,8 @@ package elements.mobile;
  *
  *
  */
+
+import elements.mobile.AMobile;
 
 /**
  * @author S. J. Yun
