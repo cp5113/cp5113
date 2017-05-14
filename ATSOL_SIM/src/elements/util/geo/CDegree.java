@@ -54,7 +54,7 @@ public class CDegree {
 	*/
 	
 	private double		iDegree;
-	private EUnit		iUnit = EUnit.DEGREE;
+	private EGEOUnit		iUnit = EGEOUnit.DEGREE;
 	private EVariation	iVariation;
 
 	/*
@@ -110,7 +110,7 @@ public class CDegree {
 	 * @version : 
 	 * May 12, 2017 : Coded by S. J. Yun.
 	 */
-	public EUnit getUnit() {
+	public EGEOUnit getUnit() {
 		return iUnit;
 	}
 
@@ -144,7 +144,7 @@ public class CDegree {
 	 * @version : 
 	 * May 12, 2017 : Coded by S. J. Yun.
 	 */
-	public void setUnit(EUnit aIUnit) {
+	public void setUnit(EGEOUnit aIUnit) {
 		iUnit = aIUnit;
 	}
 

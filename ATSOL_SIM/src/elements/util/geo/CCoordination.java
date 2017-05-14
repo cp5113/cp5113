@@ -57,7 +57,7 @@ public class CCoordination {
 	
 	private	double 	iXCoordination,iYCoordination;
 	
-	private EUnit	iUnit	= EUnit.TM;
+	private EGEOUnit	iUnit	= EGEOUnit.TM;
 
 
 	/*
@@ -95,7 +95,7 @@ public class CCoordination {
 	 * @version : 
 	 * May 12, 2017 : Coded by S. J. Yun.
 	 */
-	public CCoordination(double aXCoordination, double aYCoordination,EUnit aUnit) {
+	public CCoordination(double aXCoordination, double aYCoordination,EGEOUnit aUnit) {
 		super();
 		iXCoordination 	= aXCoordination;
 		iYCoordination 	= aYCoordination;
@@ -209,7 +209,7 @@ public class CCoordination {
 	 * @version : 
 	 * May 12, 2017 : Coded by S. J. Yun.
 	 */
-	public EUnit getUnit() {
+	public EGEOUnit getUnit() {
 		return iUnit;
 	}
 
@@ -279,7 +279,7 @@ public class CCoordination {
 	 * May 12, 2017 : Coded by S. J. Yun.
 	 */
 	@SuppressWarnings("unused")
-	private void setUnit(EUnit aIUnit) {
+	private void setUnit(EGEOUnit aIUnit) {
 		iUnit = aIUnit;
 	}
 	

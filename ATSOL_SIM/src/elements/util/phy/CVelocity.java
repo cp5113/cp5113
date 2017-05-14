@@ -1,9 +1,9 @@
 /**
  * ATSOL_SIM
- * elements.util.geo
- * CAltitude.java
+ * elements.util.phy
+ * CVelocity.java
  */
-package elements.util.geo;
+package elements.util.phy;
 /**
  * 
  * Dtails....
@@ -31,11 +31,11 @@ package elements.util.geo;
  * </p>
  * 
  * 
- * @date : May 12, 2017
+ * @date : May 13, 2017
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * May 12, 2017 : Coded by S. J. Yun.
+ * May 13, 2017 : Coded by S. J. Yun.
  *
  *
  */
@@ -44,7 +44,7 @@ package elements.util.geo;
  * @author S. J. Yun
  *
  */
-public class CAltitude {
+public class CVelocity {
 	/*
 	================================================================
 	
@@ -52,11 +52,10 @@ public class CAltitude {
 	
 	================================================================
 	*/
-	private	double 	iAltitude;
+	private double				iVelocity;
+	private EVelocityUnit		iUnit = EVelocityUnit.NAUTICAL_MILE_PER_HOUR;
 	
-	private EGEOUnit	iUnit	= EGEOUnit.FEET;
-
-
+	
 	
 	/*
 	================================================================
@@ -65,73 +64,7 @@ public class CAltitude {
 	
 	================================================================
 	 */
-	/**
-	 * getiAltitude
-	 * 
-	 * Do What
-	 * 
-	 * @return iAltitude double
-	 * 
-	 * @date : May 12, 2017
-	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
-	 *
-	 * @version : 
-	 * May 12, 2017 : Coded by S. J. Yun.
-	 */
-	public double getAltitude() {
-		return iAltitude;
-	}
 
-	/**
-	 * getiUnit
-	 * 
-	 * Do What
-	 * 
-	 * @return iUnit EUnit
-	 * 
-	 * @date : May 12, 2017
-	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
-	 *
-	 * @version : 
-	 * May 12, 2017 : Coded by S. J. Yun.
-	 */
-	public EGEOUnit getUnit() {
-		return iUnit;
-	}
-
-	/**
-	 * setiAltitude
-	 * 
-	 * Do What
-	 * 
-	 * @param aIAltitude the iAltitude to set
-	 * 
-	 * @date : May 12, 2017
-	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
-	 *
-	 * @version : 
-	 * May 12, 2017 : Coded by S. J. Yun.
-	 */
-	public synchronized void setAltitude(double aIAltitude) {
-		iAltitude = aIAltitude;
-	}
-
-	/**
-	 * setiUnit
-	 * 
-	 * Do What
-	 * 
-	 * @param aIUnit the iUnit to set
-	 * 
-	 * @date : May 12, 2017
-	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
-	 *
-	 * @version : 
-	 * May 12, 2017 : Coded by S. J. Yun.
-	 */
-	public void setUnit(EGEOUnit aIUnit) {
-		iUnit = aIUnit;
-	}
 	/*
 	================================================================
 	
