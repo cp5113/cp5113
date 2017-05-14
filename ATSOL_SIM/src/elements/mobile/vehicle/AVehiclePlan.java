@@ -1,7 +1,7 @@
 /**
  * ATSOL_SIM
  * elements.mobile.vehicle
- * AVehicle.java
+ * APlan.java
  */
 package elements.mobile.vehicle;
 /**
@@ -31,11 +31,11 @@ package elements.mobile.vehicle;
  * </p>
  * 
  * 
- * @date : May 12, 2017
+ * @date : May 13, 2017
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * May 12, 2017 : Coded by S. J. Yun.
+ * May 13, 2017 : Coded by S. J. Yun.
  *
  *
  */
@@ -44,13 +44,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import elements.mobile.AMobile;
+import elements.network.ANode;
+import elements.util.geo.CAltitude;
+import util.CTime;
 
 /**
  * @author S. J. Yun
  *
  */
-public abstract class AVehicle extends AMobile{
+public abstract class AVehiclePlan {
 	/*
 	================================================================
 	
@@ -58,14 +60,10 @@ public abstract class AVehicle extends AMobile{
 	
 	================================================================
 	*/
-	
-	private	CVehicleStatus			iCurrentStatus;
-	private	CVehicleStatus			iPreviousStatus;
-	private	CVehicleStatus			iNextStatus;
-	
-	
-	private	AVehiclePlan			iCurrentPlan;
-	private	List<AVehiclePlan>		iPlanList = Collections.synchronizedList(new ArrayList<AVehiclePlan>());
+
+	private List<ANode>		iNodeList		= Collections.synchronizedList(new ArrayList<ANode>());
+	private List<CTime>		iTimeList		= Collections.synchronizedList(new ArrayList<CTime>());
+	private List<CAltitude>	iAltitudeList	= Collections.synchronizedList(new ArrayList<CAltitude>());
 	
 	
 	/*

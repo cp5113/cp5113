@@ -1,7 +1,7 @@
 /**
  * ATSOL_SIM
  * elements.mobile.vehicle
- * AVehicle.java
+ * CAircraft.java
  */
 package elements.mobile.vehicle;
 /**
@@ -31,26 +31,20 @@ package elements.mobile.vehicle;
  * </p>
  * 
  * 
- * @date : May 12, 2017
+ * @date : May 13, 2017
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * May 12, 2017 : Coded by S. J. Yun.
+ * May 13, 2017 : Coded by S. J. Yun.
  *
  *
  */
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import elements.mobile.AMobile;
 
 /**
  * @author S. J. Yun
  *
  */
-public abstract class AVehicle extends AMobile{
+public class CAircraft extends AVehicle{
 	/*
 	================================================================
 	
@@ -58,16 +52,7 @@ public abstract class AVehicle extends AMobile{
 	
 	================================================================
 	*/
-	
-	private	CVehicleStatus			iCurrentStatus;
-	private	CVehicleStatus			iPreviousStatus;
-	private	CVehicleStatus			iNextStatus;
-	
-	
-	private	AVehiclePlan			iCurrentPlan;
-	private	List<AVehiclePlan>		iPlanList = Collections.synchronizedList(new ArrayList<AVehiclePlan>());
-	
-	
+
 	/*
 	================================================================
 	
