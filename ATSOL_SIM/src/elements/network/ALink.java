@@ -65,10 +65,11 @@ public abstract class ALink extends AElement {
 		
 	
 	private ANode					iOrigin,iDestination;
-	private ArrayList<ALink>		iAdjacentLink = new ArrayList<ALink>();
-	private	double					iDistance	=	0.0;
-	private CDegree					iDegree;
-	private CDegree					iOppositeDegree;
+	private ArrayList<ANode>		iNodeList 				= new ArrayList<ANode>();
+	private ArrayList<ALink>		iAdjacentLink 			= new ArrayList<ALink>();
+	private	double					iDistance				=	0.0;
+	private CDegree					iHeading;
+	private CDegree					iOppositeHeading;
 	
 	
 	
