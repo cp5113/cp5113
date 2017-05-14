@@ -40,13 +40,15 @@ package elements.facility;
  *
  */
 
-import elements.network.AArea;
+import elements.area.AArea;
 
 /**
  * @author S. J. Yun
  *
  */
 public class CApron extends AArea{
+
+	
 	/*
 	================================================================
 	
@@ -62,14 +64,18 @@ public class CApron extends AArea{
 	
 	================================================================
 	 */
-
+	
+	public int countNumberOfObjectInArea() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	/*
 	================================================================
 	
 						Listeners Section
 	
 	================================================================
-	 */  
+	 */
 
 	/*
 	================================================================

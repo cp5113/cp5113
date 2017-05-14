@@ -52,7 +52,7 @@ import elements.util.geo.CDegree;
  * @author S. J. Yun
  *
  */
-public class CAirport extends AFacility {
+public class CAirport extends AFacility   {
 	/*
 	================================================================
 	
