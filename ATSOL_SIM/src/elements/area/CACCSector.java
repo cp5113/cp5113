@@ -1,7 +1,7 @@
 /**
  * ATSOL_SIM
- * elements.network
- * AArea.java
+ * elements.area
+ * CACCSector.java
  */
 package elements.area;
 /**
@@ -31,26 +31,20 @@ package elements.area;
  * </p>
  * 
  * 
- * @date : May 12, 2017
+ * @date : May 13, 2017
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * May 12, 2017 : Coded by S. J. Yun.
+ * May 13, 2017 : Coded by S. J. Yun.
  *
  *
  */
-
-import java.util.LinkedList;
-
-import elements.AElement;
-import elements.network.ANode;
-import elements.util.geo.CAltitude;
 
 /**
  * @author S. J. Yun
  *
  */
-public abstract class AArea extends AElement{
+public class CACCSector extends ASector {
 	/*
 	================================================================
 	
@@ -58,12 +52,7 @@ public abstract class AArea extends AElement{
 	
 	================================================================
 	*/
-	
-	private LinkedList<ANode> 	iVertix = new LinkedList<ANode>();
-	private	CAltitude			iLowLimit;
-	private	CAltitude			iUpperLimit;
-	
-	
+
 	/*
 	================================================================
 	
@@ -71,9 +60,7 @@ public abstract class AArea extends AElement{
 	
 	================================================================
 	 */
-	//abstract public int countNumberOfObjectInArea();
-	
-	
+
 	/*
 	================================================================
 	
