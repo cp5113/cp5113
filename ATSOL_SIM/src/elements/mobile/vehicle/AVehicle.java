@@ -67,7 +67,7 @@ public abstract class AVehicle extends AMobile{
 	private	AVehiclePlan			iCurrentPlan;
 	private	List<AVehiclePlan>		iPlanList 				= Collections.synchronizedList(new ArrayList<AVehiclePlan>());
 	
-	
+	 
 	/*
 	================================================================
 	
