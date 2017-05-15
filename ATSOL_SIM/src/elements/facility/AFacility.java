@@ -55,10 +55,10 @@ abstract public class AFacility extends AElement{
 	================================================================
 	*/	
 	
-	private	static	int				iFacilityCount 		= 0;
+	protected	static	int				iFacilityCount 		= 0;
 	
 	
-	private ELocation				iLocation;		
+	protected ELocation				iLocation;		
 	
 	
 	
