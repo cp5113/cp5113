@@ -1,6 +1,7 @@
 import elements.mobile.human.CAreaController;
 import elements.util.geo.CCoordination;
 import math.basic.BasicMath;
+import test.inherr.B;
 import test.objCounter.TEST;
 
 public class Hello_World {
@@ -42,6 +43,9 @@ public class Hello_World {
 		System.out.println("distance : " + pt1.calculateDistance(pt2));
 		
 		
+		
+		B b = new B(100);
+		System.out.println(b.getA());
 		
 		
 			}

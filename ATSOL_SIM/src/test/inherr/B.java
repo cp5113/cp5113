@@ -1,9 +1,9 @@
 /**
  * ATSOL_SIM
- * elements.mobile.vehicle
- * CAircraft.java
+ * test.inherr
+ * B.java
  */
-package elements.mobile.vehicle;
+package test.inherr;
 /**
  * 
  * Dtails....
@@ -31,11 +31,11 @@ package elements.mobile.vehicle;
  * </p>
  * 
  * 
- * @date : May 13, 2017
+ * @date : May 15, 2017
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * May 13, 2017 : Coded by S. J. Yun.
+ * May 15, 2017 : Coded by S. J. Yun.
  *
  *
  */
@@ -44,7 +44,7 @@ package elements.mobile.vehicle;
  * @author S. J. Yun
  *
  */
-public class CAircraft extends AVehicle{
+public class B extends A{
 	/*
 	================================================================
 	
@@ -52,9 +52,8 @@ public class CAircraft extends AVehicle{
 	
 	================================================================
 	*/
-	
-	private CFlightPlan iCurrentPlan;
-	
+	double a;
+
 	/*
 	================================================================
 	
@@ -62,6 +61,9 @@ public class CAircraft extends AVehicle{
 	
 	================================================================
 	 */
+	public B(double w){
+		a = w;
+	}
 
 	/*
 	================================================================
