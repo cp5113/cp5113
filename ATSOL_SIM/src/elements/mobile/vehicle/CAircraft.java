@@ -52,6 +52,8 @@ public class CAircraft extends AVehicle{
 	
 	================================================================
 	*/
+	private		CAircraftType		iAircraftType;
+	
 	
 	
 	/*
