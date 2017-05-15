@@ -60,7 +60,7 @@ public class AVehiclePerformance {
 	private		double			iLength;
 	private		double			iHeight;
 	
-	private		double			iBasicWeight;
+	private		double			iBasicWeight; 
 	
 	
 	private		String			iProductionCompany;
