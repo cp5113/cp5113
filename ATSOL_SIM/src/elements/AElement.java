@@ -52,9 +52,9 @@ public abstract class AElement {
 	
 	================================================================
 	*/
-	private	String					iName;
-	private int						iID;
-	private String					iType		= this.getClass().getSimpleName();//this.getClass().getSimpleName().substring(1, this.getClass().getSimpleName().length()-1);
+	protected	String					iName;
+	protected 	int						iID;
+	protected 	String					iType		= this.getClass().getSimpleName();//this.getClass().getSimpleName().substring(1, this.getClass().getSimpleName().length()-1);
 	/**
 	 * getiName
 	 * 

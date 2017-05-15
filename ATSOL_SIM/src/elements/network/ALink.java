@@ -58,18 +58,18 @@ public abstract class ALink extends AElement {
 	================================================================
 	 */
 
-	private boolean					iIsOccuping	=	false;
+	protected 	boolean					iIsOccuping	=	false;
 	
 	
-	private int						iCapacity	=	Integer.MAX_VALUE;
+	protected 	int						iCapacity	=	Integer.MAX_VALUE;
 		
 	
-	private ANode					iOrigin,iDestination;
-	private ArrayList<ANode>		iNodeList 				= new ArrayList<ANode>();
-	private ArrayList<ALink>		iAdjacentLink 			= new ArrayList<ALink>();
-	private	double					iDistance				=	0.0;
-	private CDegree					iHeading;
-	private CDegree					iOppositeHeading;
+	protected 	ANode					iOrigin,iDestination;
+	protected 	ArrayList<ANode>		iNodeList 				= new ArrayList<ANode>();
+	protected 	ArrayList<ALink>		iAdjacentLink 			= new ArrayList<ALink>();
+	protected	double					iDistance				=	0.0;
+	protected 	CDegree					iHeading;
+	protected	CDegree					iOppositeHeading;
 	
 	
 	

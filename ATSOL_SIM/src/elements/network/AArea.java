@@ -58,9 +58,9 @@ public abstract class AArea extends AElement{
 	================================================================
 	*/
 	
-	private LinkedList<ANode> 	iVertix = new LinkedList<ANode>();
-	private	CAltitude			iLowLimit;
-	private	CAltitude			iUpperLimit;
+	protected 	LinkedList<ANode> 	iVertix = new LinkedList<ANode>();
+	protected	CAltitude			iLowLimit;
+	protected	CAltitude			iUpperLimit;
 	
 	
 	/*

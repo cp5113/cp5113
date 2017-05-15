@@ -59,14 +59,14 @@ public abstract class ANode extends AElement{
 	================================================================
 	 */
 	
-	private boolean					iIsOccuping	=	false;
+	protected	boolean					iIsOccuping	=	false;
 	
 	
-	private	final	int				CAPACITY	= 1;
+	protected	final	int				CAPACITY	= 1;
 	
-	private CAltitude				iAltitude;
-	private CCoordination			iCoordination;
-	private ArrayList<ANode>		iAdjacentNode = new ArrayList<ANode>();
+	protected 	CAltitude				iAltitude;
+	protected 	CCoordination			iCoordination;
+	protected 	ArrayList<ANode>		iAdjacentNode = new ArrayList<ANode>();
 	
 	
 	
