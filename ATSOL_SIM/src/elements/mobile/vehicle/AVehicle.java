@@ -60,17 +60,17 @@ public abstract class AVehicle extends AMobile{
 	================================================================
 	*/
 	
-	protected	CVehicleStatus			iCurrentStatus;
+	protected		CVehicleStatus			iCurrentStatus;
 	protected		CVehicleStatus			iPreviousStatus;
 	protected		CVehicleStatus			iNextStatus;
 	
 	
-	protected	AVehiclePlan			iCurrentPlan;
-	protected	List<AVehiclePlan>		iPlanList 				= Collections.synchronizedList(new ArrayList<AVehiclePlan>());
+	protected		AVehiclePlan			iCurrentPlan;
+	protected		List<AVehiclePlan>		iPlanList 				= Collections.synchronizedList(new ArrayList<AVehiclePlan>());
 	
 	
-	protected	AOperator				iOperator;
-	protected	AVehiclePerformance		iPerformance;
+	protected		AOperator				iOperator;
+	protected		AVehiclePerformance		iPerformance;
 	
 	 
 	/*
