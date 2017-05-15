@@ -53,7 +53,6 @@ public class CAircraft extends AVehicle{
 	================================================================
 	*/
 	
-	private CFlightPlan iCurrentPlan;
 	
 	/*
 	================================================================
