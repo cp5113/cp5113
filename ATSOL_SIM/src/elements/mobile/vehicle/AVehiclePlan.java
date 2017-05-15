@@ -61,9 +61,9 @@ public abstract class AVehiclePlan {
 	================================================================
 	*/
 
-	private List<ANode>		iNodeList		= Collections.synchronizedList(new ArrayList<ANode>());
-	private List<CTime>		iTimeList		= Collections.synchronizedList(new ArrayList<CTime>());
-	private List<CAltitude>	iAltitudeList	= Collections.synchronizedList(new ArrayList<CAltitude>());
+	protected List<ANode>		iNodeList		= Collections.synchronizedList(new ArrayList<ANode>());
+	protected List<CTime>		iTimeList		= Collections.synchronizedList(new ArrayList<CTime>());
+	protected List<CAltitude>	iAltitudeList	= Collections.synchronizedList(new ArrayList<CAltitude>());
 	
 	
 	/*

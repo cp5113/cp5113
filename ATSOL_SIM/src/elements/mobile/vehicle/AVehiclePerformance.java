@@ -52,18 +52,18 @@ public class AVehiclePerformance {
 	
 	================================================================
 	*/
-	private		int				iSoulCapacity;
-	private		double			iFuelCapacity;  // Weight
-	private		double			iCargoCapacity; // Weight
+	protected		int				iSoulCapacity;
+	protected		double			iFuelCapacity;  // Weight
+	protected		double			iCargoCapacity; // Weight
 	
-	private		double			iWidth;
-	private		double			iLength;
-	private		double			iHeight;
+	protected		double			iWidth;
+	protected		double			iLength;
+	protected		double			iHeight;
 	
-	private		double			iBasicWeight; 
+	protected		double			iBasicWeight; 
 	
 	
-	private		String			iProductionCompany;
+	protected		String			iProductionCompany;
 	
 	
 	
