@@ -45,6 +45,7 @@ import java.util.Collections;
 import java.util.List;
 
 import elements.mobile.AMobile;
+import elements.operator.AOperator;
 
 /**
  * @author S. J. Yun
@@ -67,6 +68,8 @@ public abstract class AVehicle extends AMobile{
 	private	AVehiclePlan			iCurrentPlan;
 	private	List<AVehiclePlan>		iPlanList 				= Collections.synchronizedList(new ArrayList<AVehiclePlan>());
 	
+	
+	private	AOperator				iOperator;
 	 
 	/*
 	================================================================
