@@ -53,10 +53,7 @@ public class CAircraft extends AVehicle{
 	================================================================
 	*/
 	
-	private	CVehicleStatus			twe = iCurrentStatus;
- 
-	
-	
+		
 	
 	/*
 	================================================================
