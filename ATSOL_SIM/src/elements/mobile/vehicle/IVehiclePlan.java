@@ -52,7 +52,7 @@ import util.CTime;
  * @author S. J. Yun
  *
  */
-public abstract class AVehiclePlan {
+public interface IVehiclePlan {
 	/*
 	================================================================
 	
@@ -61,9 +61,9 @@ public abstract class AVehiclePlan {
 	================================================================
 	*/
 
-	protected List<ANode>		iNodeList		= Collections.synchronizedList(new ArrayList<ANode>());
-	protected List<CTime>		iTimeList		= Collections.synchronizedList(new ArrayList<CTime>());
-	protected List<CAltitude>	iAltitudeList	= Collections.synchronizedList(new ArrayList<CAltitude>());
+	List<ANode>		iNodeList		= Collections.synchronizedList(new ArrayList<ANode>());
+	List<CTime>		iTimeList		= Collections.synchronizedList(new ArrayList<CTime>());
+	List<CAltitude>	iAltitudeList	= Collections.synchronizedList(new ArrayList<CAltitude>());
 	
 	
 	/*

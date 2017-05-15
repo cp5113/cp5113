@@ -44,7 +44,7 @@ package elements.mobile.vehicle;
  * @author S. J. Yun
  *
  */
-public class CFlightPlan extends AVehiclePlan{
+public class CFlightPlan implements IVehiclePlan{
 	/*
 	================================================================
 	
