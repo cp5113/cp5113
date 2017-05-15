@@ -70,6 +70,8 @@ public abstract class AVehicle extends AMobile{
 	
 	
 	private	AOperator				iOperator;
+	
+	
 	 
 	/*
 	================================================================
