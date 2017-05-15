@@ -63,7 +63,12 @@ public class AVehiclePerformance {
 	private		double			iBasicWeight;
 	
 	
+<<<<<<< HEAD
+=======
+
+>>>>>>> branch 'master' of https://github.com/cp5113/cp5113.git
 	private		String			iProductionCompany;
+<<<<<<< HEAD
 	
 	
 	
@@ -166,6 +171,9 @@ public class AVehiclePerformance {
 	
 	
 	
+=======
+
+>>>>>>> branch 'master' of https://github.com/cp5113/cp5113.git
 	
 	
 	
