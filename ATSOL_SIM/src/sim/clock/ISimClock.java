@@ -1,9 +1,4 @@
-/**
- * ATSOL_SIM
- * elements
- * GitError.java
- */
-package elements;
+package sim.clock;
 /**
  * 
  * Dtails....
@@ -31,20 +26,18 @@ package elements;
  * </p>
  * 
  * 
- * @date : May 14, 2017
+ * @date : Mar 21, 2019
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
- *
+ * : https://flowarc.tistory.com/entry/%EB%94%94%EC%9E%90%EC%9D%B8-%ED%8C%A8%ED%84%B4-%EC%98%B5%EC%A0%80%EB%B2%84-%ED%8C%A8%ED%84%B4Observer-Pattern 
  * @version : 
- * May 14, 2017 : Coded by S. J. Yun.
+ * Mar 21, 2019 : Coded by S. J. Yun.
  *
  *
  */
 
-/**
- * @author S. J. Yun
- *
- */
-public class GitError {
+import elements.IElementControlledByClock;
+
+public interface ISimClock{
 	/*
 	================================================================
 	
@@ -52,6 +45,8 @@ public class GitError {
 	
 	================================================================
 	*/
+	
+	
 
 	/*
 	================================================================
@@ -60,7 +55,10 @@ public class GitError {
 	
 	================================================================
 	 */
-
+	
+	public void addInClock(IElementControlledByClock aObserver);
+	public void deleteFromClock(IElementControlledByClock aObserver);
+	public void notifyTimeIncrementToElement();	
 	/*
 	================================================================
 	
@@ -76,6 +74,7 @@ public class GitError {
 	
 	================================================================
 	 */
+
 }
 
 

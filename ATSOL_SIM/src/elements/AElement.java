@@ -44,7 +44,7 @@ package elements;
  * @author S. J. Yun
  *
  */
-public abstract class AElement {
+public abstract class AElement{
 	/*
 	================================================================
 	

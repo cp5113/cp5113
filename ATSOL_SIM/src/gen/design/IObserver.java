@@ -1,9 +1,4 @@
-/**
- * ATSOL_SIM
- * elements.mobile.vehicle
- * AVehiclePerformance.java
- */
-package elements.mobile.vehicle;
+package gen.design;
 /**
  * 
  * Dtails....
@@ -31,20 +26,16 @@ package elements.mobile.vehicle;
  * </p>
  * 
  * 
- * @date : May 15, 2017
+ * @date : Mar 21, 2019
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * May 15, 2017 : Coded by S. J. Yun.
+ * Mar 21, 2019 : Coded by S. J. Yun.
  *
  *
  */
 
-/**
- * @author S. J. Yun
- *
- */
-public abstract class AVehiclePerformance {
+public interface IObserver {
 	/*
 	================================================================
 	
@@ -52,23 +43,7 @@ public abstract class AVehiclePerformance {
 	
 	================================================================
 	*/
-	protected		int				iSoulCapacity;
-	protected		double			iFuelCapacity;  // Weight
-	protected		double			iCargoCapacity; // Weight
-	
-	protected		double			iWidth;
-	protected		double			iLength;
-	protected		double			iHeight;
-	
-	protected		double			iBasicWeight; 
-	
-	
-	protected		String			iProductionCompany;
-	
-	
-	
-	
-	
+
 	/*
 	================================================================
 	
@@ -76,7 +51,8 @@ public abstract class AVehiclePerformance {
 	
 	================================================================
 	 */
-
+	public void update(String title, String news);
+	
 	/*
 	================================================================
 	
@@ -92,6 +68,7 @@ public abstract class AVehiclePerformance {
 	
 	================================================================
 	 */
+
 }
 
 
