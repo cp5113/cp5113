@@ -65,6 +65,10 @@ public class CAltitude {
 	
 	================================================================
 	 */
+	public CAltitude(double altitude,EGEOUnit units) {
+		iAltitude   = altitude;
+		iUnit		= units;
+	}
 	/**
 	 * getiAltitude
 	 * 

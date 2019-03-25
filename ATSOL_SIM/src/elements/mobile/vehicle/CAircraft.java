@@ -4,6 +4,10 @@
  * CAircraft.java
  */
 package elements.mobile.vehicle;
+
+import elements.operator.CAirline;
+import elements.property.CAircraftType;
+
 /**
  * 
  * Dtails....
@@ -53,9 +57,13 @@ public class CAircraft extends AVehicle{
 	================================================================
 	*/
 	private		CAircraftType		iAircraftType;
-	
-	
-	
+	private		String				iRegistration;
+		
+	@Override
+	public String toString() {
+		return iRegistration;
+		
+	}
 	/*
 	================================================================
 	
@@ -63,6 +71,24 @@ public class CAircraft extends AVehicle{
 	
 	================================================================
 	 */
+
+	public synchronized CAircraftType getAircraftType() {
+		return iAircraftType;
+	}
+
+	public synchronized void setAircraftType(CAircraftType aAircraftType) {
+		iAircraftType = aAircraftType;
+	}
+
+	public synchronized String getRegistration() {
+		return iRegistration;
+	}
+
+	public synchronized void setRegistration(String aRegistration) {
+		iRegistration = aRegistration;
+	}
+	
+	
 
 	/*
 	================================================================

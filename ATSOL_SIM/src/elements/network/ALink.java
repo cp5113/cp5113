@@ -59,8 +59,6 @@ public abstract class ALink extends AElement {
 	 */
 
 	protected 	boolean					iIsOccuping	=	false;
-	
-	
 	protected 	int						iCapacity	=	Integer.MAX_VALUE;
 		
 	
@@ -81,6 +79,60 @@ public abstract class ALink extends AElement {
 
 	================================================================
 	 */
+	public synchronized boolean isIsOccuping() {
+		return iIsOccuping;
+	}
+	public synchronized void setIsOccuping(boolean aIsOccuping) {
+		iIsOccuping = aIsOccuping;
+	}
+	public synchronized int getCapacity() {
+		return iCapacity;
+	}
+	public synchronized void setCapacity(int aCapacity) {
+		iCapacity = aCapacity;
+	}
+	public synchronized ANode getOrigin() {
+		return iOrigin;
+	}
+	public synchronized void setOrigin(ANode aOrigin) {
+		iOrigin = aOrigin;
+	}
+	public synchronized ANode getDestination() {
+		return iDestination;
+	}
+	public synchronized void setDestination(ANode aDestination) {
+		iDestination = aDestination;
+	}
+	public synchronized ArrayList<ANode> getNodeList() {
+		return iNodeList;
+	}
+	public synchronized void setNodeList(ArrayList<ANode> aNodeList) {
+		iNodeList = aNodeList;
+	}
+	public synchronized ArrayList<ALink> getAdjacentLink() {
+		return iAdjacentLink;
+	}
+	public synchronized void setAdjacentLink(ArrayList<ALink> aAdjacentLink) {
+		iAdjacentLink = aAdjacentLink;
+	}
+	public synchronized double getDistance() {
+		return iDistance;
+	}
+	public synchronized void setDistance(double aDistance) {
+		iDistance = aDistance;
+	}
+	public synchronized CDegree getHeading() {
+		return iHeading;
+	}
+	public synchronized void setHeading(CDegree aHeading) {
+		iHeading = aHeading;
+	}
+	public synchronized CDegree getOppositeHeading() {
+		return iOppositeHeading;
+	}
+	public synchronized void setOppositeHeading(CDegree aOppositeHeading) {
+		iOppositeHeading = aOppositeHeading;
+	}
 	
 	/*
 	================================================================

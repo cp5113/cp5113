@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.Pane?>
+
+<BorderPane fx:id="RootBoderPane" maxHeight="1900" maxWidth="1900" minHeight="500.0" minWidth="500.0" prefHeight="1200" prefWidth="1600" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sim.gui.control.CAtsolSimGuiControl">
+   <top>
+      <MenuBar maxHeight="-Infinity" minHeight="25.0" prefHeight="16.0" prefWidth="500.0" BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+            	  <MenuItem fx:id="MenuRunProject" mnemonicParsing="false" onAction="#MenuRunProjectAction" text="Run Project" />
+                  <MenuItem fx:id="MenuLoadProject" mnemonicParsing="false" text="Load Project" visible="false" />
+                  <MenuItem fx:id="MenuSaveProject" mnemonicParsing="false" text="Save Project" />
+              	  <MenuItem fx:id="MenuClose" mnemonicParsing="false" onAction="#MenuCloseAction" text="Close" />                  
+                  <MenuItem mnemonicParsing="false" text="tt" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+   <center>
+      <SplitPane dividerPositions="0.13016270337922403" minHeight="160.0" minWidth="200.0" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <items>
+            <AnchorPane prefHeight="779.0" prefWidth="570.0">
+               <children>
+                  <ScrollPane fitToWidth="true" minViewportHeight="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <content>
+                        <AnchorPane>
+                           <children>
+                              <FlowPane prefHeight="777.0" prefWidth="316.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <TitledPane alignment="TOP_LEFT" animated="false" expanded="false" text="untitled">
+                                      <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                      </content>
+                                    </TitledPane>
+                                    <TitledPane alignment="TOP_LEFT" animated="false" expanded="false" text="untitled">
+                                      <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                      </content>
+                                    </TitledPane>
+                                    <TitledPane alignment="TOP_LEFT" animated="false" expanded="false" text="untitled">
+                                      <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                      </content>
+                                    </TitledPane>
+                                    <TitledPane alignment="TOP_LEFT" animated="false" expanded="false" text="untitled">
+                                      <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                      </content>
+                                    </TitledPane>
+                                 </children>
+                              </FlowPane>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </ScrollPane>
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="779.0" prefWidth="661.0">
+               <children>
+                  <SplitPane dividerPositions="0.955593509820666" layoutX="-17.0" orientation="VERTICAL" prefHeight="1173.0" prefWidth="1312.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <items>
+                        <AnchorPane>
+                           <children>
+                              <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <tabs>
+                                  <Tab text="Untitled Tab 1">
+                                    <content>
+                                          <Pane fx:id="SimCanvasPane">
+                                             <children>
+                                                <Canvas fx:id="SimCanvas" height="618.0" width="934.0" />
+                                             </children>
+                                          </Pane>
+                                    </content>
+                                  </Tab>
+                                  <Tab text="Untitled Tab 2">
+                                    <content>
+                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    </content>
+                                  </Tab>
+                                </tabs>
+                              </TabPane>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane prefWidth="741.0" />
+                    </items>
+                  </SplitPane>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </center>
+</BorderPane>

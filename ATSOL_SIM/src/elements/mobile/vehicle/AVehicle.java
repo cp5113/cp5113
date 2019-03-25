@@ -46,6 +46,7 @@ import java.util.List;
 
 import elements.mobile.AMobile;
 import elements.operator.AOperator;
+import elements.property.AVehiclePerformance;
 
 /**
  * @author S. J. Yun

@@ -41,8 +41,11 @@ package elements.network;
  */
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import elements.AElement;
+import elements.facility.CAirport;
+import elements.property.CAircraftType;
 import elements.util.geo.CAltitude;
 import elements.util.geo.CCoordination;
 
@@ -62,13 +65,14 @@ public abstract class ANode extends AElement{
 	protected	boolean					iIsOccuping	=	false;
 	
 	
-	protected	final	int				CAPACITY	= 1;
-	
+	protected	int				        CAPACITY	= 1;   
 	protected 	CAltitude				iAltitude;
 	protected 	CCoordination			iCoordination;
+	protected   Double					iLatitude;
+	protected   Double					iLogitude;
 	protected 	ArrayList<ANode>		iAdjacentNode = new ArrayList<ANode>();
-	
-	
+	protected 	HashMap<String,Boolean> iACTypeAPC = new HashMap<String, Boolean>(); 
+	protected	ANode					iChildren;
 	
 	
 	/**
@@ -86,7 +90,10 @@ public abstract class ANode extends AElement{
 		setName(aIName);		
 		iCoordination = aiCoordination;
 	}
-
+	
+	protected ANode() {
+		
+	}
 
 
 	/**
@@ -105,6 +112,110 @@ public abstract class ANode extends AElement{
 		super.setName(aIName);	
 		iCoordination = new CCoordination(aXCoordination, aYCoordination);
 		
+	}
+
+
+
+	public synchronized HashMap<String, Boolean> getACTypeAPC() {
+		return iACTypeAPC;
+	}
+
+
+
+	public synchronized void setACTypeAPC(HashMap<String, Boolean> aACTypeAPC) {
+		iACTypeAPC = aACTypeAPC;
+	}
+
+
+
+	public synchronized boolean isIsOccuping() {
+		return iIsOccuping;
+	}
+
+
+
+	public synchronized void setIsOccuping(boolean aIsOccuping) {
+		iIsOccuping = aIsOccuping;
+	}
+
+
+
+	public synchronized int getCAPACITY() {
+		return CAPACITY;
+	}
+
+
+
+	public synchronized void setCAPACITY(int aCAPACITY) {
+		CAPACITY = aCAPACITY;
+	}
+
+
+
+
+	public synchronized CAltitude getAltitude() {
+		return iAltitude;
+	}
+
+
+
+	public synchronized void setAltitude(CAltitude aAltitude) {
+		iAltitude = aAltitude;
+	}
+
+
+
+	public synchronized CCoordination getCoordination() {
+		return iCoordination;
+	}
+
+
+
+	public synchronized void setCoordination(CCoordination aCoordination) {
+		iCoordination = aCoordination;
+	}
+
+
+
+	public synchronized Double getLatitude() {
+		return iLatitude;
+	}
+
+
+
+	public synchronized void setLatitude(Double aLatitude) {
+		iLatitude = aLatitude;
+	}
+
+
+
+	public synchronized Double getLogitude() {
+		return iLogitude;
+	}
+
+
+
+	public synchronized void setLogitude(Double aLogitude) {
+		iLogitude = aLogitude;
+	}
+
+
+	public synchronized ArrayList<ANode> getAdjacentNode() {
+		return iAdjacentNode;
+	}
+
+
+
+	public synchronized void setAdjacentNode(ArrayList<ANode> aAdjacentNode) {
+		iAdjacentNode = aAdjacentNode;
+	}
+
+	public synchronized ANode getChildren() {
+		return iChildren;
+	}
+
+	public synchronized void setChildren(ANode aChildren) {
+		iChildren = aChildren;
 	}
 	
 

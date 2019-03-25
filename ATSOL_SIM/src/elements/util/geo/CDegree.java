@@ -78,6 +78,11 @@ public class CDegree {
 	 */
 	public CDegree (double aDegree){
 		iDegree = aDegree;
+		if(aDegree<0) {
+			iVariation = EVariation.WEST;
+		}else {				
+			iVariation = EVariation.EAST;
+		}
 	}
 
 	/**

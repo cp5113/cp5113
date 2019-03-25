@@ -1,0 +1,10 @@
+@Airport
+\data\authority\Airport.csv
+\data\network\AirportGroundNode.csv
+\data\network\AirportGroundSPOT.csv
+\data\network\AirportGroundLink.csv
+@ViewPoint
+-1346.9,1149.65,0.21
+@Aircraft
+\data\authority\AircraftType.csv
+\data\authority\Aircraft.csv

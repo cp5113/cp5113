@@ -94,7 +94,6 @@ public class SReadCSV {
 			for(int loopHeader = 0; loopHeader < lHeader.length; loopHeader++) {
 				int lIndexInFieldPrev = 99999;
 				for(int loopField = 0; loopField < lObjectField.length; loopField++) {
-//					System.out.println(lObjectField[loopField].getName());
 					int lIndexInField = lObjectField[loopField].getName().indexOf(lHeader[loopHeader]);				
 					if(lIndexInField>=0 && lIndexInField<lIndexInFieldPrev) {
 						lHeaderLocatedInObjectField[loopHeader] = loopField;
@@ -104,8 +103,6 @@ public class SReadCSV {
 					
 				}			
 			}
-//			System.out.println(Arrays.toString(lHeaderLocatedInObjectField));
-			
 			
 			// Read Data
 			String lALine = "";
@@ -133,7 +130,7 @@ public class SReadCSV {
 				}
 				oOutputObjectList.put(aOutputObject.toString(), aOutputObject);
 			}
-			
+			lBR.close();
 			
 			
 		} catch (IOException e) {
@@ -148,6 +145,82 @@ public class SReadCSV {
 		
 	}
 	
+	
+	
+	
+	public static HashMap<String,HashMap<String,String>> readCSVHashMap(File aFile, Class<?> aOutputClass,String aSeparator) {
+		System.out.println("Reading File : " + aFile.getName());
+		// Create Output Object List
+		// To Unique data
+		 HashMap<String,HashMap<String,String>>  lOutputHashMap = new  HashMap<String,HashMap<String,String>>();
+		
+		
+		
+		/*
+		 * Read CSV
+		 */
+		try {
+			// Read Header
+			BufferedReader lBR 					= new BufferedReader(new FileReader(aFile));			
+			String[] lHeader   					= lBR.readLine().split(aSeparator);
+			
+			
+			// Read Data
+			String lALine = "";
+			while((lALine = lBR.readLine()) != null) {
+				String[] lDataSplited = lALine.split(aSeparator);
+				if(lDataSplited.length==1 && lDataSplited[0].equalsIgnoreCase("")) {
+					continue;
+				}
+				
+				// Create a line data
+				// Fieldname, Data
+				HashMap<String,String> lAlineHashMap = new HashMap<String,String>();
+				StringBuilder lUniqueKey = new StringBuilder();
+				for(int loopHeader = 0; loopHeader < lHeader.length; loopHeader++) {
+					lAlineHashMap.put(lHeader[loopHeader], lDataSplited[loopHeader]);
+					lUniqueKey.append(lDataSplited[loopHeader]);
+				}
+				
+				// Merge to global Data
+				lOutputHashMap.put(lUniqueKey.toString(), lAlineHashMap);
+				
+			}
+			
+			
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Read CSV Exception : " + aFile);
+			e.printStackTrace();
+		}
+		
+		
+		
+		return lOutputHashMap;
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public static HashMap<String,String> readCSVaLine(String[] aHeader, String[] aString){
+		HashMap<String,String> lOutput = new HashMap<String,String>();
+		for(int i = 0 ; i<aHeader.length;i++) {
+			lOutput.put(aHeader[i], aString[i]);
+		}
+		return lOutput;
+		
+	}
 	private static void setField(Object aObject, String aFieldName, String aFieldType, String aInputData) {
 		try {
 			

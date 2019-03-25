@@ -55,6 +55,9 @@ public abstract class AElement{
 	protected	String					iName;
 	protected 	int						iID;
 	protected 	String					iType		= this.getClass().getSimpleName();//this.getClass().getSimpleName().substring(1, this.getClass().getSimpleName().length()-1);
+	protected   String					iNameGroup;
+	protected	AElement				iOwnerObject;
+	
 	/**
 	 * getiName
 	 * 
@@ -68,7 +71,7 @@ public abstract class AElement{
 	 * @version : 
 	 * May 12, 2017 : Coded by S. J. Yun.
 	 */
-	public String getName() {
+	public synchronized String getName() {
 		return iName;
 	}
 	/**
@@ -84,7 +87,7 @@ public abstract class AElement{
 	 * @version : 
 	 * May 12, 2017 : Coded by S. J. Yun.
 	 */
-	public int getID() {
+	public synchronized int getID() {
 		return iID;
 	}
 	/**
@@ -100,7 +103,7 @@ public abstract class AElement{
 	 * @version : 
 	 * May 12, 2017 : Coded by S. J. Yun.
 	 */
-	public String getType() {
+	public synchronized String getType() {
 		return iType;
 	}
 	/**
@@ -116,7 +119,7 @@ public abstract class AElement{
 	 * @version : 
 	 * May 12, 2017 : Coded by S. J. Yun.
 	 */
-	public void setName(String aIName) {
+	public synchronized void setName(String aIName) {
 		iName = aIName;
 	}
 	/**
@@ -132,7 +135,7 @@ public abstract class AElement{
 	 * @version : 
 	 * May 12, 2017 : Coded by S. J. Yun.
 	 */
-	public void setID(int aIID) {
+	public synchronized void setID(int aIID) {
 		iID = aIID;
 	}
 	/**
@@ -148,13 +151,25 @@ public abstract class AElement{
 	 * @version : 
 	 * May 12, 2017 : Coded by S. J. Yun.
 	 */
-	public void setiType(String aIType) {
+	public synchronized void setType(String aIType) {
 		iType = aIType;
 	}
 	
 	
-	public String toString(){
+	public synchronized String toString(){
 		return iName;
+	}
+	public synchronized String getNameGroup() {
+		return iNameGroup;
+	}
+	public synchronized void setNameGroup(String aNameGroup) {
+		iNameGroup = aNameGroup;
+	}
+	public synchronized AElement getOwnerObject() {
+		return iOwnerObject;
+	}
+	public synchronized void setOwnerObject(AElement aOwnerObject) {
+		iOwnerObject = aOwnerObject;
 	}
 
 	/*

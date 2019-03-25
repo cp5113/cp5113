@@ -283,7 +283,16 @@ public class CCoordination {
 		iUnit = aIUnit;
 	}
 	
-
+	public String toString() {
+		return "" + iXCoordination + "," + iYCoordination;
+	}
+	
+	public synchronized void moveX(double aXmove) {
+		iXCoordination += aXmove;
+	}
+	public synchronized void moveY(double aYmove) {
+		iYCoordination += aYmove;
+	}
 	/*
 	================================================================
 	

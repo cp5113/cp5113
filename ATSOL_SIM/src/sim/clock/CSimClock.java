@@ -58,13 +58,13 @@ public class CSimClock implements ISimClock, Runnable{
 	================================================================
 	*/
 	
-	private Calendar iCurrentTIme;
-	private Calendar iStartTIme;
-	private Calendar iEndTIme;	
+	private Calendar iCurrentTIme = Calendar.getInstance();
+	private Calendar iStartTIme = Calendar.getInstance();
+	private Calendar iEndTIme = Calendar.getInstance();
 	private int iIncrementStepInMiliSec = 100;
-	private ArrayList<IElementControlledByClock> iObserverList;
+	private ArrayList<IElementControlledByClock> iObserverList = new ArrayList<IElementControlledByClock>();
 	private static CSimClock iInstance = new CSimClock();
-	
+	private boolean iRunning;
 	
 	
 	private CSimClock() {
@@ -74,6 +74,24 @@ public class CSimClock implements ISimClock, Runnable{
 	
 	
 
+	
+
+
+
+	
+	
+	
+	
+	
+
+
+	/*
+	================================================================
+	
+						Methods Section
+	
+	================================================================
+	 */
 	
 	@Override
 	public void addInClock(IElementControlledByClock aObserver) {
@@ -93,36 +111,70 @@ public class CSimClock implements ISimClock, Runnable{
 		
 		// Verify that All Elements are ready
 		int lCountReadyObserver = 0;
-		for(IElementControlledByClock lObserver : iObserverList) {
-			if(lObserver.isPreparedForNextIncrement()) lCountReadyObserver ++;
-		}
-		
-		// Nofity to all Elements
-		if(lCountReadyObserver == iObserverList.size()) {
+		while(lCountReadyObserver != iObserverList.size()) {
+			lCountReadyObserver = 0;
 			for(IElementControlledByClock lObserver : iObserverList) {
-				lObserver.incrementTime(iCurrentTIme, iIncrementStepInMiliSec);
+				if(lObserver.isPreparedForNextIncrement()) lCountReadyObserver ++;
 			}
 		}
+		
+		// Notify to all Elements
+		for(IElementControlledByClock lObserver : iObserverList) {
+			lObserver.incrementTime(iCurrentTIme, iIncrementStepInMiliSec);
+		}
 
+
+	}
+
+	/** (non-Javadoc)
+	 * @see java.lang.Runnable#run()
+	 */
+	@Override
+	public void run() {
+		iRunning = true;
+		// Run Clock
+
+		while(iCurrentTIme.getTimeInMillis() <= iEndTIme.getTimeInMillis() && iRunning) {
+			System.out.println("Current Time : " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(iCurrentTIme.getTimeInMillis())));
+			iCurrentTIme.add(Calendar.MILLISECOND, iIncrementStepInMiliSec);
+			notifyTimeIncrementToElement();
+			
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		iRunning = false;
+		
+	}
+	
+	public synchronized boolean isRunning() {
+		return iRunning;
+	}
+
+	private synchronized void setRunning(boolean aIsRunning) {
+		iRunning = aIsRunning;
+	}
+	
+	public void stop() {
+		setRunning(false);
 	}
 
 
 
-	
-	
-	
-	
-	
 
 
-	/*
-	================================================================
-	
-						Methods Section
-	
-	================================================================
-	 */
-	
+
+
+
+
+
+
+
+
+
 	/**
 	 * getCurrentTIme
 	 * 
@@ -179,8 +231,12 @@ public class CSimClock implements ISimClock, Runnable{
 	 * @version : 
 	 * Mar 21, 2019 : Coded by S. J. Yun.
 	 */
-	public synchronized void setStartTIme(Calendar aStartTIme) {
-		iStartTIme = aStartTIme;
+	public synchronized void setStartTimeInMilliSeconds(long aMilliSeconds) {
+		iStartTIme.setTimeInMillis(aMilliSeconds);;
+		iCurrentTIme.setTimeInMillis(aMilliSeconds);
+	}
+	public synchronized void setEndTimeInMilliSeconds(long aMilliSeconds) {
+		iEndTIme.setTimeInMillis(aMilliSeconds);;		
 	}
 
 	/**
@@ -296,25 +352,26 @@ public class CSimClock implements ISimClock, Runnable{
 
 
 
-	/** (non-Javadoc)
-	 * @see java.lang.Runnable#run()
-	 */
-	@Override
-	public void run() {
-		
-		// Run Clock
-		while(iCurrentTIme.getTimeInMillis() <= iEndTIme.getTimeInMillis()) {
-			iCurrentTIme.add(Calendar.MILLISECOND, iIncrementStepInMiliSec);;
-			System.out.println("Current Time : " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(iCurrentTIme.getTimeInMillis())));
-//			try {
-//				Thread.sleep(1);
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-		}
+
+
+
+
+
+
+
+
+
+
+	public void setStartTIme(Calendar aStartT) {
+		// TODO Auto-generated method stub
 		
 	}
+
+
+
+
+
+
 	
 
 	/*
