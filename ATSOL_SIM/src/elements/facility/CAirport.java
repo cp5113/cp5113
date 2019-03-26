@@ -47,6 +47,7 @@ import java.util.List;
 
 import elements.mobile.human.CGroundController;
 import elements.mobile.human.CLocalController;
+import elements.network.INode;
 import elements.util.geo.CAltitude;
 import elements.util.geo.CCoordination;
 import elements.util.geo.CDegree;
@@ -59,7 +60,7 @@ import elements.util.geo.CDegree;
  * @author S. J. Yun
  *
  */
-public class CAirport extends AFacility   {
+public class CAirport extends AFacility  implements INode {
 	/*
 	================================================================
 	
@@ -195,6 +196,11 @@ public class CAirport extends AFacility   {
 
 	public String toString() {
 		return iAirportICAO;
+	}
+	@Override
+	public CCoordination getCoordination() {
+		// TODO Auto-generated method stub
+		return iARP;
 	}
 	
 	

@@ -1,9 +1,7 @@
-/**
- * ATSOL_SIM
- * elements.mobile.vehicle
- * APlan.java
- */
-package elements.mobile.vehicle;
+package elements.network;
+
+import elements.util.geo.CCoordination;
+
 /**
  * 
  * Dtails....
@@ -31,28 +29,16 @@ package elements.mobile.vehicle;
  * </p>
  * 
  * 
- * @date : May 13, 2017
+ * @date : Mar 26, 2019
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * May 13, 2017 : Coded by S. J. Yun.
+ * Mar 26, 2019 : Coded by S. J. Yun.
  *
  *
  */
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import elements.network.ANode;
-import elements.util.geo.CAltitude;
-import util.CTime;
-
-/**
- * @author S. J. Yun
- *
- */
-public interface IVehiclePlan {
+public interface INode {
 	/*
 	================================================================
 	
@@ -61,11 +47,6 @@ public interface IVehiclePlan {
 	================================================================
 	*/
 
-	List<ANode>		iNodeList		= Collections.synchronizedList(new ArrayList<ANode>());
-	List<CTime>		iTimeList		= Collections.synchronizedList(new ArrayList<CTime>());
-	List<CAltitude>	iAltitudeList	= Collections.synchronizedList(new ArrayList<CAltitude>());
-	
-	
 	/*
 	================================================================
 	
@@ -73,6 +54,7 @@ public interface IVehiclePlan {
 	
 	================================================================
 	 */
+	public CCoordination getCoordination();
 
 	/*
 	================================================================
@@ -89,6 +71,7 @@ public interface IVehiclePlan {
 	
 	================================================================
 	 */
+
 }
 
 

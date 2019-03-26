@@ -9,9 +9,15 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import elements.airspace.CWaypoint;
 import elements.facility.CAirport;
 import elements.facility.CTaxiwayLink;
+import elements.property.CAircraftType;
+import elements.table.CAirRouteTable;
+import elements.table.CAircraftTable;
+import elements.table.CAircraftTypeTable;
 import elements.table.CAirportTable;
+import elements.table.CWaypointTable;
 import elements.util.geo.CCoordination;
 import javafx.application.Application;
 import sim.clock.CSimClock;
@@ -76,13 +82,19 @@ public class CAtsolSimMain {
 	private static CAtsolSimGuiView iGUI = new CAtsolSimGuiView();
 	private static CSimClock		iSimClock = CSimClock.getInstance();
 
-	private static CAirportTable iAirportTable = new CAirportTable();
+	private static CAirportTable 			iAirportTable 		= new CAirportTable();
+	private static CAircraftTypeTable		iAircraftTypeTable 	= new CAircraftTypeTable();
+	private static CWaypointTable			iWaypointTable      = new CWaypointTable();
+	private static CAirRouteTable			iAirRouteTable      = new CAirRouteTable();
+	private static CAircraftTable			iAircraftTable      = new CAircraftTable();
+	
 	private static List<IDrawingObject> iDrawingObjectList = Collections.synchronizedList(new ArrayList<IDrawingObject>());
 	
 	
 	// Graphic Control
 	private static CCoordination iViewPoint;	
 	private static Double		 iViewPointR;
+	
 	
 	
 	private CAtsolSimMain() {
@@ -116,10 +128,6 @@ public class CAtsolSimMain {
 		Application.launch(iGUI.getClass());
 	}
 
-	private void createAirportTables(ArrayList<File> aFileArrayLise) {
-		// TODO Auto-generated method stub
-		iAirportTable.createTable(aFileArrayLise);
-	}
 	
 	private void createDrawingObjectList() {
 		CAirport lAirport = (CAirport)(iAirportTable.getElementTable().get("RKSI"));
@@ -127,12 +135,18 @@ public class CAtsolSimMain {
 		while(iter.hasNext()) {
 			CTaxiwayLink lTaxiwayLink = iter.next();			
 			iDrawingObjectList.add(lTaxiwayLink);
-//			System.out.println(lTaxiwayLink.getNodeList().get(0).getCoordination() +"," + lTaxiwayLink.getNodeList().get(1).getCoordination());
 		}
+//		CAirport lWaypoint = (CWaypoint)(iWaypointTable.getElementTable().get("RKSI"));
+//		Iterator<CTaxiwayLink> iter = lAirport.getTaxiwayLinkList().iterator();
+		
 	}
 
 	private void loadEnvironment(File aProjectFile) {
 		ArrayList<File> lAirportFileList = new ArrayList<File>();
+		ArrayList<File> lAircraftFileTypeList = new ArrayList<File>();
+		ArrayList<File> lWaypointFileList = new ArrayList<File>();
+		ArrayList<File> lAirRouteFileList = new ArrayList<File>();
+		ArrayList<File> lAircraftFilelist = new ArrayList<File>();
 		
 		// Read Project File				
 		try {			
@@ -140,27 +154,70 @@ public class CAtsolSimMain {
 			String lLine = "";
 			String lLinePrev = "";
 			while(true ) {
-				lLinePrev = lLine;
+				
 				switch(lLinePrev) {
 				case "@Airport":
 					while(true) {
-						lLine = lBR.readLine();
-						if(lLine.contains("@")) {lLinePrev = lLine; break;}
 						lAirportFileList.add(new File(aProjectFile.getParent().toString()+lLine));
+						lLine = lBR.readLine();
+						if(lLine.contains("@")|| lLine==null) {lLinePrev = lLine; break;}						
 					}
-					createAirportTables(lAirportFileList);
-					
-				case "@ViewPoint":
-					lLine = lBR.readLine();
+					iAirportTable.createTable(lAirportFileList);
+					break;
+				case "@ViewPoint":					
 					String[] lviewPoint= lLine.split(",");
 					iViewPoint = new CCoordination(Double.parseDouble(lviewPoint[0]),Double.parseDouble(lviewPoint[1]));
 					iViewPointR= Double.parseDouble(lviewPoint[2]);
+					break;
+				case "@Aircraft":
+					while(true) {
+						if(lLine.contains("AircraftType.csv")) {
+							lAircraftFileTypeList.add(new File(aProjectFile.getParent().toString()+lLine));							
+						}else if(lLine.contains("Aircraft.csv")) {
+							
+						}
+						lLine = lBR.readLine();
+						if(lLine==null || lLine.contains("@") ) {lLinePrev = lLine; break;}
+					}
+					iAircraftTypeTable.createTable(lAircraftFileTypeList);
+					break;
+				case "@Waypoint":
+					while(true) {
+						if(lLine.contains("Waypoint.csv")) {
+							lWaypointFileList.add(new File(aProjectFile.getParent().toString()+lLine));
+						}
+						lLine = lBR.readLine();
+						if(lLine==null || lLine.contains("@") ) {lLinePrev = lLine; break;}
+					}
+					iWaypointTable.createTable(lWaypointFileList);
+					break;
+				case "@Route":
+					while(true) {
+						if(lLine.contains("Route.csv")) {
+							lAirRouteFileList.add(new File(aProjectFile.getParent().toString()+lLine));
+						}
+						lLine = lBR.readLine();
+						if(lLine==null || lLine.contains("@") ) {lLinePrev = lLine; break;}
+					}
+					iAirRouteTable.createTable(lAirRouteFileList);
+					break;
+				case "@FlightSchedule":
+					while(true) {
+						if(lLine.contains("FlightSchedule.csv")) {
+							lAircraftFilelist.add(new File(aProjectFile.getParent().toString()+lLine));
+						}
+						lLine = lBR.readLine();
+						if(lLine==null || lLine.contains("@") ) {lLinePrev = lLine; break;}
+					}
+					iAircraftTable.createTable(lAircraftFilelist);
+					break;
 				default:
 				}
-				
-				if(!lLinePrev.contains("@"))lLine = lBR.readLine();
+				lLinePrev = lLine;
+				lLine = lBR.readLine();
 				if(lLine==null) break;
 			}
+			
 			
 			
 		} catch (Exception e) {
@@ -181,29 +238,50 @@ public class CAtsolSimMain {
 	public synchronized CAirportTable getiAirportTable() {
 		return iAirportTable;
 	}
-	public synchronized void setiAirportTable(CAirportTable aIAirportTable) {
+	public synchronized void setAirportTable(CAirportTable aIAirportTable) {
 		iAirportTable = aIAirportTable;
 	}
-	public synchronized List<IDrawingObject> getiDrawingObjectList() {
+	public synchronized List<IDrawingObject> getDrawingObjectList() {
 		return iDrawingObjectList;
 	}
-	public synchronized void setiDrawingObjectList(List<IDrawingObject> aIDrawingObjectList) {
+	public synchronized void setDrawingObjectList(List<IDrawingObject> aIDrawingObjectList) {
 		iDrawingObjectList = aIDrawingObjectList;
 	}
-	public synchronized CCoordination getiViewPoint() {
+	public synchronized CCoordination getViewPoint() {
 		return iViewPoint;
 	}
-	public synchronized void setiViewPoint(CCoordination aIViewPoint) {
+	public synchronized void setViewPoint(CCoordination aIViewPoint) {
 		iViewPoint = aIViewPoint;
 	}
-	public synchronized Double getiViewPointR() {
+	public synchronized Double getViewPointR() {
 		return iViewPointR;
 	}
-	public synchronized void setiViewPointR(Double aIViewPointR) {
+	public synchronized void setViewPointR(Double aIViewPointR) {
 		iViewPointR = aIViewPointR;
 	}
 	public CSimClock getSimClock() {
 		return iSimClock;
+	}
+	public CWaypointTable getiWaypointTable() {
+		return iWaypointTable;
+	}
+	public CAirRouteTable getiAirRouteTable() {
+		return iAirRouteTable;
+	}
+	public CSimClock getiSimClock() {
+		return iSimClock;
+	}
+	public CAircraftTypeTable getiAircraftTypeTable() {
+		return iAircraftTypeTable;
+	}
+	public List<IDrawingObject> getiDrawingObjectList() {
+		return iDrawingObjectList;
+	}
+	public CCoordination getiViewPoint() {
+		return iViewPoint;
+	}
+	public Double getiViewPointR() {
+		return iViewPointR;
 	}
 	
 	

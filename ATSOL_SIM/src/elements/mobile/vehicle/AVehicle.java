@@ -47,6 +47,7 @@ import java.util.List;
 import elements.mobile.AMobile;
 import elements.operator.AOperator;
 import elements.property.AVehiclePerformance;
+import elements.util.geo.CCoordination;
 
 /**
  * @author S. J. Yun
@@ -72,12 +73,70 @@ public abstract class AVehicle extends AMobile{
 	protected		CVehicleStatus			iNextStatus;
 	
 	
-	protected		IVehiclePlan			iCurrentPlan;
-	protected		List<IVehiclePlan>		iPlanList 				= Collections.synchronizedList(new ArrayList<IVehiclePlan>());
+	protected		List<AVehiclePlan>		iPlanList 				= Collections.synchronizedList(new ArrayList<AVehiclePlan>());
 	
+	protected		CCoordination			iCurrentPostion;
+	protected		CCoordination			iPreviousPostion;
+	protected		CCoordination			iNextPostion;
 	
 	protected		AOperator				iOperator;
 	protected		AVehiclePerformance		iPerformance;
+	
+	
+	public CVehicleStatus getCurrentStatus() {
+		return iCurrentStatus;
+	}
+	public void setCurrentStatus(CVehicleStatus aCurrentStatus) {
+		iCurrentStatus = aCurrentStatus;
+	}
+	public CVehicleStatus getPreviousStatus() {
+		return iPreviousStatus;
+	}
+	public void setPreviousStatus(CVehicleStatus aPreviousStatus) {
+		iPreviousStatus = aPreviousStatus;
+	}
+	public CVehicleStatus getNextStatus() {
+		return iNextStatus;
+	}
+	public void setNextStatus(CVehicleStatus aNextStatus) {
+		iNextStatus = aNextStatus;
+	}
+	public List<AVehiclePlan> getPlanList() {
+		return iPlanList;
+	}
+	public void setPlanList(List<AVehiclePlan> aPlanList) {
+		iPlanList = aPlanList;
+	}
+	public CCoordination getCurrentPostion() {
+		return iCurrentPostion;
+	}
+	public void setCurrentPostion(CCoordination aCurrentPostion) {
+		iCurrentPostion = aCurrentPostion;
+	}
+	public CCoordination getPreviousPostion() {
+		return iPreviousPostion;
+	}
+	public void setPreviousPostion(CCoordination aPreviousPostion) {
+		iPreviousPostion = aPreviousPostion;
+	}
+	public CCoordination getNextPostion() {
+		return iNextPostion;
+	}
+	public void setNextPostion(CCoordination aNextPostion) {
+		iNextPostion = aNextPostion;
+	}
+	public AOperator getOperator() {
+		return iOperator;
+	}
+	public void setOperator(AOperator aOperator) {
+		iOperator = aOperator;
+	}
+	public AVehiclePerformance getPerformance() {
+		return iPerformance;
+	}
+	public void setPerformance(AVehiclePerformance aPerformance) {
+		iPerformance = aPerformance;
+	}
 	
 	 
 	/*
@@ -88,6 +147,9 @@ public abstract class AVehicle extends AMobile{
 	================================================================
 	 */
 
+	
+	
+	
 	/*
 	================================================================
 	

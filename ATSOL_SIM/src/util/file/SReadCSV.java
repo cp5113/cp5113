@@ -286,12 +286,12 @@ public class SReadCSV {
 	
 	
 	
-	public static void main(String args[]) {
-		
-		HashMap<String, Object> aOutput = SReadCSV.readCSV(new File("C:\\Users\\cp511\\git\\cp5113\\ATSOL_SIM\\src\\util\\file\\TestCSVObject.csv"), TestCSVObject.class,",");
-		System.out.println("Testing Main Code is working..");
-		
-	}
+//	public static void main(String args[]) {
+//		
+//		HashMap<String, Object> aOutput = SReadCSV.readCSV(new File("C:\\Users\\cp511\\git\\cp5113\\ATSOL_SIM\\src\\util\\file\\TestCSVObject.csv"), TestCSVObject.class,",");
+//		System.out.println("Testing Main Code is working..");
+//		
+//	}
 	
 
 	/*

@@ -1,9 +1,14 @@
-/**
- * ATSOL_SIM
- * elements.mobile.vehicle
- * CAircraftType.java
- */
-package elements.property;
+package elements.airspace;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import elements.AElement;
+import elements.facility.AFacility;
+import elements.network.INode;
+import elements.table.ITableAble;
+
 /**
  * 
  * Dtails....
@@ -31,24 +36,16 @@ package elements.property;
  * </p>
  * 
  * 
- * @date : May 15, 2017
+ * @date : Mar 26, 2019
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * May 15, 2017 : Coded by S. J. Yun.
+ * Mar 26, 2019 : Coded by S. J. Yun.
  *
  *
  */
 
-import java.util.ArrayList;
-
-import elements.table.ITableAble;
-
-/**
- * @author S. J. Yun
- *
- */
-public class CAircraftType extends AVehicleType implements ITableAble {
+public class CAirRoute extends AElement implements ITableAble{
 	/*
 	================================================================
 	
@@ -57,30 +54,46 @@ public class CAircraftType extends AVehicleType implements ITableAble {
 	================================================================
 	*/
 	
-	
-	public CAircraftType() {
-		
-	}
-
+	private List<INode> iNodeList = Collections.synchronizedList(new ArrayList<INode>());
+	private int				iCurrentElementCountInRoute = 0;
+	private int				iCapacity;
 	/**
 	 * The Constructor
 	 * 
 	 * Do What
 	 * 
-	 * @date : Mar 25, 2019
+	 * @date : Mar 26, 2019
 	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
 	 *
 	 * @version : 
-	 * Mar 25, 2019 : Coded by S. J. Yun.
+	 * Mar 26, 2019 : Coded by S. J. Yun.
 	 */
-	public CAircraftType(String aAircraftType, 
-			CAircraftPerformance aAircraftPerformance, String aRange) {
+	public CAirRoute(List<INode> aNodeList, int aCurrentElementCount, int aCapacity) {
 		super();
-		
-//		iType = aAircraftType;		
-		iPerformance = aAircraftPerformance;
-		iRange = aRange;
+		iNodeList = aNodeList;
+		iCurrentElementCountInRoute = aCurrentElementCount;
+		iCapacity = aCapacity;
 	}
+	/**
+	 * The Constructor
+	 * 
+	 * Do What
+	 * 
+	 * @date : Mar 26, 2019
+	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
+	 *
+	 * @version : 
+	 * Mar 26, 2019 : Coded by S. J. Yun.
+	 */
+	public CAirRoute(String aName) {
+		super();
+		iName = aName;
+		// TODO Auto-generated constructor stub
+	}
+
+	
+	
+
 	/*
 	================================================================
 	
@@ -88,23 +101,25 @@ public class CAircraftType extends AVehicleType implements ITableAble {
 	
 	================================================================
 	 */
-	public String getAircraftType() {
-		return iType;
+	public List<INode> getNodeList() {
+		return iNodeList;
 	}
-	public void setAircraftType(String aAircraftType) {
-		iType = aAircraftType;
+	public void setNodeList(List<INode> aNodeList) {
+		iNodeList = aNodeList;
 	}
-	public CAircraftPerformance getAircraftPerformance() {
-		return (CAircraftPerformance) iPerformance;
+	public int getCurrentElementCountInRoute() {
+		return iCurrentElementCountInRoute;
 	}
-	public void setAircraftPerformance(CAircraftPerformance aAircraftPerformance) {
-		iPerformance = aAircraftPerformance;
+	public void setCurrentElementCountInRoute(int aCurrentElementCountInRoute) {
+		iCurrentElementCountInRoute = aCurrentElementCountInRoute;
 	}
-	public String toString() {
-		return iType + "/" + iRange;
+	public int getCapacity() {
+		return iCapacity;
 	}
-	
-	
+	public void setCapacity(int aCapacity) {
+		iCapacity = aCapacity;
+	}
+
 	/*
 	================================================================
 	

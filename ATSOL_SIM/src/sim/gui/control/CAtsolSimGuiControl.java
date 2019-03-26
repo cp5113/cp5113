@@ -114,7 +114,7 @@ public class CAtsolSimGuiControl {
 		gc.fillRect(0, 0, SimCanvas.getWidth(), SimCanvas.getHeight());
 		
 		
-		Iterator<IDrawingObject> iter = CAtsolSimMain.getInstance().getiDrawingObjectList().iterator();
+		Iterator<IDrawingObject> iter = CAtsolSimMain.getInstance().getDrawingObjectList().iterator();
 		while(iter.hasNext()) {
 			CDrawingInform lDrawingInform = iter.next().getDrawingInform();
 			if(!lDrawingInform.isVisible()) continue; 
@@ -146,7 +146,7 @@ public class CAtsolSimGuiControl {
 				double p1Y = lCoordination.getYCoordination();
 				CCoordination p1 = changeCoordinatesInCanvas(p1X, p1Y);
 				gc.setStroke(lDrawingInform.getColor());
-				gc.fillRect(p1.getXCoordination(), p1.getYCoordination(), 50*CAtsolSimMain.getInstance().getiViewPointR(), 50*CAtsolSimMain.getInstance().getiViewPointR());
+				gc.fillRect(p1.getXCoordination(), p1.getYCoordination(), 50*CAtsolSimMain.getInstance().getViewPointR(), 50*CAtsolSimMain.getInstance().getViewPointR());
 				
 				break;
 			} //switch(lDrawingInform.getShape()) {
@@ -165,9 +165,9 @@ public class CAtsolSimGuiControl {
 		Double lCanvaswidth  = SimCanvas.getWidth();
 		
 		// get View Points
-		double lCenterX = CAtsolSimMain.getInstance().getiViewPoint().getXCoordination();
-		double lCenterY = CAtsolSimMain.getInstance().getiViewPoint().getYCoordination();
-		double lRatio   = CAtsolSimMain.getInstance().getiViewPointR();
+		double lCenterX = CAtsolSimMain.getInstance().getViewPoint().getXCoordination();
+		double lCenterY = CAtsolSimMain.getInstance().getViewPoint().getYCoordination();
+		double lRatio   = CAtsolSimMain.getInstance().getViewPointR();
 		
 		
 		// Normalize Coordination
@@ -222,8 +222,8 @@ public class CAtsolSimGuiControl {
 					iMousePositionYCurrent = ((MouseEvent) aEvent).getSceneY();
 					double lMovementX = (iMousePositionXCurrent-iMousePositionXPrev);
 					double lMovementY = (iMousePositionYCurrent-iMousePositionYPrev);
-					CAtsolSimMain.getInstance().getiViewPoint().moveX(-lMovementX/CAtsolSimMain.getInstance().getiViewPointR());
-					CAtsolSimMain.getInstance().getiViewPoint().moveY(lMovementY/CAtsolSimMain.getInstance().getiViewPointR());					
+					CAtsolSimMain.getInstance().getViewPoint().moveX(-lMovementX/CAtsolSimMain.getInstance().getViewPointR());
+					CAtsolSimMain.getInstance().getViewPoint().moveY(lMovementY/CAtsolSimMain.getInstance().getViewPointR());					
 					drawDrawingObjectList();
 					iMousePositionXPrev = iMousePositionXCurrent;
 					iMousePositionYPrev = iMousePositionYCurrent;
@@ -256,10 +256,10 @@ public class CAtsolSimGuiControl {
 //				}				
 				if(((ScrollEvent) aEvent).getDeltaY()<0) {
 //					CAtsolSimMain.getInstance().setiViewPointR(CAtsolSimMain.getInstance().getiViewPointR() - iScrollStep);
-					CAtsolSimMain.getInstance().setiViewPointR(CAtsolSimMain.getInstance().getiViewPointR()*0.7);
+					CAtsolSimMain.getInstance().setViewPointR(CAtsolSimMain.getInstance().getViewPointR()*0.7);
 				}else {
 //					CAtsolSimMain.getInstance().setiViewPointR(CAtsolSimMain.getInstance().getiViewPointR() +iScrollStep);
-					CAtsolSimMain.getInstance().setiViewPointR(CAtsolSimMain.getInstance().getiViewPointR()/0.7);
+					CAtsolSimMain.getInstance().setViewPointR(CAtsolSimMain.getInstance().getViewPointR()/0.7);
 				}
 				
 				drawDrawingObjectList();

@@ -40,11 +40,14 @@ package elements;
  *
  */
 
+import elements.facility.ELocation;
+import elements.table.ITableAble;
+
 /**
  * @author S. J. Yun
  *
  */
-public abstract class AElement{
+public abstract class AElement implements ITableAble{
 	/*
 	================================================================
 	
@@ -57,7 +60,9 @@ public abstract class AElement{
 	protected 	String					iType		= this.getClass().getSimpleName();//this.getClass().getSimpleName().substring(1, this.getClass().getSimpleName().length()-1);
 	protected   String					iNameGroup;
 	protected	AElement				iOwnerObject;
-	
+	protected ELocation				    iLocation;		
+	protected 	int						iCapacity;
+
 	/**
 	 * getiName
 	 * 
@@ -171,7 +176,14 @@ public abstract class AElement{
 	public synchronized void setOwnerObject(AElement aOwnerObject) {
 		iOwnerObject = aOwnerObject;
 	}
-
+	public ELocation getLocation(){		
+		return iLocation;
+	}
+	public int getCapacity() {
+		return iCapacity;
+	}
+	
+	
 	/*
 	================================================================
 	

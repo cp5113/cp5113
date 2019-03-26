@@ -123,7 +123,7 @@ public class CAirportTable extends ATable {
 		for(String key : lDataList.keySet()) {
 			// Extract Data
 			HashMap<String,String> lData = lDataList.get(key);
-
+			
 			// get Properties
 			String lTaxiwayLinkName = lData.get("Name");
 			String lTaxiwayNodeConnected1 = lData.get("StartNode");
@@ -161,7 +161,6 @@ public class CAirportTable extends ATable {
 			lTargetAirport.getTaxiwayLinkList().add(lTaxiwayLink);
 
 		} // for(String key : lDataList.keySet()) 
-		
 		
 	}
 
@@ -234,7 +233,7 @@ public class CAirportTable extends ATable {
 			// Find Linked Airport
 			String lAirportStr = lData.get("Airport");
 			CAirport lTargetAirport  = (CAirport) getElementTable().get(lAirportStr);
-			Hashtable<String, AElement> a = getElementTable();
+			
 			// Set Properties
 			CTaxiwayNode lTaxiwayNode = new CTaxiwayNode(lData.get("Name"),new CCoordination(Double.parseDouble(lData.get("Xcoord")), Double.parseDouble(lData.get("Ycoord")),EGEOUnit.TM));
 			lTaxiwayNode.setNameGroup(lData.get("NameGroup"));
@@ -306,13 +305,13 @@ public class CAirportTable extends ATable {
 	
 	public static void main(String args[]) {
 		CAirportTable my = new CAirportTable();
-		File[] aFile = new File[4];
-		aFile[0] = new File("C:\\Users\\cp511\\git\\cp5113\\ATSOL_SIM\\SimStudy\\data\\authority\\Airport.csv");
-		aFile[1] = new File("C:\\Users\\cp511\\git\\cp5113\\ATSOL_SIM\\SimStudy\\data\\network\\AirportGroundNode.csv");
-		aFile[2] = new File("C:\\Users\\cp511\\git\\cp5113\\ATSOL_SIM\\SimStudy\\data\\network\\AirportGroundSPOT.csv");
-		aFile[3] = new File("C:\\Users\\cp511\\git\\cp5113\\ATSOL_SIM\\SimStudy\\data\\network\\AirportGroundLink.csv");
+		ArrayList<File> aFile = new ArrayList<File>();
+		aFile.add(new File("C:\\Users\\cp511\\git\\cp5113\\ATSOL_SIM\\SimStudy\\data\\authority\\Airport.csv"));
+		aFile.add(new File("C:\\Users\\cp511\\git\\cp5113\\ATSOL_SIM\\SimStudy\\data\\network\\AirportGroundNode.csv"));
+		aFile.add(new File("C:\\Users\\cp511\\git\\cp5113\\ATSOL_SIM\\SimStudy\\data\\network\\AirportGroundSPOT.csv"));
+		aFile.add(new File("C:\\Users\\cp511\\git\\cp5113\\ATSOL_SIM\\SimStudy\\data\\network\\AirportGroundLink.csv"));
 		
-//		my.createTable(aFile);
+		my.createTable(aFile);
 	}
 	/*
 	================================================================

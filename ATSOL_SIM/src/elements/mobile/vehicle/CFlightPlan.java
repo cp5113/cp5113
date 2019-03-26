@@ -40,11 +40,16 @@ package elements.mobile.vehicle;
  *
  */
 
+import elements.facility.CRunway;
+import elements.facility.CSpot;
+import elements.network.INode;
+
 /**
  * @author S. J. Yun
  *
  */
-public class CFlightPlan implements IVehiclePlan{
+public class CFlightPlan extends AVehiclePlan{
+	
 	/*
 	================================================================
 	
@@ -52,7 +57,19 @@ public class CFlightPlan implements IVehiclePlan{
 	
 	================================================================
 	*/
-
+	
+	private String iCallsign; 
+	private CRunway iDepartureRunway;
+	private CRunway iArrivalRunway;
+	private CSpot	iArrivalSpot;
+	private CSpot   iDepartureSpot;
+	
+	
+	public CFlightPlan(AVehicle aOwner, INode aOrigination, INode aDestination) {
+		super(aOwner, aOrigination, aDestination);
+		// TODO Auto-generated constructor stub
+	}
+	
 	/*
 	================================================================
 	
@@ -60,6 +77,12 @@ public class CFlightPlan implements IVehiclePlan{
 	
 	================================================================
 	 */
+	public String getCallsign() {
+		return iCallsign;
+	}
+	public void setCallsign(String aCallsign) {
+		iCallsign = aCallsign;
+	}
 
 	/*
 	================================================================

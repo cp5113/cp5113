@@ -53,7 +53,7 @@ import elements.util.geo.CCoordination;
  * @author S. J. Yun
  *
  */
-public abstract class ANode extends AElement{
+public abstract class ANode extends AElement implements INode{
 	/*
 	================================================================
 

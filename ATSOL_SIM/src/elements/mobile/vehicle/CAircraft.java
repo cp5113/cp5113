@@ -5,8 +5,13 @@
  */
 package elements.mobile.vehicle;
 
+import java.util.ArrayList;
+
 import elements.operator.CAirline;
 import elements.property.CAircraftType;
+import elements.table.ITableAble;
+import sim.gui.CDrawingInform;
+import sim.gui.IDrawingObject;
 
 /**
  * 
@@ -48,7 +53,7 @@ import elements.property.CAircraftType;
  * @author S. J. Yun
  *
  */
-public class CAircraft extends AVehicle{
+public class CAircraft extends AVehicle implements ITableAble, IDrawingObject{
 	/*
 	================================================================
 	
@@ -56,9 +61,13 @@ public class CAircraft extends AVehicle{
 	
 	================================================================
 	*/
-	private		CAircraftType		iAircraftType;
-	private		String				iRegistration;
-		
+	private		CAircraftType					iAircraftType;
+	private		String							iRegistration;
+	private 	ArrayList<CFlightPlan>		    iFlightPlanList = new ArrayList<CFlightPlan>();	
+	private 	CAirline						iAirline;
+	
+	private	CFlightPlan							iCurrentFlightPlan;
+	
 	@Override
 	public String toString() {
 		return iRegistration;
@@ -86,6 +95,24 @@ public class CAircraft extends AVehicle{
 
 	public synchronized void setRegistration(String aRegistration) {
 		iRegistration = aRegistration;
+	}
+
+	public ArrayList<CFlightPlan> getFlightPlanList() {
+		return iFlightPlanList;
+	}
+
+	public CAirline getAirline() {
+		return iAirline;
+	}
+
+	public void setAirline(CAirline aAirline) {
+		iAirline = aAirline;
+	}
+
+	@Override
+	public CDrawingInform getDrawingInform() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

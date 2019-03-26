@@ -52,8 +52,8 @@ public abstract class ATable {
 	
 	================================================================
 	*/
-	private List<AElement> iElementList = Collections.synchronizedList(new ArrayList<AElement>());
-	private Hashtable<String, AElement> iElementTable = new Hashtable<String, AElement>();
+	private List<ITableAble> iElementList = Collections.synchronizedList(new ArrayList<ITableAble>());
+	private Hashtable<String, ITableAble> iElementTable = new Hashtable<String, ITableAble>();
 	/*
 	================================================================
 	
@@ -61,28 +61,37 @@ public abstract class ATable {
 	
 	================================================================
 	 */
-	public List<AElement> getElementList(){
+	public List<ITableAble> getElementList(){
 		return iElementList;
 	} 
-	public Hashtable<String,AElement> getElementTable(){
+	public Hashtable<String,ITableAble> getElementTable(){
 		return iElementTable;
 	} 
 	
-	public void setElementList(ArrayList<AElement> aElimentList){
+	public void setElementList(ArrayList<ITableAble> aElimentList){
 		iElementList = aElimentList;		
 		for(int i = 0; i < aElimentList.size();i++) {
 			iElementTable.put(aElimentList.get(i).toString(),aElimentList.get(i));
 		}
 	} 
-	public void addElement(AElement aElement) {
+	public void addElement(ITableAble aElement) {
 		iElementList.add(aElement);
 		iElementTable.put(aElement.toString(),aElement);
 	}
-	public void removeElement(AElement aElement) {
+	public void removeElement(ITableAble aElement) {
 		iElementList.remove(aElement);
 		iElementTable.remove(aElement.toString());
 	}
-	
+	public Double parseDouble(String s) {
+		Double output;
+		try{
+			output = Double.parseDouble(s);
+		}catch(Exception e) {
+			output = 0.0;
+		}
+		return output;
+		
+	}
 	
 	
 	abstract public void createTable(ArrayList<File> aFileArrayList); 

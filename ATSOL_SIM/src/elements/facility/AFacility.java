@@ -58,7 +58,7 @@ abstract public class AFacility extends AElement{
 	protected	static	int				iFacilityCount 		= 0;
 	
 	
-	protected ELocation				iLocation;		
+
 	
 	
 	
@@ -74,13 +74,11 @@ abstract public class AFacility extends AElement{
 	
 	================================================================
 	 */
+	
 	public int getFacilityCount(){		
 		return iFacilityCount;
 	}
-	
-	public ELocation getLocation(){		
-		return iLocation;
-	}
+
 	
 	/*
 	================================================================

@@ -1,9 +1,12 @@
-/**
- * ATSOL_SIM
- * elements.mobile.vehicle
- * CAircraftType.java
- */
-package elements.property;
+package elements.airspace;
+
+import elements.AElement;
+import elements.facility.AFacility;
+import elements.facility.ELocation;
+import elements.network.ANode;
+import elements.table.ITableAble;
+import elements.util.geo.CCoordination;
+
 /**
  * 
  * Dtails....
@@ -31,24 +34,16 @@ package elements.property;
  * </p>
  * 
  * 
- * @date : May 15, 2017
+ * @date : Mar 26, 2019
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * May 15, 2017 : Coded by S. J. Yun.
+ * Mar 26, 2019 : Coded by S. J. Yun.
  *
  *
  */
 
-import java.util.ArrayList;
-
-import elements.table.ITableAble;
-
-/**
- * @author S. J. Yun
- *
- */
-public class CAircraftType extends AVehicleType implements ITableAble {
+public class CWaypoint extends ANode implements ITableAble {
 	/*
 	================================================================
 	
@@ -56,31 +51,28 @@ public class CAircraftType extends AVehicleType implements ITableAble {
 	
 	================================================================
 	*/
-	
-	
-	public CAircraftType() {
-		
-	}
 
 	/**
 	 * The Constructor
 	 * 
 	 * Do What
 	 * 
-	 * @date : Mar 25, 2019
+	 * @date : Mar 26, 2019
 	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
 	 *
 	 * @version : 
-	 * Mar 25, 2019 : Coded by S. J. Yun.
+	 * Mar 26, 2019 : Coded by S. J. Yun.
 	 */
-	public CAircraftType(String aAircraftType, 
-			CAircraftPerformance aAircraftPerformance, String aRange) {
+	public CWaypoint(String aName,CCoordination aCoordination) {
 		super();
-		
-//		iType = aAircraftType;		
-		iPerformance = aAircraftPerformance;
-		iRange = aRange;
+		iName		 = aName;
+		iCoordination = aCoordination;
+		iLocation	  = ELocation.AIRSPACE;
+				
 	}
+
+			
+
 	/*
 	================================================================
 	
@@ -88,23 +80,7 @@ public class CAircraftType extends AVehicleType implements ITableAble {
 	
 	================================================================
 	 */
-	public String getAircraftType() {
-		return iType;
-	}
-	public void setAircraftType(String aAircraftType) {
-		iType = aAircraftType;
-	}
-	public CAircraftPerformance getAircraftPerformance() {
-		return (CAircraftPerformance) iPerformance;
-	}
-	public void setAircraftPerformance(CAircraftPerformance aAircraftPerformance) {
-		iPerformance = aAircraftPerformance;
-	}
-	public String toString() {
-		return iType + "/" + iRange;
-	}
-	
-	
+
 	/*
 	================================================================
 	
