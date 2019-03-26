@@ -65,6 +65,7 @@ public class AVehiclePlan {
 	private INode				iCurrentNode				;
 	private INode				iOriginationNode			;
 	private INode				iDestinationNode			;
+	private CAltitude			iCrusingAltitude			;
 	private List<INode>			iNodeList				= Collections.synchronizedList(new ArrayList<INode>());
 	private List<Calendar>		iScheduleTimeList		= Collections.synchronizedList(new ArrayList<Calendar>());
 	private List<Calendar>		iEstimateTimeList		= Collections.synchronizedList(new ArrayList<Calendar>());
@@ -187,6 +188,14 @@ public class AVehiclePlan {
 
 	public void setScheduleTimeList(List<Calendar> aScheduleTimeList) {
 		iScheduleTimeList = aScheduleTimeList;
+	}
+
+	public CAltitude getCrusingAltitude() {
+		return iCrusingAltitude;
+	}
+
+	public void setCrusingAltitude(CAltitude aCrusingAltitude) {
+		iCrusingAltitude = aCrusingAltitude;
 	}
 	
 	

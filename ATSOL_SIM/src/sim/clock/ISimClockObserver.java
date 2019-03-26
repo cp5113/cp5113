@@ -37,7 +37,7 @@ package sim.clock;
 
 import elements.IElementControlledByClock;
 
-public interface ISimClock{
+public interface ISimClockObserver {
 	/*
 	================================================================
 	

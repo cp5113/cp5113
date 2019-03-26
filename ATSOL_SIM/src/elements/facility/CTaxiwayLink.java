@@ -84,45 +84,6 @@ public class CTaxiwayLink extends ALink implements IDrawingObject{
 	@Override
 	public CDrawingInform getDrawingInform() {
 		
-		// TODO Auto-generated method stub
-		CAirportTable a = CAtsolSimMain.getInstance().getiAirportTable();
-		CAirport b = (CAirport) a.getElementTable().get("RKSI");
-		CTaxiwayLink compare = null;
-		for(int i = 0; i< b.getTaxiwayLinkList().size(); i++) {
-			CTaxiwayLink linkInTable = b.getTaxiwayLinkList().get(i);
-//			System.out.println(linkInTable.getNodeList().get(0).getCoordination() + "," +linkInTable.getNodeList().get(1).getCoordination());
-			if(this==linkInTable) {
-//				if(this.getNodeList().get(0).getCoordination().getXCoordination() != linkInTable.getNodeList().get(0).getCoordination().getXCoordination()) {
-//					System.out.println("Wow");
-//				}
-				
-				compare = linkInTable;
-				
-			}
-				
-			
-//			System.out.println(b.getTaxiwayLinkList().get(i).getNodeList().get(0).getCoordination() + "," +b.getTaxiwayLinkList().get(i).getNodeList().get(1).getCoordination()); 
-		}
-		
-		
-		if(this.getNodeList().get(0).getCoordination().getXCoordination() != compare.getNodeList().get(0).getCoordination().getXCoordination()) {
-			System.out.println("WW");
-		}
-		if(this.getNodeList().get(1).getCoordination().getXCoordination() != compare.getNodeList().get(1).getCoordination().getXCoordination()) {
-			System.out.println("WW");
-		}
-		
-		if(this.getNodeList().get(0).getCoordination().getYCoordination() != compare.getNodeList().get(0).getCoordination().getYCoordination()) {
-			System.out.println("WW");
-		}
-		if(this.getNodeList().get(1).getCoordination().getYCoordination() != compare.getNodeList().get(1).getCoordination().getYCoordination()) {
-			System.out.println("WW");
-		}
-		
-//		System.out.println(this.getNodeList().get(0).getCoordination() + "," +this.getNodeList().get(1).getCoordination());
-//		System.out.println(compare.getNodeList().get(0).getCoordination() + "," +compare.getNodeList().get(1).getCoordination());
-//		System.out.println(this);
-		
 		List<CCoordination> lCoordinationList = Collections.synchronizedList(new ArrayList<CCoordination>()); 
 		Iterator<ANode> iter = this.getNodeList().iterator();		
 		while(iter.hasNext()) {

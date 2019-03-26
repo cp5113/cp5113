@@ -77,7 +77,7 @@ public class CAircraftType extends AVehicleType implements ITableAble {
 			CAircraftPerformance aAircraftPerformance, String aRange) {
 		super();
 		
-//		iType = aAircraftType;		
+		iType = aAircraftType;		
 		iPerformance = aAircraftPerformance;
 		iRange = aRange;
 	}

@@ -47,7 +47,7 @@ import elements.IElementControlledByClock;
  * @author S. J. Yun
  *
  */
-public class CSimClock implements ISimClock, Runnable{
+public class CSimClock implements ISimClockObserver, Runnable{
 	
 	
 	/*

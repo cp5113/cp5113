@@ -149,6 +149,14 @@ public class CAtsolSimGuiControl {
 				gc.fillRect(p1.getXCoordination(), p1.getYCoordination(), 50*CAtsolSimMain.getInstance().getViewPointR(), 50*CAtsolSimMain.getInstance().getViewPointR());
 				
 				break;
+			case CIRCLE:
+				break;
+			case RECTANGEL:
+				break;
+			case SQUARE:
+				break;
+			default:
+				break;
 			} //switch(lDrawingInform.getShape()) {
 			
 		}//while(iter.hasNext()) {

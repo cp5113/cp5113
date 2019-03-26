@@ -156,14 +156,13 @@ public class CAircraftTable extends ATable {
 			CAircraft lAircraft	= (CAircraft) getElementTable().get(lRegistration);
 			if(lAircraft == null) {
 				lAircraft = new CAircraft();
-				lAircraft.setRegistration(lRegistration);
-				Hashtable<String, ITableAble> b = CAtsolSimMain.getInstance().getiAircraftTypeTable().getElementTable();
+				lAircraft.setRegistration(lRegistration);				
 				CAircraftType lACTypeInTable = (CAircraftType) CAtsolSimMain.getInstance().getiAircraftTypeTable().getElementTable().get(lAircraftType + "/" +lRange);
 				if(lACTypeInTable == null) {
 					System.out.println("Aircraft Type "+ lAircraftType +"/Range is not defined");
 					System.out.println("Input Data is "+ lAircraftType +"/" + lRange);
 				}
-				lAircraft.setAircraftType(lACTypeInTable);
+				lAircraft.setVehcleType(lACTypeInTable);
 			}
 
 			// Search Node List
@@ -187,6 +186,7 @@ public class CAircraftTable extends ATable {
 			
 			// Set Properties to FlightPlan
 			lFlightPlan.setCallsign(lCallsign);
+			lFlightPlan.setCrusingAltitude(new CAltitude(parseDouble(lCrusingAltitude), EGEOUnit.FEET));
 			
 			// Add Node list into Flight Plan			
 			for(int loopNode = 0; loopNode < lNodeList.size(); loopNode++) {
@@ -213,6 +213,7 @@ public class CAircraftTable extends ATable {
 				if(lNodeList.get(loopNode) instanceof CWaypoint && (lFlightPlan.getOriginationNode() instanceof CWaypoint || lFlightPlan.getDestinationNode() instanceof CWaypoint)) {
 					lFlightPlan.setAltitude(loopNode, new CAltitude(parseDouble(lCrusingAltitude), EGEOUnit.FEET));
 				}
+				lAircraft.getPlanList().add(lFlightPlan);
 			}
 			// add to table			
 			addElement(lAircraft);

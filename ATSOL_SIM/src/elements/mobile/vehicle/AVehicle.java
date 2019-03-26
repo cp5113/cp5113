@@ -47,6 +47,7 @@ import java.util.List;
 import elements.mobile.AMobile;
 import elements.operator.AOperator;
 import elements.property.AVehiclePerformance;
+import elements.property.AVehicleType;
 import elements.util.geo.CCoordination;
 
 /**
@@ -67,6 +68,7 @@ public abstract class AVehicle extends AMobile{
 	
 	================================================================
 	*/
+	protected		AVehicleType			iVehcleType;
 	
 	protected		CVehicleStatus			iCurrentStatus;
 	protected		CVehicleStatus			iPreviousStatus;
@@ -74,6 +76,7 @@ public abstract class AVehicle extends AMobile{
 	
 	
 	protected		List<AVehiclePlan>		iPlanList 				= Collections.synchronizedList(new ArrayList<AVehiclePlan>());
+	protected		AVehiclePlan			iCurrentPlan			;
 	
 	protected		CCoordination			iCurrentPostion;
 	protected		CCoordination			iPreviousPostion;
@@ -136,6 +139,18 @@ public abstract class AVehicle extends AMobile{
 	}
 	public void setPerformance(AVehiclePerformance aPerformance) {
 		iPerformance = aPerformance;
+	}
+	public AVehiclePlan getCurrentPlan() {
+		return iCurrentPlan;
+	}
+	public void setCurrentPlan(AVehiclePlan aCurrentPlan) {
+		iCurrentPlan = aCurrentPlan;
+	}
+	public AVehicleType getVehcleType() {
+		return iVehcleType;
+	}
+	public void setVehcleType(AVehicleType aVehcleType) {
+		iVehcleType = aVehcleType;
 	}
 	
 	 

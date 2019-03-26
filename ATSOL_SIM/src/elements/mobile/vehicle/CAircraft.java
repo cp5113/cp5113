@@ -6,7 +6,9 @@
 package elements.mobile.vehicle;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
+import elements.IElementControlledByClock;
 import elements.operator.CAirline;
 import elements.property.CAircraftType;
 import elements.table.ITableAble;
@@ -53,7 +55,7 @@ import sim.gui.IDrawingObject;
  * @author S. J. Yun
  *
  */
-public class CAircraft extends AVehicle implements ITableAble, IDrawingObject{
+public class CAircraft extends AVehicle implements ITableAble, IDrawingObject, IElementControlledByClock{
 	/*
 	================================================================
 	
@@ -61,12 +63,9 @@ public class CAircraft extends AVehicle implements ITableAble, IDrawingObject{
 	
 	================================================================
 	*/
-	private		CAircraftType					iAircraftType;
-	private		String							iRegistration;
-	private 	ArrayList<CFlightPlan>		    iFlightPlanList = new ArrayList<CFlightPlan>();	
+	private		String							iRegistration;	
 	private 	CAirline						iAirline;
 	
-	private	CFlightPlan							iCurrentFlightPlan;
 	
 	@Override
 	public String toString() {
@@ -81,13 +80,7 @@ public class CAircraft extends AVehicle implements ITableAble, IDrawingObject{
 	================================================================
 	 */
 
-	public synchronized CAircraftType getAircraftType() {
-		return iAircraftType;
-	}
-
-	public synchronized void setAircraftType(CAircraftType aAircraftType) {
-		iAircraftType = aAircraftType;
-	}
+	
 
 	public synchronized String getRegistration() {
 		return iRegistration;
@@ -95,10 +88,6 @@ public class CAircraft extends AVehicle implements ITableAble, IDrawingObject{
 
 	public synchronized void setRegistration(String aRegistration) {
 		iRegistration = aRegistration;
-	}
-
-	public ArrayList<CFlightPlan> getFlightPlanList() {
-		return iFlightPlanList;
 	}
 
 	public CAirline getAirline() {
@@ -109,13 +98,6 @@ public class CAircraft extends AVehicle implements ITableAble, IDrawingObject{
 		iAirline = aAirline;
 	}
 
-	@Override
-	public CDrawingInform getDrawingInform() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	
 
 	/*
 	================================================================
@@ -124,6 +106,23 @@ public class CAircraft extends AVehicle implements ITableAble, IDrawingObject{
 	
 	================================================================
 	 */
+	@Override
+	public CDrawingInform getDrawingInform() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public void incrementTime(Calendar aCurrentTIme, int aIncrementStepInSec) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public boolean isPreparedForNextIncrement() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	
 
 	/*
 	================================================================
