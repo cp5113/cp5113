@@ -65,6 +65,8 @@ public class AVehiclePlan {
 	private INode				iCurrentNode				;
 	private INode				iOriginationNode			;
 	private INode				iDestinationNode			;
+	private String				iOriginationAirport;
+	private String				iDestinationAirport;
 	private CAltitude			iCrusingAltitude			;
 	private List<INode>			iNodeList				= Collections.synchronizedList(new ArrayList<INode>());
 	private List<Calendar>		iScheduleTimeList		= Collections.synchronizedList(new ArrayList<Calendar>());
@@ -196,6 +198,22 @@ public class AVehiclePlan {
 
 	public void setCrusingAltitude(CAltitude aCrusingAltitude) {
 		iCrusingAltitude = aCrusingAltitude;
+	}
+
+	public String getOriginationAirport() {
+		return iOriginationAirport;
+	}
+
+	public void setOriginationAirport(String aOriginationAirport) {
+		iOriginationAirport = aOriginationAirport;
+	}
+
+	public String getDestinationAirport() {
+		return iDestinationAirport;
+	}
+
+	public void setDestinationAirport(String aDestinationAirport) {
+		iDestinationAirport = aDestinationAirport;
 	}
 	
 	

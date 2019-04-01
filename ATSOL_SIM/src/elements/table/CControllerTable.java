@@ -60,12 +60,18 @@ import elements.AElement;
 import elements.IElementControlledByClock;
 import elements.airspace.CAirRoute;
 import elements.airspace.CWaypoint;
+import elements.facility.AFacility;
 import elements.facility.CAirport;
 import elements.facility.CSpot;
 import elements.facility.CTaxiwayLink;
 import elements.facility.CTaxiwayNode;
+import elements.mobile.human.AATCController;
+import elements.mobile.human.CGroundController;
+import elements.mobile.human.EGender;
+import elements.mobile.human.ESkill;
 import elements.mobile.vehicle.CAircraft;
 import elements.mobile.vehicle.CFlightPlan;
+import elements.network.ANode;
 import elements.network.INode;
 import elements.property.CAircraftPerformance;
 import elements.property.CAircraftType;
@@ -82,7 +88,7 @@ import util.file.SReadCSV;
  * @author S. J. Yun
  *
  */
-public class CAircraftTable extends ATable {
+public class CControllerTable extends ATable {
 
 	/*
 	================================================================
@@ -108,7 +114,7 @@ public class CAircraftTable extends ATable {
 		// TODO Auto-generated method stub
 		
  		for(int loopFile = 0; loopFile< aFileArrayList.size() ; loopFile++) {
-			if(aFileArrayList.get(loopFile).getName().contains("FlightSchedule.csv")) {
+			if(aFileArrayList.get(loopFile).getName().contains("Controller.csv")) {
 				createAircraftTypeTable(aFileArrayList.get(loopFile));
 			}
 		}
@@ -136,94 +142,82 @@ public class CAircraftTable extends ATable {
 			HashMap<String,String> lData = lDataList.get(key);
 			
 			// Extract Properties
-			String lCallsign 				= lData.get("Callsign");
-			String lAircraftType 			= lData.get("AircraftType");
-			String lRange 					= lData.get("Range");
-			String lRegistration 			= lData.get("Registration");
-			String lOrigin 					= lData.get("Origin");
-			String lDestination 			= lData.get("Destination");
-			String lScheduleTimeDeparture 	= lData.get("ScheduleTimeDeparture");
-			String lScheduleTimeArrival 	= lData.get("ScheduleTimeArrival");
-			String lSpotArrival 			= lData.get("SpotArrival");
-			String lSpotDeparture			= lData.get("SpotDeparture");
-			String lDepartureRunway 		= lData.get("DepartureRunway");
-			String lArrivalRunway 			= lData.get("ArrivalRunway");
-			String lAirline 				= lData.get("Airline");
-			String lRoute 					= lData.get("Route");
-			String lCrusingAltitude			= lData.get("CrusingAltitude");
-			
-			// Search Aircraft or create Aircraft
-			CAircraft lAircraft	= (CAircraft) getElementTable().get(lRegistration);			
-			if(lAircraft == null) {
-				lAircraft = new CAircraft();
-				lAircraft.setRegistration(lRegistration);				
-				CAircraftType lACTypeInTable = (CAircraftType) CAtsolSimMain.getInstance().getAircraftTypeTable().getElementTable().get(lAircraftType + "/" +lRange);
-				if(lACTypeInTable == null) {
-					System.out.println("Aircraft Type "+ lAircraftType +"/Range is not defined");
-					System.out.println("Input Data is "+ lAircraftType +"/" + lRange);
-				}
-				lAircraft.setVehcleType(lACTypeInTable);
-				
-				// add to table			
-				addElement(lAircraft);
+			String lName = lData.get("Name");
+			String lAge = lData.get("Age");
+			String lExperienceDay = lData.get("ExperienceDay");
+			String lSkill = lData.get("Skill");
+			String lGender = lData.get("Gender");
+			String lControllerType = lData.get("ControllerType");
+			String lFacilityID = lData.get("FacilityID");
+			String lSpecificLink = lData.get("SpecificLink");
+			String[] lSpecificLinkList;
+			try{
+				lSpecificLinkList = lSpecificLink.split("/");
+			}catch(Exception e) {
+				lSpecificLinkList = null;
 			}
+			
+			
+			// Create Object
+			AATCController lController = null; 
+			switch(lControllerType) {
+			case "GroundController":
+				
+				// Create Controller
+				lController = new CGroundController(lName, parseDouble(lAge).intValue(), parseDouble(lExperienceDay).intValue(), ESkill.valueOf(lSkill), EGender.valueOf(lGender));
+				
+				// Add to Airport
+				CAirport lAirport = (CAirport) CAtsolSimMain.getInstance().getiAirportTable().getElementTable().get(lFacilityID);
+				if(lAirport==null) {
+					System.out.println("No facility in Airport or Airspace for the controller " + lController.getName());
+					continue;
+				}
+				
+				lAirport.getGroundControllerList().add((CGroundController) lController);
+				
+				// set Airport to controller
+				lController.setOwnedFacilty(lAirport);
+				
+				// Set TaxiwayLink to controller
+				for(int i=0; i< lAirport.getTaxiwayLinkList().size(); i++) {
+					if(lSpecificLinkList== null) {						
+						lController.addFacility(lAirport.getTaxiwayLinkList().get(i));
+						lAirport.getTaxiwayLinkList().get(i).setController(lController);
+					}else {
+						for(int loopSpecific = 0; loopSpecific < lSpecificLinkList.length; loopSpecific++) {
+							if(lSpecificLinkList[loopSpecific].equalsIgnoreCase(lAirport.getTaxiwayLinkList().get(i).getName())) {
+								lController.addFacility(lAirport.getTaxiwayLinkList().get(i));
+								lAirport.getTaxiwayLinkList().get(i).setController(lController);
+							}
+						}
+					}
+				}
+				
+				break;
+			case "LocalController":
 
-			// Search Node List
-			INode lOriginNode = searchNodeInAirportAndWaypoint(lOrigin);
-			INode lDestinNode = searchNodeInAirportAndWaypoint(lDestination);
-			
-			
-			
-			// Search Node in Route
-			CAirRoute lRouteConnected = (CAirRoute) CAtsolSimMain.getInstance().getAirRouteTable().getElementTable().get(lRoute);			
-			List<INode> lNodeList;
-			try {
-				lNodeList= lRouteConnected.getNodeList();
+				break;
+			case "RampController":
+
+				break;
+			case "ApproachController":
+
+				break;
+			case "ArrivalController":
+
+				break;
+			case "DepartureController":
+
+				break;
+			case "AreaController":
+
+				break;
+			default:
+				break;
 			}
-			catch(Exception e) {
-				System.out.println(lRoute + " is not defined in Route.csv");
-				continue;
-			}
 			
-			
-			// Create Flight plan 
-			CFlightPlan lFlightPlan = new CFlightPlan(lAircraft,lOriginNode,lDestinNode);
-			
-			// Set Properties to FlightPlan
-			lFlightPlan.setCallsign(lCallsign);
-			lFlightPlan.setCrusingAltitude(new CAltitude(parseDouble(lCrusingAltitude), EGEOUnit.FEET));
-			lFlightPlan.setOriginationAirport(lOrigin);
-			lFlightPlan.setDestinationAirport(lDestination);
-			
-			// Add Node list into Flight Plan			
-			for(int loopNode = 0; loopNode < lNodeList.size(); loopNode++) {
-				if(loopNode==0) {
-					Calendar lCal                       = Calendar.getInstance();
-					try {
-						lCal.setTime(lSimpleDateFormat.parse(lScheduleTimeDeparture));
-					} catch (ParseException e) {
-						lCal.setTimeInMillis(0);
-					}
-					lFlightPlan.addPlanItem(lNodeList.get(loopNode), lCal);
-				}else if(loopNode==lNodeList.size()-1) {
-					Calendar lCal                       = Calendar.getInstance();
-					try {
-						lCal.setTime(lSimpleDateFormat.parse(lScheduleTimeArrival));
-					} catch (ParseException e) {
-						lCal.setTimeInMillis(0);
-					}
-					lFlightPlan.addPlanItem(lNodeList.get(loopNode), lCal);
-				}else {
-					lFlightPlan.addPlanItem(lNodeList.get(loopNode),null);
-				}				
-				
-				if(lNodeList.get(loopNode) instanceof CWaypoint && (lFlightPlan.getOriginationNode() instanceof CWaypoint || lFlightPlan.getDestinationNode() instanceof CWaypoint)) {
-					lFlightPlan.setAltitude(loopNode, new CAltitude(parseDouble(lCrusingAltitude), EGEOUnit.FEET));
-				}
-				
-			}
-			// Add Flight Plan
-			lAircraft.getPlanList().add(lFlightPlan);
+			// add to table			
+			addElement(lController);
 			
 			
 		} // for(String key : lDataList.keySet()) 
@@ -246,9 +240,9 @@ public class CAircraftTable extends ATable {
 	
 	
 	public static void main(String args[]) {
-		CAircraftTable my = new CAircraftTable();
+		CControllerTable my = new CControllerTable();
 		ArrayList<File> aFile = new ArrayList<File>();
-		aFile.add(new File("C:\\Users\\cp511\\git\\cp5113\\ATSOL_SIM\\SimStudy\\data\\schedule\\FlightSchedule.csv"));
+		aFile.add(new File("C:\\Users\\cp511\\git\\cp5113\\ATSOL_SIM\\SimStudy\\data\\controller\\Controller.csv"));
 		my.createTable(aFile);
 	}
 	/*

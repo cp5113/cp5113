@@ -39,6 +39,8 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
+import elements.facility.CAirport;
+import elements.mobile.vehicle.CAircraft;
 import elements.util.geo.CCoordination;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -54,6 +56,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import sim.CAtsolSimMain;
+import sim.clock.CDispatchAircraftThreadByTime;
 import sim.gui.CDrawingInform;
 import sim.gui.IDrawingObject;
 import sim.gui.view.CAtsolSimGuiView;
@@ -66,8 +69,9 @@ public class CAtsolSimGuiControl {
 	
 	================================================================
 	*/
-	private static double TestingCount = 0;
-	private CAtsolSimGuiView fGuiview;
+	
+	@SuppressWarnings("unused")
+	private static CAtsolSimGuiView fGuiview;
 	@FXML
 	private MenuItem MenuRunProject;
 	@FXML
@@ -83,6 +87,7 @@ public class CAtsolSimGuiControl {
 	private Canvas   SimCanvas;
 	@FXML
 	private BorderPane RootBoderPane;
+	private static CAtsolSimGuiControl iInstance;
 	/*
 	================================================================
 	
@@ -95,19 +100,35 @@ public class CAtsolSimGuiControl {
 	}
 	
 	public void MenuRunProjectAction() {		
+		
+		
 		if(!CAtsolSimMain.getInstance().getSimClock().isRunning()) {
-			CAtsolSimMain.getInstance().getSimClock().setStartTimeInMilliSeconds(0);
-			CAtsolSimMain.getInstance().getSimClock().setEndTimeInMilliSeconds(3600000);			
-			Thread myThread = new Thread(CAtsolSimMain.getInstance().getSimClock());
+			
+			System.out.println("Create link between Time and Elements(eg., Aircraft, Controller...)");
+			CAtsolSimMain.getInstance().getSimClock().createLinkBetweenTimeAndElements();
+			
+			
+			System.out.println("Clock Setting...");
+			
+			CAtsolSimMain.getInstance().getSimClock().setStartTimeInMilliSeconds(CDispatchAircraftThreadByTime.getInstance().getSimStartTime()          );
+			CAtsolSimMain.getInstance().getSimClock().setEndTimeInMilliSeconds(  CDispatchAircraftThreadByTime.getInstance().getSimStartTime() + 3600000);			
+			Thread myThread = new Thread(CAtsolSimMain.getInstance().getSimClock(),"SimClockThread");
+			
+			System.out.println("Clock is Start");
 			myThread.start();
+
+			System.out.println("Create Thread and Start Thread (eg., Aircraft, Controller...)");
+			CAtsolSimMain.getInstance().getSimClock().createThreadOfElements();
+			
+			
 			
 		}else {
-			CAtsolSimMain.getInstance().getSimClock().stop();
+			CAtsolSimMain.getInstance().getSimClock().stopClock();
 		}
 			
 	}
 	
-	public void drawDrawingObjectList() {		
+	public synchronized void drawDrawingObjectList()  {		
 		// Cleaning Canvas
 		GraphicsContext gc = SimCanvas.getGraphicsContext2D();
 		gc.setFill(Color.LIGHTGRAY);
@@ -116,7 +137,8 @@ public class CAtsolSimGuiControl {
 		
 		Iterator<IDrawingObject> iter = CAtsolSimMain.getInstance().getDrawingObjectList().iterator();
 		while(iter.hasNext()) {
-			CDrawingInform lDrawingInform = iter.next().getDrawingInform();
+			IDrawingObject lAnObject = iter.next();
+			CDrawingInform lDrawingInform = lAnObject.getDrawingInform();
 			if(!lDrawingInform.isVisible()) continue; 
 			
 			// Drawing			
@@ -145,8 +167,17 @@ public class CAtsolSimGuiControl {
 				double p1X = lCoordination.getXCoordination();
 				double p1Y = lCoordination.getYCoordination();
 				CCoordination p1 = changeCoordinatesInCanvas(p1X, p1Y);
-				gc.setStroke(lDrawingInform.getColor());
-				gc.fillRect(p1.getXCoordination(), p1.getYCoordination(), 50*CAtsolSimMain.getInstance().getViewPointR(), 50*CAtsolSimMain.getInstance().getViewPointR());
+				if(p1.getXCoordination()<0 || p1.getXCoordination()>SimCanvas.getWidth() || p1.getYCoordination()<0 || p1.getYCoordination()>SimCanvas.getHeight() ) {
+					continue;
+				}
+				
+				gc.setFill(lDrawingInform.getColor());
+				try {
+					CAircraft lAnAircraft = (CAircraft) lAnObject;					
+					gc.fillOval(p1.getXCoordination(), p1.getYCoordination(), 50*CAtsolSimMain.getInstance().getViewPointR(), 50*CAtsolSimMain.getInstance().getViewPointR());
+				}catch(Exception e) {
+					gc.fillRect(p1.getXCoordination(), p1.getYCoordination(), 50*CAtsolSimMain.getInstance().getViewPointR(), 50*CAtsolSimMain.getInstance().getViewPointR());
+				}
 				
 				break;
 			case CIRCLE:
@@ -160,6 +191,14 @@ public class CAtsolSimGuiControl {
 			} //switch(lDrawingInform.getShape()) {
 			
 		}//while(iter.hasNext()) {
+		
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 //		System.out.println(CAtsolSimMain.getInstance().getiViewPoint());
 //		System.out.println(CAtsolSimMain.getInstance().getiViewPointR());
@@ -277,8 +316,14 @@ public class CAtsolSimGuiControl {
 		
 	}
 	
+	@SuppressWarnings("static-access")
+	public CAtsolSimGuiControl() {
+		this.iInstance = this;
+	}
 	
-	
+	public static CAtsolSimGuiControl getInstance() {
+		return iInstance;
+	}
 	public void addview(CAtsolSimGuiView aGuiview) {
 		fGuiview = aGuiview;
 	}

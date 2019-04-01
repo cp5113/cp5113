@@ -40,6 +40,8 @@ package elements;
  *
  */
 
+import java.util.Calendar;
+
 import elements.facility.ELocation;
 import elements.table.ITableAble;
 
@@ -62,7 +64,14 @@ public abstract class AElement implements ITableAble{
 	protected	AElement				iOwnerObject;
 	protected ELocation				    iLocation;		
 	protected 	int						iCapacity;
+	
+	protected	Calendar				iPreviousTime;
+	protected	Calendar				iCurrentTime;
 
+	protected	long				iPreviousTimeInMilliSecond;
+	protected	long				iCurrentTimeInMilliSecond;
+
+	protected 	boolean				iIsWorking;
 	/**
 	 * getiName
 	 * 
@@ -181,6 +190,12 @@ public abstract class AElement implements ITableAble{
 	}
 	public int getCapacity() {
 		return iCapacity;
+	}
+	public boolean isIsWorking() {
+		return iIsWorking;
+	}
+	public void setIsWorking(boolean aIsWorking) {
+		iIsWorking = aIsWorking;
 	}
 	
 	

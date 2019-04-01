@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.Pane?>
 
-<BorderPane fx:id="RootBoderPane" maxHeight="1900" maxWidth="1900" minHeight="500.0" minWidth="500.0" prefHeight="1200" prefWidth="1600" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sim.gui.control.CAtsolSimGuiControl">
+<BorderPane fx:id="RootBoderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sim.gui.control.CAtsolSimGuiControl">
    <top>
       <MenuBar maxHeight="-Infinity" minHeight="25.0" prefHeight="16.0" prefWidth="500.0" BorderPane.alignment="CENTER">
         <menus>
@@ -41,15 +41,15 @@
       </MenuBar>
    </top>
    <center>
-      <SplitPane dividerPositions="0.13016270337922403" minHeight="160.0" minWidth="200.0" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <SplitPane dividerPositions="0.16901408450704225" minHeight="160.0" minWidth="200.0" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <items>
             <AnchorPane prefHeight="779.0" prefWidth="570.0">
                <children>
-                  <ScrollPane fitToWidth="true" minViewportHeight="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <ScrollPane fitToWidth="true" minViewportHeight="100.0" prefHeight="773.0" prefWidth="166.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-3.0" AnchorPane.topAnchor="0.0">
                      <content>
                         <AnchorPane>
                            <children>
-                              <FlowPane prefHeight="777.0" prefWidth="316.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <FlowPane prefHeight="777.0" prefWidth="202.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
                                     <TitledPane alignment="TOP_LEFT" animated="false" expanded="false" text="untitled">
                                       <content>

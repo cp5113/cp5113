@@ -45,6 +45,11 @@ package elements.mobile.human;
  *
  */
 public class CPilot extends AHuman {
+
+	public CPilot(String aName, int aAge, int aExperienceDay, ESkill aNSkill, EGender aNGender) {
+		super(aName, aAge, aExperienceDay, aNSkill, aNGender);
+		// TODO Auto-generated constructor stub
+	}
 	/*
 	================================================================
 	

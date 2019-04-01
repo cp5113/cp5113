@@ -3,8 +3,6 @@ package test.aircraftMovement;
 import java.util.Calendar;
 import java.util.Date;
 
-import sim.clock.CSimClock;
-
 /**
  * 
  * Dtails....
@@ -61,22 +59,22 @@ public class TestClockMain {
 	public static void main(String args[]) {
 		
 		
-		CSimClock clock = CSimClock.getInstance();
-		Calendar startT = Calendar.getInstance();
-		startT.setTimeInMillis(System.currentTimeMillis());
-		Calendar currentT = Calendar.getInstance();
-		currentT.setTimeInMillis(startT.getTimeInMillis());
-		Calendar endT = Calendar.getInstance();
-		endT.setTimeInMillis(System.currentTimeMillis()+30000);
-		
-		clock.setStartTIme(startT);
-		clock.setCurrentTIme(currentT);
-		clock.setEndTIme(endT);
-		
-		
-		
-		Thread clockThread = new Thread(clock);
-		clockThread.start();
+//		CSimClock clock = CSimClock.getInstance();
+//		Calendar startT = Calendar.getInstance();
+//		startT.setTimeInMillis(System.currentTimeMillis());
+//		Calendar currentT = Calendar.getInstance();
+//		currentT.setTimeInMillis(startT.getTimeInMillis());
+//		Calendar endT = Calendar.getInstance();
+//		endT.setTimeInMillis(System.currentTimeMillis()+30000);
+//		
+//		clock.setStartTIme(startT);
+//		clock.setCurrentTIme(currentT);
+//		clock.setEndTIme(endT);
+//		
+//		
+//		
+//		Thread clockThread = new Thread(clock);
+//		clockThread.start();
 		
 	}
 

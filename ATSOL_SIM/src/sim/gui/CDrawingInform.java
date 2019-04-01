@@ -77,6 +77,15 @@ public class CDrawingInform {
 		iColor = aColor;
 		iVisible = aVisible;
 	}
+	public CDrawingInform(CCoordination aCoordinationList, CAltitude aAltitude, EShape aShape, Color aColor,boolean aVisible) {
+		super();
+		iCoordinationList.add(aCoordinationList);
+		iAltitude = aAltitude;
+		iShape = aShape;
+		iColor = aColor;
+		iVisible = aVisible;
+	}
+
 
 
 	/*

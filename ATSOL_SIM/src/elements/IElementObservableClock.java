@@ -1,4 +1,7 @@
-package sim.clock;
+package elements;
+
+import sim.clock.ISimClockOberserver;
+
 /**
  * 
  * Dtails....
@@ -26,18 +29,16 @@ package sim.clock;
  * </p>
  * 
  * 
- * @date : Mar 21, 2019
+ * @date : Mar 28, 2019
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
- * : https://flowarc.tistory.com/entry/%EB%94%94%EC%9E%90%EC%9D%B8-%ED%8C%A8%ED%84%B4-%EC%98%B5%EC%A0%80%EB%B2%84-%ED%8C%A8%ED%84%B4Observer-Pattern 
+ *
  * @version : 
- * Mar 21, 2019 : Coded by S. J. Yun.
+ * Mar 28, 2019 : Coded by S. J. Yun.
  *
  *
  */
 
-import elements.IElementControlledByClock;
-
-public interface ISimClockObserver {
+public interface IElementObservableClock {
 	/*
 	================================================================
 	
@@ -45,8 +46,6 @@ public interface ISimClockObserver {
 	
 	================================================================
 	*/
-	
-	
 
 	/*
 	================================================================
@@ -55,10 +54,10 @@ public interface ISimClockObserver {
 	
 	================================================================
 	 */
-	
-	public void addInClock(IElementControlledByClock aObserver);
-	public void deleteFromClock(IElementControlledByClock aObserver);
-	public void notifyTimeIncrementToElement();	
+	public void waitUntilClockStatusIsChanged();	
+	public void notifyToClockImDone();
+	public void addClock(ISimClockOberserver aSimclock);
+	public void removeClock();
 	/*
 	================================================================
 	

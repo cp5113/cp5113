@@ -56,8 +56,7 @@ public abstract class AMobile extends AElement{
 	
 	================================================================
 	*/	
-	private	static	int		iMobileCount 		= 0;
-	private String			iName				= this.getClass().getSimpleName() + iMobileCount;
+	protected	static	int		iMobileCount 		= 0;
 	
 	
 	public AMobile(){

@@ -40,11 +40,16 @@ package elements.mobile.human;
  *
  */
 
+import java.util.Calendar;
+
+import elements.mobile.vehicle.CAircraft;
+import sim.clock.ISimClockOberserver;
+
 /**
  * @author S. J. Yun
  *
  */
-public class CLocalController extends AATCController implements IATCController{
+public class CLocalController extends AATCController {
 	/*
 	================================================================
 	
@@ -52,6 +57,11 @@ public class CLocalController extends AATCController implements IATCController{
 	
 	================================================================
 	*/
+
+	public CLocalController(String aName, int aAge, int aExperienceDay, ESkill aNSkill, EGender aNGender) {
+		super(aName, aAge, aExperienceDay, aNSkill, aNGender);
+		// TODO Auto-generated constructor stub
+	}
 
 	/*
 	================================================================
@@ -68,6 +78,58 @@ public class CLocalController extends AATCController implements IATCController{
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void handOffAircraft(IATCController aToController, CAircraft aAircraft) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void handOnAircraft(IATCController aFromController, CAircraft aAircraft) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addAircraft(CAircraft aAircraft) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void waitUntilClockStatusIsChanged() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notifyToClockImDone() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void addClock(ISimClockOberserver aSimclock) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void removeClock() {
+		// TODO Auto-generated method stub
+		iSimClockObserver = null;
+	}
+
+
 
 	/*
 	================================================================

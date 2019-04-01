@@ -47,7 +47,7 @@ import elements.IElementControlledByClock;
  * @author S. J. Yun
  *
  */
-public class CSimClock implements ISimClockObserver, Runnable{
+public class CSimClock implements ISimClockObserverable, Runnable{
 	
 	
 	/*
@@ -138,13 +138,13 @@ public class CSimClock implements ISimClockObserver, Runnable{
 			System.out.println("Current Time : " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(iCurrentTIme.getTimeInMillis())));
 			iCurrentTIme.add(Calendar.MILLISECOND, iIncrementStepInMiliSec);
 			notifyTimeIncrementToElement();
-			
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+//			
+//			try {
+//				Thread.sleep(1);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 		}
 		iRunning = false;
 		

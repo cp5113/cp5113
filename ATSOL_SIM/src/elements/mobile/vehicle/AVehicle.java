@@ -44,17 +44,23 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import elements.IElementObservableClock;
 import elements.mobile.AMobile;
 import elements.operator.AOperator;
 import elements.property.AVehiclePerformance;
 import elements.property.AVehicleType;
+import elements.table.ITableAble;
+import elements.util.geo.CAltitude;
 import elements.util.geo.CCoordination;
+import elements.util.geo.EGEOUnit;
+import sim.clock.ISimClockOberserver;
+import sim.gui.IDrawingObject;
 
 /**
  * @author S. J. Yun
  *
  */
-public abstract class AVehicle extends AMobile{
+public abstract class AVehicle extends AMobile implements ITableAble, IDrawingObject, IElementObservableClock, Runnable{
 	
 	// Strategy Pattern과 Observer Pattern을 공부해야 함
 	// S : http://hyeonstorage.tistory.com/146
@@ -78,12 +84,16 @@ public abstract class AVehicle extends AMobile{
 	protected		List<AVehiclePlan>		iPlanList 				= Collections.synchronizedList(new ArrayList<AVehiclePlan>());
 	protected		AVehiclePlan			iCurrentPlan			;
 	
-	protected		CCoordination			iCurrentPostion;
-	protected		CCoordination			iPreviousPostion;
-	protected		CCoordination			iNextPostion;
+	protected		CCoordination			iCurrentPostion		= new CCoordination(-9999999, -9999999, EGEOUnit.METER);
+	protected		CCoordination			iPreviousPostion 	= new CCoordination(-9999999, -9999999, EGEOUnit.METER);
+	protected		CCoordination			iNextPostion  		= new CCoordination(-9999999, -9999999, EGEOUnit.METER);
+	protected		CAltitude				iCurrentAltitude 	= new CAltitude(0, EGEOUnit.FEET);
 	
 	protected		AOperator				iOperator;
 	protected		AVehiclePerformance		iPerformance;
+	
+	protected ISimClockOberserver iSimClockObserver;
+	
 	
 	
 	public CVehicleStatus getCurrentStatus() {

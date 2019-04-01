@@ -168,7 +168,10 @@ public class SReadCSV {
 			// Read Data
 			String lALine = "";
 			while((lALine = lBR.readLine()) != null) {
-				String[] lDataSplited = lALine.split(aSeparator);
+				String[] lDataSplited = lALine.split(aSeparator);				
+				if(lDataSplited.length==0) {
+					continue;
+				}
 				if(lDataSplited.length==1 && lDataSplited[0].equalsIgnoreCase("")) {
 					continue;
 				}

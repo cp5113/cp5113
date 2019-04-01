@@ -1,9 +1,4 @@
-/**
- * ATSOL_SIM
- * elements.mobile.human
- * CGroundVehicleDriver.java
- */
-package elements.mobile.human;
+package sim.clock;
 /**
  * 
  * Dtails....
@@ -31,26 +26,19 @@ package elements.mobile.human;
  * </p>
  * 
  * 
- * @date : May 21, 2017
+ * @date : Mar 31, 2019
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * May 21, 2017 : Coded by S. J. Yun.
+ * Mar 31, 2019 : Coded by S. J. Yun.
  *
  *
  */
 
+import elements.mobile.vehicle.AVehicle;
+import elements.mobile.vehicle.AVehiclePlan;
 
-/**
- * @author S. J. Yun
- *
- */
-public class CGroundVehicleDriver extends AHuman{
-
-	public CGroundVehicleDriver(String aName, int aAge, int aExperienceDay, ESkill aNSkill, EGender aNGender) {
-		super(aName, aAge, aExperienceDay, aNSkill, aNGender);
-		// TODO Auto-generated constructor stub
-	}
+public class CVehicleAndPlanAndTime implements Comparable<CVehicleAndPlanAndTime> {
 	/*
 	================================================================
 	
@@ -58,6 +46,66 @@ public class CGroundVehicleDriver extends AHuman{
 	
 	================================================================
 	*/
+	
+	private AVehicle	iVehicle;
+	private	AVehiclePlan	iVechiPlan;
+	private	long		iSTD;
+	
+	
+	/**
+	 * The Constructor
+	 * 
+	 * Do What
+	 * 
+	 * @date : Mar 31, 2019
+	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
+	 *
+	 * @version : 
+	 * Mar 31, 2019 : Coded by S. J. Yun.
+	 */
+	public CVehicleAndPlanAndTime(AVehicle aVehicle, AVehiclePlan aVechiPlan, long aSTD) {
+		super();
+		iVehicle = aVehicle;
+		iVechiPlan = aVechiPlan;
+		iSTD = aSTD;
+	}
+	
+	
+
+
+
+
+
+	@Override
+	public int compareTo(CVehicleAndPlanAndTime aO) {
+		// TODO Auto-generated method stub
+		if(this.iSTD< aO.getSTD()) {
+			return -1;
+		}else if(this.iSTD > aO.getSTD()) {
+			return 1;
+		}
+		return 0;
+	}
+	public AVehicle getVehicle() {
+		return iVehicle;
+	}
+	public void setVehicle(AVehicle aVehicle) {
+		iVehicle = aVehicle;
+	}
+	public AVehiclePlan getVechiPlan() {
+		return iVechiPlan;
+	}
+	public void setVechiPlan(AVehiclePlan aVechiPlan) {
+		iVechiPlan = aVechiPlan;
+	}
+	public long getSTD() {
+		return iSTD;
+	}
+	public void setSTD(long aSTD) {
+		iSTD = aSTD;
+	}
+	
+	
 
 	/*
 	================================================================

@@ -113,7 +113,7 @@ public class CAirRouteTable extends ATable {
 			// Find INode from Airport and Waypoint
 			for(int loopNode = 0; loopNode<lRouteList.length; loopNode++) {
 				INode lNodeFromAirport  = (INode) CAtsolSimMain.getInstance().getiAirportTable().getElementTable().get(lRouteList[loopNode]);				
-				INode lNodeFromWaypoint = (INode) CAtsolSimMain.getInstance().getiWaypointTable().getElementTable().get(lRouteList[loopNode]);
+				INode lNodeFromWaypoint = (INode) CAtsolSimMain.getInstance().getWaypointTable().getElementTable().get(lRouteList[loopNode]);
 				INode lNode;
 				if(lNodeFromAirport==null && lNodeFromWaypoint!=null) {
 					lNode = lNodeFromWaypoint;

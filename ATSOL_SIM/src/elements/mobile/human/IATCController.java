@@ -4,6 +4,11 @@
  * IATCController.java
  */
 package elements.mobile.human;
+
+import elements.AElement;
+import elements.mobile.vehicle.AVehicle;
+import elements.mobile.vehicle.CAircraft;
+
 /**
  * 
  * Dtails....
@@ -61,18 +66,8 @@ public interface IATCController {
 	================================================================
 	 */
 	
-	/**
-	 * controlAircraft
-	 * 
-	 * Make controller work
-	 * 
-	 * @date : May 9, 2017
-	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
-	 *
-	 * @version : 
-	 * May 9, 2017 : Coded by S. J. Yun.
-	 */
-	public void controlAircraft();
+
+	
 	
 	/*
 	================================================================

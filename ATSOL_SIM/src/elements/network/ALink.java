@@ -43,13 +43,15 @@ package elements.network;
 import java.util.ArrayList;
 
 import elements.AElement;
+import elements.facility.AFacility;
+import elements.mobile.human.IATCController;
 import elements.util.geo.CDegree;
 
 /**
  * @author S. J. Yun
  *
  */
-public abstract class ALink extends AElement {
+public abstract class ALink extends AFacility {
 	/*
 	================================================================
 
@@ -69,7 +71,7 @@ public abstract class ALink extends AElement {
 	protected 	CDegree					iHeading;
 	protected	CDegree					iOppositeHeading;
 	
-	
+	protected IATCController			iController;
 	
 	
 	/*
@@ -132,6 +134,12 @@ public abstract class ALink extends AElement {
 	}
 	public synchronized void setOppositeHeading(CDegree aOppositeHeading) {
 		iOppositeHeading = aOppositeHeading;
+	}
+	public IATCController getController() {
+		return iController;
+	}
+	public void setController(IATCController aController) {
+		iController = aController;
 	}
 	
 	/*

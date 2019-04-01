@@ -39,11 +39,22 @@ package elements.mobile.human;
  *
  */
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import elements.IElementControlledByClock;
+import elements.IElementObservableClock;
+import elements.facility.AFacility;
+import elements.mobile.vehicle.CAircraft;
+import elements.table.ITableAble;
+import sim.clock.ISimClockOberserver;
+
 /**
  * @author S. J. Yun
  *
  */
-public abstract class AATCController extends AHuman{
+public abstract class AATCController extends AHuman implements IATCController, ITableAble, IElementObservableClock, Runnable{
 	/*
 	================================================================
 	
@@ -52,10 +63,30 @@ public abstract class AATCController extends AHuman{
 	================================================================
 	*/
 	
+	protected ISimClockOberserver iSimClockObserver;
+	protected List<CAircraft> iAircraftList = Collections.synchronizedList(new ArrayList<CAircraft>());
+	protected List<AFacility> iFacilityControlledList= Collections.synchronizedList(new ArrayList<AFacility>());
 	
+	protected AFacility		  iOwnedFacilty;
 	
+	public AATCController(String aName, int aAge, int aExperienceDay, ESkill aNSkill, EGender aNGender) {
+		super(aName,aAge, aExperienceDay, aNSkill, aNGender);
+		// TODO Auto-generated constructor stub
+	}
+
 	
-	//private enum nRole{Controller,Planner,
+	/**
+	 * The Constructor
+	 * 
+	 * Do What
+	 * 
+	 * @date : Mar 27, 2019
+	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
+	 *
+	 * @version : 
+	 * Mar 27, 2019 : Coded by S. J. Yun.
+	 */
+	
 	/*
 	================================================================
 	
@@ -63,6 +94,49 @@ public abstract class AATCController extends AHuman{
 	
 	================================================================
 	 */
+	abstract protected void controlAircraft();
+	abstract protected void handOffAircraft(IATCController aToController, CAircraft aAircraft);	
+	abstract protected void handOnAircraft(IATCController aFromController,  CAircraft aAircraft);	
+	
+	
+	
+	protected void addAircraft(CAircraft aAircraft) {
+		iAircraftList.add(aAircraft);
+	}
+	public CAircraft getAircraft(int aIndex){
+		return iAircraftList.get(aIndex);
+	}
+	
+	public List<CAircraft> getAircraftList(){
+		return iAircraftList;
+	}
+	
+	public void addFacility(AFacility aFacility) {
+		iFacilityControlledList.add(aFacility);
+	}
+	public AFacility getFacilityControlled(int aIndex){
+		return iFacilityControlledList.get(aIndex);
+	}
+	
+
+	public List<AFacility> getFacilityControlledList() {
+		return iFacilityControlledList;
+	}
+
+
+	public void setFacilityControlledList(List<AFacility> aFacilityControlledList) {
+		iFacilityControlledList = aFacilityControlledList;
+	}
+
+
+	public AFacility getOwnedFacilty() {
+		return iOwnedFacilty;
+	}
+
+
+	public void setOwnedFacilty(AFacility aOwnedFacilty) {
+		iOwnedFacilty = aOwnedFacilty;
+	}
 
 	/*
 	================================================================

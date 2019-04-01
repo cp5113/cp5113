@@ -1,9 +1,7 @@
-/**
- * ATSOL_SIM
- * elements.mobile.human
- * CGroundVehicleDriver.java
- */
-package elements.mobile.human;
+package sim.clock;
+
+import elements.IElementObservableClock;
+
 /**
  * 
  * Dtails....
@@ -31,26 +29,16 @@ package elements.mobile.human;
  * </p>
  * 
  * 
- * @date : May 21, 2017
+ * @date : Mar 28, 2019
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * May 21, 2017 : Coded by S. J. Yun.
+ * Mar 28, 2019 : Coded by S. J. Yun.
  *
  *
  */
 
-
-/**
- * @author S. J. Yun
- *
- */
-public class CGroundVehicleDriver extends AHuman{
-
-	public CGroundVehicleDriver(String aName, int aAge, int aExperienceDay, ESkill aNSkill, EGender aNGender) {
-		super(aName, aAge, aExperienceDay, aNSkill, aNGender);
-		// TODO Auto-generated constructor stub
-	}
+public interface ISimClockOberserver {
 	/*
 	================================================================
 	
@@ -66,7 +54,16 @@ public class CGroundVehicleDriver extends AHuman{
 	
 	================================================================
 	 */
-
+	
+	public void addInClock(IElementObservableClock aElementObservableClock);
+	public void deleteFromClock(int aIndex);
+	public void deleteFromClock(IElementObservableClock aElementObservableClock);	
+	public boolean isRunning();
+	public void setRunning(boolean aIsRunning);
+	public void stopClock();
+	public void pubSaidImDone();
+	
+	
 	/*
 	================================================================
 	
@@ -82,6 +79,7 @@ public class CGroundVehicleDriver extends AHuman{
 	
 	================================================================
 	 */
+
 }
 
 

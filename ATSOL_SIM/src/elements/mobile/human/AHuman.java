@@ -54,13 +54,35 @@ public abstract class AHuman extends AMobile{
 	================================================================
 	*/
 	
-	private int			iAge;
-	private int			iExperienceDay;
+	protected int			iAge;
+	protected int			iExperienceDay;
 	
-	private ESkill 		nSkill;
-	private EGender		nGender;
+	protected ESkill 		nSkill;
+	protected EGender		nGender;
 
 	
+	/**
+	 * The Constructor
+	 * 
+	 * Do What
+	 * 
+	 * @date : Mar 27, 2019
+	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
+	 *
+	 * @version : 
+	 * Mar 27, 2019 : Coded by S. J. Yun.
+	 */
+	public AHuman(String aName, int aAge, int aExperienceDay, ESkill aNSkill, EGender aNGender) {
+		iName = aName;
+		iAge = aAge;
+		iExperienceDay = aExperienceDay;
+		nSkill = aNSkill;
+		nGender = aNGender;
+	}
+	public AHuman() {
+		
+	}
+
 	/*
 	================================================================
 	
@@ -68,7 +90,7 @@ public abstract class AHuman extends AMobile{
 	
 	================================================================
 	 */
-
+	
 	/**
 	 * getAge
 	 * 

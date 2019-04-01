@@ -1,9 +1,4 @@
-/**
- * ATSOL_SIM
- * elements.mobile.human
- * CGroundVehicleDriver.java
- */
-package elements.mobile.human;
+package sim.clock;
 /**
  * 
  * Dtails....
@@ -31,26 +26,18 @@ package elements.mobile.human;
  * </p>
  * 
  * 
- * @date : May 21, 2017
+ * @date : Mar 21, 2019
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
- *
+ * : https://flowarc.tistory.com/entry/%EB%94%94%EC%9E%90%EC%9D%B8-%ED%8C%A8%ED%84%B4-%EC%98%B5%EC%A0%80%EB%B2%84-%ED%8C%A8%ED%84%B4Observer-Pattern 
  * @version : 
- * May 21, 2017 : Coded by S. J. Yun.
+ * Mar 21, 2019 : Coded by S. J. Yun.
  *
  *
  */
 
+import elements.IElementControlledByClock;
 
-/**
- * @author S. J. Yun
- *
- */
-public class CGroundVehicleDriver extends AHuman{
-
-	public CGroundVehicleDriver(String aName, int aAge, int aExperienceDay, ESkill aNSkill, EGender aNGender) {
-		super(aName, aAge, aExperienceDay, aNSkill, aNGender);
-		// TODO Auto-generated constructor stub
-	}
+public interface ISimClockObserverable {
 	/*
 	================================================================
 	
@@ -58,6 +45,8 @@ public class CGroundVehicleDriver extends AHuman{
 	
 	================================================================
 	*/
+	
+	
 
 	/*
 	================================================================
@@ -66,7 +55,10 @@ public class CGroundVehicleDriver extends AHuman{
 	
 	================================================================
 	 */
-
+	
+	public void addInClock(IElementControlledByClock aObserver);
+	public void deleteFromClock(IElementControlledByClock aObserver);
+	public void notifyTimeIncrementToElement();	
 	/*
 	================================================================
 	
@@ -82,6 +74,7 @@ public class CGroundVehicleDriver extends AHuman{
 	
 	================================================================
 	 */
+
 }
 
 

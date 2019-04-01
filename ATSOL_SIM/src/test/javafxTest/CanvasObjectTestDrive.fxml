@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.SubScene?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Region?>
+
+<BorderPane prefHeight="400.0" prefWidth="565.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="test.javafxTest.CanvasObjectControlTestDrive">
+   <center>
+         <SubScene fx:id="InnerScene" height="200.0" width="565.0" BorderPane.alignment="CENTER">
+        <root>
+          <Region />
+        </root>
+      </SubScene>
+      
+   </center>
+   <bottom>
+<Canvas fx:id="canvas" height="200.0" width="564.0" BorderPane.alignment="CENTER" />
+   </bottom>
+</BorderPane>

@@ -9,10 +9,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import elements.IElementControlledByClock;
+import elements.IElementObservableClock;
 import elements.operator.CAirline;
 import elements.property.CAircraftType;
 import elements.table.ITableAble;
+import javafx.scene.paint.Color;
+import sim.clock.CSimClockOberserver;
+import sim.clock.ISimClockOberserver;
 import sim.gui.CDrawingInform;
+import sim.gui.EShape;
 import sim.gui.IDrawingObject;
 
 /**
@@ -55,7 +60,7 @@ import sim.gui.IDrawingObject;
  * @author S. J. Yun
  *
  */
-public class CAircraft extends AVehicle implements ITableAble, IDrawingObject, IElementControlledByClock{
+public class CAircraft extends AVehicle {
 	/*
 	================================================================
 	
@@ -66,7 +71,9 @@ public class CAircraft extends AVehicle implements ITableAble, IDrawingObject, I
 	private		String							iRegistration;	
 	private 	CAirline						iAirline;
 	
+	private 	CDrawingInform					iDrawingInform = new CDrawingInform(iCurrentPostion,iCurrentAltitude,EShape.DOT,Color.RED,true);
 	
+
 	@Override
 	public String toString() {
 		return iRegistration;
@@ -109,20 +116,74 @@ public class CAircraft extends AVehicle implements ITableAble, IDrawingObject, I
 	@Override
 	public CDrawingInform getDrawingInform() {
 		// TODO Auto-generated method stub
-		return null;
+		return iDrawingInform;
 	}
+
+
 	@Override
-	public void incrementTime(Calendar aCurrentTIme, int aIncrementStepInSec) {
+	public void waitUntilClockStatusIsChanged() {
 		// TODO Auto-generated method stub
 		
 	}
+
+
+
 	@Override
-	public boolean isPreparedForNextIncrement() {
+	public void notifyToClockImDone() {
 		// TODO Auto-generated method stub
-		return false;
+		iSimClockObserver.pubSaidImDone();
+		
+	}
+
+
+
+
+
+
+	@Override
+	public void addClock(ISimClockOberserver aSimclock) {
+		// TODO Auto-generated method stub
+		iSimClockObserver = aSimclock;
+	}
+
+
+
+	@Override
+	public void run() {
+		iPreviousTimeInMilliSecond = ((CSimClockOberserver) iSimClockObserver).getCurrentTIme().getTimeInMillis();
+		notifyToClockImDone();
+		
+		while( ((CSimClockOberserver) iSimClockObserver).isRunning()) {
+			iCurrentTimeInMilliSecond = ((CSimClockOberserver) iSimClockObserver).getCurrentTIme().getTimeInMillis();
+			while(iPreviousTimeInMilliSecond == iCurrentTimeInMilliSecond) {
+				iCurrentTimeInMilliSecond = ((CSimClockOberserver) iSimClockObserver).getCurrentTIme().getTimeInMillis();
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+
+				}
+			}
+			
+//			System.out.println("Aircraft " + iRegistration + " is Working.. Sleep 1 secs");
+//			
+////			try {
+////				Thread.sleep(1000);
+////			} catch (InterruptedException e) {
+////				// TODO Auto-generated catch block
+////				e.printStackTrace();
+////			}
+//			System.out.println("Aircraft " + iRegistration + " is done");
+			notifyToClockImDone();
+			iPreviousTimeInMilliSecond = iCurrentTimeInMilliSecond;
+		}
 	}
 	
-	
+	@Override
+	public void removeClock() {
+		// TODO Auto-generated method stub
+		iSimClockObserver = null;
+	}
+
 
 	/*
 	================================================================
