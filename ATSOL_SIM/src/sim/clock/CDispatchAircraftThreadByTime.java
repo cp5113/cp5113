@@ -62,21 +62,26 @@ public class CDispatchAircraftThreadByTime implements IElementControlledByClock{
 	public static CDispatchAircraftThreadByTime iInstance = new CDispatchAircraftThreadByTime();
 	
 	private CDispatchAircraftThreadByTime() {
+	}
+	
+	public void initializeDispatch() {
+		
+		iVehicleAndPlanAndTimes.clear();
 		// Create Plan List
 		for(int loopAC = 0; loopAC < iAircraftList.size(); loopAC++) {
 			List<AVehiclePlan> lFlightPlanList = ((CAircraft) iAircraftList.get(loopAC)).getPlanList();
 			for(int loopPlan = 0; loopPlan < lFlightPlanList.size(); loopPlan++) {
-				
+
 				// get a FlightPlan
 				CFlightPlan lFlightPlan = (CFlightPlan) lFlightPlanList.get(loopPlan);				
 				iVehicleAndPlanAndTimes.add(new CVehicleAndPlanAndTime(((AVehicle) iAircraftList.get(loopAC)), (AVehiclePlan)lFlightPlan, lFlightPlan.getScheduleTimeList().get(0).getTimeInMillis()));
 			}
 		}
-		
+
 		Collections.sort(iVehicleAndPlanAndTimes);
-		
-		
+
 	}
+	
 	
 	
 	@SuppressWarnings("unused")
@@ -121,7 +126,9 @@ public class CDispatchAircraftThreadByTime implements IElementControlledByClock{
 			if(lSTD <= aCurrentTIme.getTimeInMillis()+1800000 && lAirportOrWaypoint.equalsIgnoreCase("Airport")) {
 				// set a Flight plan to currentFlightPlan
 				lAircraft.setCurrentPlan(lFlightPlan);
-
+				// and remove this Plan from list
+				lAircraft.getPlanList().remove(lFlightPlan);
+				
 				// Add to Clock as Observable
 				CAtsolSimMain.getInstance().getSimClock().createLinkBetweenTimeAndElement(lAircraft);
 				
@@ -135,6 +142,8 @@ public class CDispatchAircraftThreadByTime implements IElementControlledByClock{
 			if(lSTD <= aCurrentTIme.getTimeInMillis() && lAirportOrWaypoint.equalsIgnoreCase("Waypoint")) {
 				// set a Flight plan to currentFlightPlan
 				lAircraft.setCurrentPlan(lFlightPlan);
+				// and remove this Plan from list
+				lAircraft.getPlanList().remove(lFlightPlan);
 
 				// Add to Clock as Observable
 				CAtsolSimMain.getInstance().getSimClock().createLinkBetweenTimeAndElement(lAircraft);

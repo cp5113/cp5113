@@ -47,8 +47,8 @@ import sim.gui.view.CAtsolSimGuiView;
 public class CanvasObjectTestDrive extends Application{
 	Stage primaryStage;
 
-	private BorderPane rootLayout;
-	private CanvasObjectControlTestDrive controller;
+	public static  BorderPane rootLayout;
+	public static  CanvasObjectControlTestDrive controller;
 	
 	@Override
 	public void start(Stage primaryStage) {

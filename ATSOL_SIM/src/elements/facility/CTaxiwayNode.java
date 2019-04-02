@@ -40,6 +40,7 @@ package elements.facility;
  *
  */
 
+import elements.mobile.human.IATCController;
 import elements.network.ANode;
 import elements.util.geo.CCoordination;
 
@@ -60,11 +61,51 @@ public class CTaxiwayNode extends ANode{
 	 * @version : 
 	 * May 12, 2017 : Coded by S. J. Yun.
 	 */
+	private CSpot iSpot;
+	private CRunway iRunway;
+	
+	
 	public CTaxiwayNode(String aIName, CCoordination aAiCoordination) {
 		super(aIName, aAiCoordination);
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
+	public void setATCControllerToChildren(IATCController aController) {
+		// TODO Auto-generated method stub
+		try {
+			iSpot.setATCController(aController);
+		}catch(Exception e) {
+			
+		}
+		try {
+			iRunway.setATCController(aController);
+		}catch(Exception e) {
+			
+		}
+		
+	}
+
+	public CSpot getSpot() {
+		return iSpot;
+	}
+
+	public void setSpot(CSpot aSpot) {
+		iSpot = aSpot;
+		iSpot.setATCController(iATCController);
+	}
+
+	public CRunway getRunway() {
+		return iRunway;
+	}
+
+	public void setRunway(CRunway aRunway) {
+		iRunway = aRunway;
+		iRunway.setATCController(iATCController);
+	}
+
+	
+	
 
 	/*
 	================================================================

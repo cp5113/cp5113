@@ -1,19 +1,12 @@
-/**
- * ATSOL_SIM
- * elements.mobile
- * AMobile.java
- */
-package elements.mobile;
+package test.javafxTest;
 
-import elements.AElement;
+import javafx.application.Application;
+import sim.gui.view.CAtsolSimGuiView;
 
 /**
  * 
- * The Mobile abstract class
+ * Dtails....
  * 
- * <li> Human </li>
- * <li> Vehicle </li>
- *  
  * 
  * <p>
  * The naming convention
@@ -29,40 +22,67 @@ import elements.AElement;
  *  <li>i...... : Instance variable </li>
  *  <li>l...... : Local variable </li>
  *  <li>s...... : Static variable </li>
+ *  <li>a...... : Argument </li>
+ *  <li>n...... : ENUM </li>
  *
  *  <li>VARIABLE_NAME : Constant variable </li>
  * </ul>
  * </p>
  * 
  * 
- * @date : May 9, 2017
+ * @date : Apr 1, 2019
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * May 9, 2017 : Coded by S. J. Yun.
+ * Apr 1, 2019 : Coded by S. J. Yun.
  *
  *
  */
 
-/**
- * @author S. J. Yun
- *
- */
-public abstract class AMobile extends AElement {
+public class LaunchGuiTestDrive {
 	/*
 	================================================================
 	
 			           Initializing Section
 	
 	================================================================
-	*/	
-	protected	static	int		iMobileCount 		= 0;
-	
-	
-	public AMobile(){
-		iMobileCount++;
+	*/
+	public static void main(String args[]) {
+		
+//		Application.launch(args);
+		new Thread(()->CanvasObjectTestDrive.main(new String[0])).start();
+		
+		Thread a = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				};
+				
+				while(true) {
+					CanvasObjectControlTestDrive b = CanvasObjectTestDrive.controller;
+					if(b==null) continue;
+					CanvasObjectTestDrive.controller.draw();
+					try {
+						Thread.sleep(1);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				
+			}
+		});
+		
+		a.start();
+		
+		
 	}
-	
 	/*
 	================================================================
 	
@@ -70,18 +90,6 @@ public abstract class AMobile extends AElement {
 	
 	================================================================
 	 */
-	
-	public int getMobileCount(){		
-		return iMobileCount;
-	}
-	
-	public String getName(){
-		return iName;
-	}
-	
-	public void setName(String aName){
-		iName = aName;
-	}
 
 	/*
 	================================================================

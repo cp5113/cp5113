@@ -43,6 +43,7 @@ package elements.mobile.vehicle;
 import elements.facility.CRunway;
 import elements.facility.CSpot;
 import elements.network.INode;
+import sim.clock.CVehicleAndPlanAndTime;
 
 /**
  * @author S. J. Yun
@@ -84,6 +85,43 @@ public class CFlightPlan extends AVehiclePlan{
 		iCallsign = aCallsign;
 	}
 
+	public CRunway getDepartureRunway() {
+		return iDepartureRunway;
+	}
+
+	public void setDepartureRunway(CRunway aDepartureRunway) {
+		iDepartureRunway = aDepartureRunway;
+	}
+
+	public CRunway getArrivalRunway() {
+		return iArrivalRunway;
+	}
+
+	public void setArrivalRunway(CRunway aArrivalRunway) {
+		iArrivalRunway = aArrivalRunway;
+	}
+
+	public CSpot getArrivalSpot() {
+		return iArrivalSpot;
+	}
+
+	public void setArrivalSpot(CSpot aArrivalSpot) {
+		iArrivalSpot = aArrivalSpot;
+	}
+
+	public CSpot getDepartureSpot() {
+		return iDepartureSpot;
+	}
+
+	public void setDepartureSpot(CSpot aDepartureSpot) {
+		iDepartureSpot = aDepartureSpot;
+	}
+
+	@Override
+	public String toString() {
+		return iCallsign;
+		
+	}
 	/*
 	================================================================
 	
@@ -91,6 +129,7 @@ public class CFlightPlan extends AVehiclePlan{
 	
 	================================================================
 	 */
+
 
 	/*
 	================================================================

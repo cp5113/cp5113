@@ -40,6 +40,7 @@ package elements.facility;
  *
  */
 
+import elements.mobile.human.IATCController;
 import elements.network.ANode;
 import elements.util.geo.CCoordination;
 
@@ -115,6 +116,12 @@ public class CSpot extends ANode{
 
 	public synchronized void setTaxiwayNode(CTaxiwayNode aTaxiwayNode) {
 		iTaxiwayNode = aTaxiwayNode;
+	}
+
+	@Override
+	public void setATCControllerToChildren(IATCController aController) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	/*

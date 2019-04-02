@@ -1,5 +1,6 @@
 package test.javafxTest;
 
+import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -11,6 +12,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import sim.CAtsolSimMain;
 
 /**
  * 
@@ -82,14 +84,35 @@ public class CanvasObjectControlTestDrive {
 		
 	}
 	
+	
+	public void draw() {
+		Platform.runLater(()->{
+			circle.setCenterX(circle.getCenterX()+1);
+			circle.setCenterY(50);
+			
+			GraphicsContext gc = SimCanvas.getGraphicsContext2D();
+			gc.setFill(Color.LIGHTGRAY);
+			gc.fillRect(0, 0, SimCanvas.getWidth(), SimCanvas.getHeight());
+			
+			gc.setFill(Color.RED);
+			for(int i = 0 ; i < 100000 ;i++){
+				gc.fillOval(Math.random()*500,Math.random()*100,10,10);
+			}	
+		});
+		
+		
+		
+	}
+	
 	public class Testclick implements EventHandler<Event> {
 
 		@Override
 		public void handle(Event aEvent) {
 			// TODO Auto-generated method stub
-			System.out.println("TTT");
-			circle.setCenterX(circle.getCenterX()+1);
-			circle.setCenterY(50);
+			
+			
+			
+			draw();
 		}
 		
 	}

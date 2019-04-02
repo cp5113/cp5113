@@ -174,11 +174,13 @@ public class CSimClockOberserver implements ISimClockObserverable, ISimClockOber
 		iRunning = true;
 
 		// Initialize CControlAircraftThreadByTime to enhance number of Thread
-//		CDispatchAircraftThreadByTime lControlAircraftThreadByTime = CDispatchAircraftThreadByTime.getInstance();
-//		this.addInClock(lControlAircraftThreadByTime);
+		CDispatchAircraftThreadByTime lControlAircraftThreadByTime = CDispatchAircraftThreadByTime.getInstance();
+		this.addInClock(lControlAircraftThreadByTime);
 
 		
-//		iCountPublicationIsDone = 0;
+		//		iCountPublicationIsDone = 0;
+
+		
 		// Run Clock
 		while(iCurrentTIme.getTimeInMillis() <= iEndTIme.getTimeInMillis() && iRunning) {			
 			
@@ -208,8 +210,7 @@ public class CSimClockOberserver implements ISimClockObserverable, ISimClockOber
 			
 			
 			// Draw Map
-
-				CAtsolSimGuiControl.getInstance().drawDrawingObjectList();
+			CAtsolSimGuiControl.getInstance().drawDrawingObjectList();
 
 			
 			// Sleep to Animation

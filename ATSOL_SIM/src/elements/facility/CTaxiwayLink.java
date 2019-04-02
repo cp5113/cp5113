@@ -45,6 +45,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import elements.mobile.human.IATCController;
 import elements.network.ALink;
 import elements.network.ANode;
 import elements.table.CAirportTable;
@@ -56,6 +57,7 @@ import sim.CAtsolSimMain;
 import sim.gui.CDrawingInform;
 import sim.gui.EShape;
 import sim.gui.IDrawingObject;
+import sim.gui.control.CAtsolSimGuiControl;
 
 /**
  * @author S. J. Yun
@@ -71,8 +73,6 @@ public class CTaxiwayLink extends ALink implements IDrawingObject{
 	
 	================================================================
 	*/
-	
-	
 	
 	/*
 	================================================================
@@ -93,6 +93,17 @@ public class CTaxiwayLink extends ALink implements IDrawingObject{
 		
 		CDrawingInform  lDrawingInform = new CDrawingInform(lCoordinationList, new CAltitude(0,EGEOUnit.FEET), EShape.LINE, Color.BLACK,true);
 		return lDrawingInform;			
+	}
+
+	@Override
+	public void setATCControllerToChildren(IATCController aController) {
+		// TODO Auto-generated method stub
+		Iterator<ANode> iter = this.iNodeList.iterator();
+		while(iter.hasNext()) {
+			CTaxiwayNode lNode = (CTaxiwayNode) iter.next();
+			lNode.setATCController(aController);
+			lNode.setATCControllerToChildren(aController);
+		}
 	}
 
 	/*

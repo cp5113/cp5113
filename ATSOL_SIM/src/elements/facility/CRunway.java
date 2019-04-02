@@ -40,6 +40,7 @@ package elements.facility;
  *
  */
 
+import elements.mobile.human.IATCController;
 import elements.network.ALink;
 
 /**
@@ -47,6 +48,12 @@ import elements.network.ALink;
  *
  */
 public class CRunway extends ALink{
+
+	@Override
+	public void setATCControllerToChildren(IATCController aController) {
+		// TODO Auto-generated method stub
+		
+	}
 	/*
 	================================================================
 	

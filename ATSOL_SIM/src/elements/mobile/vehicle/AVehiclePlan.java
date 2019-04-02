@@ -48,12 +48,13 @@ import java.util.List;
 import elements.network.INode;
 import elements.util.geo.CAltitude;
 import elements.util.geo.EGEOUnit;
+import sim.clock.CVehicleAndPlanAndTime;
 
 /**
  * @author S. J. Yun
  *
  */
-public class AVehiclePlan {
+public abstract class AVehiclePlan implements Comparable<AVehiclePlan>{
 	/*
 	================================================================
 	
@@ -216,6 +217,15 @@ public class AVehiclePlan {
 		iDestinationAirport = aDestinationAirport;
 	}
 	
+	public int compareTo(AVehiclePlan aO) {
+		// TODO Auto-generated method stub
+		if(this.iScheduleTimeList.get(0).getTimeInMillis()< aO.getScheduleTimeList().get(0).getTimeInMillis()) {
+			return -1;
+		}else if(this.iScheduleTimeList.get(0).getTimeInMillis()> aO.getScheduleTimeList().get(0).getTimeInMillis()) {
+			return 1;
+		}
+		return 0;
+	}
 	
 	
 	/*

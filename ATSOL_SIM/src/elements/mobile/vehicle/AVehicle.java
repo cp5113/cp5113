@@ -46,6 +46,7 @@ import java.util.List;
 
 import elements.IElementObservableClock;
 import elements.mobile.AMobile;
+import elements.mobile.human.IATCController;
 import elements.operator.AOperator;
 import elements.property.AVehiclePerformance;
 import elements.property.AVehicleType;
@@ -53,7 +54,10 @@ import elements.table.ITableAble;
 import elements.util.geo.CAltitude;
 import elements.util.geo.CCoordination;
 import elements.util.geo.EGEOUnit;
+import javafx.scene.paint.Color;
 import sim.clock.ISimClockOberserver;
+import sim.gui.CDrawingInform;
+import sim.gui.EShape;
 import sim.gui.IDrawingObject;
 
 /**
@@ -80,6 +84,8 @@ public abstract class AVehicle extends AMobile implements ITableAble, IDrawingOb
 	protected		CVehicleStatus			iPreviousStatus;
 	protected		CVehicleStatus			iNextStatus;
 	
+	protected		IATCController			iATCController;
+
 	
 	protected		List<AVehiclePlan>		iPlanList 				= Collections.synchronizedList(new ArrayList<AVehiclePlan>());
 	protected		AVehiclePlan			iCurrentPlan			;
@@ -88,6 +94,11 @@ public abstract class AVehicle extends AMobile implements ITableAble, IDrawingOb
 	protected		CCoordination			iPreviousPostion 	= new CCoordination(-9999999, -9999999, EGEOUnit.METER);
 	protected		CCoordination			iNextPostion  		= new CCoordination(-9999999, -9999999, EGEOUnit.METER);
 	protected		CAltitude				iCurrentAltitude 	= new CAltitude(0, EGEOUnit.FEET);
+	
+	
+	protected 	CDrawingInform				iDrawingInform = new CDrawingInform(iCurrentPostion,iCurrentAltitude,EShape.DOT,Color.RED,true);
+	
+	
 	
 	protected		AOperator				iOperator;
 	protected		AVehiclePerformance		iPerformance;
@@ -163,6 +174,13 @@ public abstract class AVehicle extends AMobile implements ITableAble, IDrawingOb
 		iVehcleType = aVehcleType;
 	}
 	
+	
+	@Override
+	public CDrawingInform getDrawingInform() {
+		// TODO Auto-generated method stub
+		return iDrawingInform;
+	}
+
 	 
 	/*
 	================================================================

@@ -50,6 +50,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -168,11 +169,6 @@ public class CAircraftTable extends ATable {
 				addElement(lAircraft);
 			}
 
-			// Search Node List
-			INode lOriginNode = searchNodeInAirportAndWaypoint(lOrigin);
-			INode lDestinNode = searchNodeInAirportAndWaypoint(lDestination);
-			
-			
 			
 			// Search Node in Route
 			CAirRoute lRouteConnected = (CAirRoute) CAtsolSimMain.getInstance().getAirRouteTable().getElementTable().get(lRoute);			
@@ -184,6 +180,11 @@ public class CAircraftTable extends ATable {
 				System.out.println(lRoute + " is not defined in Route.csv");
 				continue;
 			}
+
+			// Search Node List
+			INode lOriginNode = lNodeList.get(0);
+			INode lDestinNode = lNodeList.get(lNodeList.size()-1);
+			
 			
 			
 			// Create Flight plan 
@@ -193,7 +194,43 @@ public class CAircraftTable extends ATable {
 			lFlightPlan.setCallsign(lCallsign);
 			lFlightPlan.setCrusingAltitude(new CAltitude(parseDouble(lCrusingAltitude), EGEOUnit.FEET));
 			lFlightPlan.setOriginationAirport(lOrigin);
-			lFlightPlan.setDestinationAirport(lDestination);
+			lFlightPlan.setDestinationAirport(lDestination);		
+			
+			
+			// Arrival and Departure Spot
+			// Arrival Spot
+			try {
+				CAirport lAirport = (CAirport)lDestinNode;
+				Iterator<CSpot> loopSpot = lAirport.getSpotList().iterator();
+				while(loopSpot.hasNext()) {
+					CSpot lSpot = loopSpot.next();
+					if(lSpot.getName().equalsIgnoreCase(lSpotArrival)) {
+						lFlightPlan.setArrivalSpot(lSpot);
+						break;
+					}
+				}
+				
+			}catch(Exception e) {
+				
+			}
+			
+			// Departure Spot
+			try {
+				CAirport lAirport = (CAirport)lOriginNode;
+				Iterator<CSpot> loopSpot = lAirport.getSpotList().iterator();
+				while(loopSpot.hasNext()) {
+					CSpot lSpot = loopSpot.next();
+					if(lSpot.getName().equalsIgnoreCase(lSpotDeparture)) {
+						lFlightPlan.setDepartureSpot(lSpot);
+						break;
+					}
+				}
+				
+			}catch(Exception e) {
+				
+			}
+			
+			
 			
 			// Add Node list into Flight Plan			
 			for(int loopNode = 0; loopNode < lNodeList.size(); loopNode++) {
@@ -224,8 +261,7 @@ public class CAircraftTable extends ATable {
 			}
 			// Add Flight Plan
 			lAircraft.getPlanList().add(lFlightPlan);
-			
-			
+			Collections.sort(lAircraft.getPlanList());
 		} // for(String key : lDataList.keySet()) 
 	}
 	

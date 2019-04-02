@@ -47,6 +47,7 @@ import java.util.List;
 
 import elements.mobile.human.CGroundController;
 import elements.mobile.human.CLocalController;
+import elements.mobile.human.IATCController;
 import elements.network.INode;
 import elements.util.geo.CAltitude;
 import elements.util.geo.CCoordination;
@@ -201,6 +202,11 @@ public class CAirport extends AFacility  implements INode {
 	public CCoordination getCoordination() {
 		// TODO Auto-generated method stub
 		return iARP;
+	}
+	@Override
+	public void setATCControllerToChildren(IATCController aController) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

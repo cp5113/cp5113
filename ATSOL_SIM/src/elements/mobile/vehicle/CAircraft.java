@@ -10,6 +10,9 @@ import java.util.Calendar;
 
 import elements.IElementControlledByClock;
 import elements.IElementObservableClock;
+import elements.airspace.CWaypoint;
+import elements.facility.CAirport;
+import elements.mobile.human.IATCController;
 import elements.operator.CAirline;
 import elements.property.CAircraftType;
 import elements.table.ITableAble;
@@ -71,7 +74,7 @@ public class CAircraft extends AVehicle {
 	private		String							iRegistration;	
 	private 	CAirline						iAirline;
 	
-	private 	CDrawingInform					iDrawingInform = new CDrawingInform(iCurrentPostion,iCurrentAltitude,EShape.DOT,Color.RED,true);
+	
 	
 
 	@Override
@@ -113,12 +116,7 @@ public class CAircraft extends AVehicle {
 	
 	================================================================
 	 */
-	@Override
-	public CDrawingInform getDrawingInform() {
-		// TODO Auto-generated method stub
-		return iDrawingInform;
-	}
-
+	
 
 	@Override
 	public void waitUntilClockStatusIsChanged() {
@@ -150,9 +148,52 @@ public class CAircraft extends AVehicle {
 
 	@Override
 	public void run() {
+		
+		// Initialize status of this aircraft
+		CFlightPlan lCurrentPlan = (CFlightPlan) this.iCurrentPlan;
+		this.getCurrentPostion().setXCoordination(lCurrentPlan.getNode(0).getCoordination().getXCoordination());
+		this.getCurrentPostion().setYCoordination(lCurrentPlan.getNode(0).getCoordination().getYCoordination());
+		
+		
+		/*
+		 * Find ATC Controller
+		 */
+		// if Departure from an Airport
+		// add to ground/ramp controller
+		// and request to set start point as spot
+		// 		if not available, change departure spot		
+		if(lCurrentPlan.getDepartureSpot()!=null) {
+			iATCController = lCurrentPlan.getDepartureSpot().getATCController();
+		}else if(lCurrentPlan.getOriginationNode().getClass().getSimpleName().equalsIgnoreCase("CAirport")) {
+			if( ((CAirport) lCurrentPlan.getOriginationNode()).getGroundControllerList().size()>0) {
+				iATCController = ((CAirport) lCurrentPlan.getOriginationNode()).getGroundControllerList().get(0);
+			}else {   // Airport as a Point
+				iATCController = ((CAirport) lCurrentPlan.getOriginationNode()).getLocalControllerList().get(0);
+			}
+		}
+		
+		// if departure from waypoint
+		// add airspace Controller
+		if(lCurrentPlan.getOriginationNode().getClass().getSimpleName().equalsIgnoreCase("CWaypoint")) {
+			iATCController = ((CWaypoint) lCurrentPlan.getOriginationNode()).getATCController();
+		}
+		
+		/*
+		 * Add this A/C to ATC Controller
+		 */
+		iATCController.handOnAircraft(null, this);
+		System.out.println(2);
+//		if()
+		
+		
+		// Get Previous Time
 		iPreviousTimeInMilliSecond = ((CSimClockOberserver) iSimClockObserver).getCurrentTIme().getTimeInMillis();
+		
+		// Notify I'm Done for initialize and Start SimClock
 		notifyToClockImDone();
 		
+		
+		// Wait for Clock is ticking and run own algorithm
 		while( ((CSimClockOberserver) iSimClockObserver).isRunning()) {
 			iCurrentTimeInMilliSecond = ((CSimClockOberserver) iSimClockObserver).getCurrentTIme().getTimeInMillis();
 			while(iPreviousTimeInMilliSecond == iCurrentTimeInMilliSecond) {
@@ -166,13 +207,31 @@ public class CAircraft extends AVehicle {
 			
 //			System.out.println("Aircraft " + iRegistration + " is Working.. Sleep 1 secs");
 //			
-////			try {
-////				Thread.sleep(1000);
-////			} catch (InterruptedException e) {
-////				// TODO Auto-generated catch block
-////				e.printStackTrace();
-////			}
+//			try {
+//				Thread.sleep(1000);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 //			System.out.println("Aircraft " + iRegistration + " is done");
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
 			notifyToClockImDone();
 			iPreviousTimeInMilliSecond = iCurrentTimeInMilliSecond;
 		}

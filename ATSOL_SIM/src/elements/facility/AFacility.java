@@ -41,6 +41,7 @@ package elements.facility;
  */
 
 import elements.AElement;
+import elements.mobile.human.IATCController;
 
 /**
  * @author S. J. Yun
@@ -56,7 +57,7 @@ abstract public class AFacility extends AElement{
 	*/	
 	
 	protected	static	int				iFacilityCount 		= 0;
-	
+	protected IATCController			iATCController;
 	
 
 	
@@ -79,6 +80,13 @@ abstract public class AFacility extends AElement{
 		return iFacilityCount;
 	}
 
+	public IATCController getATCController() {
+		return iATCController;
+	}
+	public void setATCController(IATCController aController) {
+		iATCController = aController;
+	}
+	public abstract void setATCControllerToChildren(IATCController aController);
 	
 	/*
 	================================================================

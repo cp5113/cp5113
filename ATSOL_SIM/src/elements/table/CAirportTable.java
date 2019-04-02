@@ -180,6 +180,7 @@ public class CAirportTable extends ATable {
 
 			// get Properties
 			String lSpotName = lData.get("Name");
+			String lTaxiwayNodeName = lData.get("Node");
 			String lAirportStr = lData.get("Airport");
 			HashMap<String,Boolean> lAPCAvailable = new HashMap<String,Boolean>();
 			lAPCAvailable.put("A",lData.get("A").equalsIgnoreCase("A"));
@@ -197,7 +198,7 @@ public class CAirportTable extends ATable {
 			CTaxiwayNode lTargetTaxiwayNode = null;
 			while(iter.hasNext()) {
 				lTargetTaxiwayNode =iter.next();
-				if(lTargetTaxiwayNode.getName().equalsIgnoreCase(lSpotName)) {
+				if(lTargetTaxiwayNode.getName().equalsIgnoreCase(lTaxiwayNodeName)) {					
 					 break;
 				}
 			}
@@ -206,7 +207,12 @@ public class CAirportTable extends ATable {
 			CSpot lSpot = new CSpot(lTargetTaxiwayNode);
 			lSpot.setACTypeAPC(lAPCAvailable);
 			lSpot.setOwnerObject(lTargetAirport);
-
+			lSpot.setName(lSpotName);
+			lSpot.setNameGroup(lSpotName);
+			
+			// set owner connect each other
+			lTargetTaxiwayNode.setSpot(lSpot);
+			
 			// Add to Airport
 			lTargetAirport.getSpotList().add(lSpot);
 

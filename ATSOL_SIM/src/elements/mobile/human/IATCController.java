@@ -66,7 +66,9 @@ public interface IATCController {
 	================================================================
 	 */
 	
-
+	abstract void controlAircraft();
+	abstract void handOffAircraft(IATCController aToController, CAircraft aAircraft);	
+	abstract void handOnAircraft(IATCController aFromController,  CAircraft aAircraft);	
 	
 	
 	/*

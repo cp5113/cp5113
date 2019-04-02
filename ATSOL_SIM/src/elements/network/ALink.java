@@ -71,7 +71,7 @@ public abstract class ALink extends AFacility {
 	protected 	CDegree					iHeading;
 	protected	CDegree					iOppositeHeading;
 	
-	protected IATCController			iController;
+
 	
 	
 	/*
@@ -135,13 +135,7 @@ public abstract class ALink extends AFacility {
 	public synchronized void setOppositeHeading(CDegree aOppositeHeading) {
 		iOppositeHeading = aOppositeHeading;
 	}
-	public IATCController getController() {
-		return iController;
-	}
-	public void setController(IATCController aController) {
-		iController = aController;
-	}
-	
+
 	/*
 	================================================================
 

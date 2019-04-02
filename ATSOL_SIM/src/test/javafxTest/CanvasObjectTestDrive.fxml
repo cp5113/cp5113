@@ -15,6 +15,6 @@
       
    </center>
    <bottom>
-<Canvas fx:id="canvas" height="200.0" width="564.0" BorderPane.alignment="CENTER" />
+<Canvas fx:id="SimCanvas" height="200.0" width="564.0" BorderPane.alignment="CENTER" />
    </bottom>
 </BorderPane>

@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import elements.AElement;
+import elements.facility.AFacility;
 import elements.facility.CAirport;
 import elements.property.CAircraftType;
 import elements.util.geo.CAltitude;
@@ -53,7 +54,7 @@ import elements.util.geo.CCoordination;
  * @author S. J. Yun
  *
  */
-public abstract class ANode extends AElement implements INode{
+public abstract class ANode extends AFacility implements INode{
 	/*
 	================================================================
 

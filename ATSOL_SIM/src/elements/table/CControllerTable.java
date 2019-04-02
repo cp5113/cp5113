@@ -150,13 +150,12 @@ public class CControllerTable extends ATable {
 			String lControllerType = lData.get("ControllerType");
 			String lFacilityID = lData.get("FacilityID");
 			String lSpecificLink = lData.get("SpecificLink");
-			String[] lSpecificLinkList;
+			String[] lSpecificLinkList = null;
 			try{
 				lSpecificLinkList = lSpecificLink.split("/");
 			}catch(Exception e) {
 				lSpecificLinkList = null;
 			}
-			
 			
 			// Create Object
 			AATCController lController = null; 
@@ -180,14 +179,16 @@ public class CControllerTable extends ATable {
 				
 				// Set TaxiwayLink to controller
 				for(int i=0; i< lAirport.getTaxiwayLinkList().size(); i++) {
-					if(lSpecificLinkList== null) {						
+					if(lSpecificLinkList== null || lSpecificLinkList[0].equalsIgnoreCase("")) {						
 						lController.addFacility(lAirport.getTaxiwayLinkList().get(i));
-						lAirport.getTaxiwayLinkList().get(i).setController(lController);
+						lAirport.getTaxiwayLinkList().get(i).setATCController(lController);
+						lAirport.getTaxiwayLinkList().get(i).setATCControllerToChildren(lController);
 					}else {
 						for(int loopSpecific = 0; loopSpecific < lSpecificLinkList.length; loopSpecific++) {
 							if(lSpecificLinkList[loopSpecific].equalsIgnoreCase(lAirport.getTaxiwayLinkList().get(i).getName())) {
 								lController.addFacility(lAirport.getTaxiwayLinkList().get(i));
-								lAirport.getTaxiwayLinkList().get(i).setController(lController);
+								lAirport.getTaxiwayLinkList().get(i).setATCController(lController);
+								lAirport.getTaxiwayLinkList().get(i).setATCControllerToChildren(lController);
 							}
 						}
 					}

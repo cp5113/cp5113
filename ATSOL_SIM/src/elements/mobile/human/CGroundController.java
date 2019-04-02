@@ -82,13 +82,12 @@ public class CGroundController extends AATCController {
 	@Override
 	public void handOnAircraft(IATCController aFromController, CAircraft aAircraft) {
 		// TODO Auto-generated method stub
+		System.out.println("I Got Aircraft \"" + aAircraft +"\", from Controller \"" + aFromController + "\"");
+		System.out.println();
+		addAircraft(aAircraft);
 		
 	}
-	@Override
-	public void addAircraft(CAircraft aAircraft) {
-		// TODO Auto-generated method stub
-		
-	}
+
 
 	@Override
 	public void waitUntilClockStatusIsChanged() {

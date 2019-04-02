@@ -94,9 +94,7 @@ public abstract class AATCController extends AHuman implements IATCController, I
 	
 	================================================================
 	 */
-	abstract protected void controlAircraft();
-	abstract protected void handOffAircraft(IATCController aToController, CAircraft aAircraft);	
-	abstract protected void handOnAircraft(IATCController aFromController,  CAircraft aAircraft);	
+
 	
 	
 	
