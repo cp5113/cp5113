@@ -3,6 +3,7 @@ package elements.airspace;
 import elements.AElement;
 import elements.facility.AFacility;
 import elements.facility.ELocation;
+import elements.mobile.human.IATCController;
 import elements.network.ANode;
 import elements.table.ITableAble;
 import elements.util.geo.CCoordination;
@@ -69,6 +70,12 @@ public class CWaypoint extends ANode implements ITableAble {
 		iCoordination = aCoordination;
 		iLocation	  = ELocation.AIRSPACE;
 				
+	}
+
+	@Override
+	public void setATCControllerToChildren(IATCController aController) {
+		// TODO Auto-generated method stub
+		
 	}
 
 			
