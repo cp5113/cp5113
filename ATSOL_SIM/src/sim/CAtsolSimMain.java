@@ -13,6 +13,7 @@ import java.util.List;
 import elements.IElementObservableClock;
 import elements.facility.CAirport;
 import elements.facility.CTaxiwayLink;
+import elements.facility.CTaxiwayNode;
 import elements.table.ATable;
 import elements.table.CAirRouteTable;
 import elements.table.CAircraftTable;
@@ -95,6 +96,7 @@ public class CAtsolSimMain {
 	private static CControllerTable			iControllerTable	= new CControllerTable();
 	private static List<IDrawingObject> iDrawingObjectList = Collections.synchronizedList(new ArrayList<IDrawingObject>());
 	
+	private static String					iProjectFileName   = null;
 	
 	// Graphic Control
 	private static CCoordination iViewPoint;	
@@ -121,16 +123,16 @@ public class CAtsolSimMain {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		String lProjectFilename = "C:\\\\Users\\\\cp511\\\\git\\\\cp5113\\\\ATSOL_SIM\\\\SimStudy\\\\Test001_Project.txt";
-		System.out.println("Loading Project : " + lProjectFilename);
+		iProjectFileName = "C:\\\\Users\\\\cp511\\\\git\\\\cp5113\\\\ATSOL_SIM\\\\SimStudy\\\\Test001_Project.txt";
+		System.out.println("Loading Project : " + iProjectFileName);
 		
 		CAtsolSimMain.getInstance().connectTable();
-		CAtsolSimMain.getInstance().loadEnvironment(new File(lProjectFilename));		
+		CAtsolSimMain.getInstance().loadEnvironment(new File(iProjectFileName));		
 		CAtsolSimMain.getInstance().createDrawingObjectList();
 		CAtsolSimMain.getInstance().openGui();		
 	}
 	
-	private void connectTable() {
+	public void connectTable() {
 //		Field[] lFieldList = CAtsolSimMain.class.getDeclaredFields();
 //		
 //		for(int loopField = 0; loopField<lFieldList.length;loopField++) {
@@ -147,7 +149,12 @@ public class CAtsolSimMain {
 		iAllTableList.add(iAirportTable);
 		iAllTableList.add(iWaypointTable);
 		iAllTableList.add(iAircraftTable);
-		iAllTableList.add(iControllerTable);		
+		iAllTableList.add(iControllerTable);	
+		iAirRouteTable.clearTalbe();
+		iAircraftTypeTable.clearTalbe();
+		iAirportTable.clearTalbe();
+		iAircraftTable.clearTalbe();
+		iControllerTable.clearTalbe();
 		
 					 
 		
@@ -161,7 +168,9 @@ public class CAtsolSimMain {
 	}
 
 	
-	private void createDrawingObjectList() {
+	public void createDrawingObjectList() {
+		iDrawingObjectList.clear();
+		
 		for(int loopList = 0; loopList < iAllTableList.size(); loopList++) {
 			List<ITableAble> lElementList = iAllTableList.get(loopList).getElementList();
 			for(int loopElement = 0; loopElement < lElementList.size(); loopElement++) {
@@ -179,12 +188,22 @@ public class CAtsolSimMain {
 			CTaxiwayLink lTaxiwayLink = iter.next();			
 			iDrawingObjectList.add(lTaxiwayLink);
 		}
+		
+		Iterator<CTaxiwayNode> iter2 = lAirport.getTaxiwayNodeList().iterator();		
+		while(iter2.hasNext()) {
+			CTaxiwayNode lTaxiwaynode= iter2.next();			
+			iDrawingObjectList.add(lTaxiwaynode);
+		}
+		
+		
+		
+		
 //		CAirport lWaypoint = (CWaypoint)(iWaypointTable.getElementTable().get("RKSI"));
 //		Iterator<CTaxiwayLink> iter = lAirport.getTaxiwayLinkList().iterator();
 		
 	}
 
-	private void loadEnvironment(File aProjectFile) {
+	public void loadEnvironment(File aProjectFile) {
 		ArrayList<File> lAirportFileList = new ArrayList<File>();
 		ArrayList<File> lAircraftFileTypeList = new ArrayList<File>();
 		ArrayList<File> lWaypointFileList = new ArrayList<File>();
@@ -339,7 +358,9 @@ public class CAtsolSimMain {
 	}
 	
 	
-	
+	public String getProjectFileName() {
+		return iProjectFileName;
+	}
 	
 	/*
 	================================================================

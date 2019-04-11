@@ -52,6 +52,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
+import algorithm.routing.DijkstraAlgorithm;
 import elements.AElement;
 import elements.IElementControlledByClock;
 import elements.facility.CAirport;
@@ -63,6 +64,7 @@ import elements.util.geo.CCoordination;
 import elements.util.geo.CDegree;
 import elements.util.geo.EGEOUnit;
 import elements.util.geo.EUnit;
+import sim.CAtsolSimMain;
 import util.file.CListUtil;
 import util.file.SReadCSV;
 
@@ -129,13 +131,15 @@ public class CAirportTable extends ATable {
 			String lTaxiwayNodeConnected1 = lData.get("StartNode");
 			String lTaxiwayNodeConnected2 = lData.get("EndNode");
 			String lAirportStr = lData.get("Airport");
-			HashMap<String,Boolean> lAPCAvailable = new HashMap<String,Boolean>();
-			lAPCAvailable.put("A",lData.get("A").equalsIgnoreCase("A"));
-			lAPCAvailable.put("B",lData.get("B").equalsIgnoreCase("B"));
-			lAPCAvailable.put("C",lData.get("C").equalsIgnoreCase("C"));
-			lAPCAvailable.put("D",lData.get("D").equalsIgnoreCase("D"));
-			lAPCAvailable.put("E",lData.get("E").equalsIgnoreCase("E"));
-			lAPCAvailable.put("F",lData.get("F").equalsIgnoreCase("F"));
+			String lSpeedLimitStr = lData.get("TaxiingSpeed");
+			
+			HashMap<String,Boolean> lADGAvailable = new HashMap<String,Boolean>();
+			lADGAvailable.put("A",lData.get("A").equalsIgnoreCase("TRUE"));
+			lADGAvailable.put("B",lData.get("B").equalsIgnoreCase("TRUE"));
+			lADGAvailable.put("C",lData.get("C").equalsIgnoreCase("TRUE"));
+			lADGAvailable.put("D",lData.get("D").equalsIgnoreCase("TRUE"));
+			lADGAvailable.put("E",lData.get("E").equalsIgnoreCase("TRUE"));
+			lADGAvailable.put("F",lData.get("F").equalsIgnoreCase("TRUE"));
 			
 			// Find Linked Airport			
 			CAirport lTargetAirport  = (CAirport) getElementTable().get(lAirportStr);
@@ -155,12 +159,28 @@ public class CAirportTable extends ATable {
 			lTaxiwayLink.getNodeList().add(lStartNode);
 			lTaxiwayLink.getNodeList().add(lEndNode);
 			lTaxiwayLink.setOwnerObject(lTargetAirport);
+			lTaxiwayLink.setSpeedLimitKts(parseDouble(lSpeedLimitStr));
+			
+			lStartNode.addOwnerLink(lTaxiwayLink);
+			lEndNode.addOwnerLink(lTaxiwayLink);
+			
+
+			
 //			System.out.println(lTaxiwayLink.getNodeList().get(0).getCoordination()+","+lTaxiwayLink.getNodeList().get(1).getCoordination());
 			
 			// Add to Airport
 			lTargetAirport.getTaxiwayLinkList().add(lTaxiwayLink);
 
 		} // for(String key : lDataList.keySet()) 
+		
+		
+		// Mapping Routing Algorithm
+//		Iterator iterAirport = CAtsolSimMain.getInstance().getiAirportTable().getElementList().iterator();
+//		while(iterAirport.hasNext()) {
+//			CAirport lAirport = (CAirport) iterAirport.next();
+//			DijkstraAlgorithm lDijsktra = new DijkstraAlgorithm(lAirport.getTaxiwayLinkList(), lAirport.getTaxiwayNodeList());
+//			lAirport.setRoutingAlgorithm(lDijsktra);
+//		}
 		
 	}
 
@@ -182,13 +202,13 @@ public class CAirportTable extends ATable {
 			String lSpotName = lData.get("Name");
 			String lTaxiwayNodeName = lData.get("Node");
 			String lAirportStr = lData.get("Airport");
-			HashMap<String,Boolean> lAPCAvailable = new HashMap<String,Boolean>();
-			lAPCAvailable.put("A",lData.get("A").equalsIgnoreCase("A"));
-			lAPCAvailable.put("B",lData.get("B").equalsIgnoreCase("B"));
-			lAPCAvailable.put("C",lData.get("C").equalsIgnoreCase("C"));
-			lAPCAvailable.put("D",lData.get("D").equalsIgnoreCase("D"));
-			lAPCAvailable.put("E",lData.get("E").equalsIgnoreCase("E"));
-			lAPCAvailable.put("F",lData.get("F").equalsIgnoreCase("F"));
+			HashMap<String,Boolean> lADGAvailable = new HashMap<String,Boolean>();
+			lADGAvailable.put("A",lData.get("A").equalsIgnoreCase("TRUE"));
+			lADGAvailable.put("B",lData.get("B").equalsIgnoreCase("TRUE"));
+			lADGAvailable.put("C",lData.get("C").equalsIgnoreCase("TRUE"));
+			lADGAvailable.put("D",lData.get("D").equalsIgnoreCase("TRUE"));
+			lADGAvailable.put("E",lData.get("E").equalsIgnoreCase("TRUE"));
+			lADGAvailable.put("F",lData.get("F").equalsIgnoreCase("TRUE"));
 			
 			// Find Linked Airport			
 			CAirport lTargetAirport  = (CAirport) getElementTable().get(lAirportStr);
@@ -205,11 +225,11 @@ public class CAirportTable extends ATable {
 			
 			// Create Object and Set Properties
 			CSpot lSpot = new CSpot(lTargetTaxiwayNode);
-			lSpot.setACTypeAPC(lAPCAvailable);
+			lSpot.setACTypeADG(lADGAvailable);
 			lSpot.setOwnerObject(lTargetAirport);
 			lSpot.setName(lSpotName);
 			lSpot.setNameGroup(lSpotName);
-			
+			lSpot.setCoordination(lTargetTaxiwayNode.getCoordination());
 			// set owner connect each other
 			lTargetTaxiwayNode.setSpot(lSpot);
 			

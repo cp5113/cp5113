@@ -58,6 +58,9 @@ public class CDrawingInform {
 	private EShape			iShape;
 	private Color			iColor;
 	private boolean			iVisible;
+	
+	private Double			iSize;
+	
 	/**
 	 * The Constructor
 	 * 
@@ -69,21 +72,23 @@ public class CDrawingInform {
 	 * @version : 
 	 * Mar 23, 2019 : Coded by S. J. Yun.
 	 */
-	public CDrawingInform(List<CCoordination> aCoordinationList, CAltitude aAltitude, EShape aShape, Color aColor,boolean aVisible) {
+	public CDrawingInform(List<CCoordination> aCoordinationList, CAltitude aAltitude, EShape aShape, Color aColor,boolean aVisible,Double aSize) {
 		super();
 		iCoordinationList = aCoordinationList;
 		iAltitude = aAltitude;
 		iShape = aShape;
 		iColor = aColor;
 		iVisible = aVisible;
+		iSize = aSize;
 	}
-	public CDrawingInform(CCoordination aCoordinationList, CAltitude aAltitude, EShape aShape, Color aColor,boolean aVisible) {
+	public CDrawingInform(CCoordination aCoordinationList, CAltitude aAltitude, EShape aShape, Color aColor,boolean aVisible,Double aSize) {
 		super();
 		iCoordinationList.add(aCoordinationList);
 		iAltitude = aAltitude;
 		iShape = aShape;
 		iColor = aColor;
 		iVisible = aVisible;
+		iSize = aSize;
 	}
 
 
@@ -125,6 +130,12 @@ public class CDrawingInform {
 	}
 	public synchronized void setVisible(boolean aVisible) {
 		iVisible = aVisible;
+	}
+	public synchronized Double getSize() {
+		return iSize;
+	}
+	public synchronized void setSize(Double aSize) {
+		iSize = aSize;
 	}
 
 	

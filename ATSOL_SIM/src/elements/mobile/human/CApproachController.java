@@ -63,6 +63,25 @@ public class CApproachController extends AATCController {
 		// TODO Auto-generated constructor stub
 	}
 
+	/** (non-Javadoc)
+	 * @see elements.mobile.human.IATCController#controlAircraft()
+	 */
+	@Override
+	public synchronized void controlAircraft() {
+		// TODO Auto-generated method stub
+		System.out.println(this.iAircraftList);
+		System.out.println();
+	}
+	@Override
+	public void initializeAircraft(CAircraft aAircraft) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+		
+	
+
 	/*
 	================================================================
 	
@@ -70,63 +89,7 @@ public class CApproachController extends AATCController {
 	
 	================================================================
 	 */
-	/** (non-Javadoc)
-	 * @see elements.mobile.human.IATCController#controlAircraft()
-	 */
-	@Override
-	public void controlAircraft() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void handOffAircraft(IATCController aToController, CAircraft aAircraft) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void handOnAircraft(IATCController aFromController, CAircraft aAircraft) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void addAircraft(CAircraft aAircraft) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void waitUntilClockStatusIsChanged() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void notifyToClockImDone() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	@Override
-	public void addClock(ISimClockOberserver aSimclock) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void removeClock() {
-		// TODO Auto-generated method stub
-		iSimClockObserver = null;
-	}
-
+	
 
 	/*
 	================================================================

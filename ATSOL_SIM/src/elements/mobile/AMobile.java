@@ -56,11 +56,11 @@ public abstract class AMobile extends AElement {
 	
 	================================================================
 	*/	
-	protected	static	int		iMobileCount 		= 0;
 	
+	protected  long iNextEventTime = -99999999;
 	
 	public AMobile(){
-		iMobileCount++;
+	
 	}
 	
 	/*
@@ -71,14 +71,20 @@ public abstract class AMobile extends AElement {
 	================================================================
 	 */
 	
-	public int getMobileCount(){		
-		return iMobileCount;
-	}
+	
 	
 	public String getName(){
 		return iName;
 	}
 	
+	public synchronized long getNextEventTime() {
+		return iNextEventTime;
+	}
+
+	public synchronized void setNextEventTime(long aNextEventTime) {
+		iNextEventTime = aNextEventTime;
+	}
+
 	public void setName(String aName){
 		iName = aName;
 	}

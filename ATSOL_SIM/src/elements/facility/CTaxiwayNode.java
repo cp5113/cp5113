@@ -40,15 +40,26 @@ package elements.facility;
  *
  */
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+
 import elements.mobile.human.IATCController;
 import elements.network.ANode;
+import elements.util.geo.CAltitude;
 import elements.util.geo.CCoordination;
+import elements.util.geo.EGEOUnit;
+import javafx.scene.paint.Color;
+import sim.gui.CDrawingInform;
+import sim.gui.EShape;
+import sim.gui.IDrawingObject;
 
 /**
  * @author S. J. Yun
  *
  */
-public class CTaxiwayNode extends ANode{
+public class CTaxiwayNode extends ANode implements IDrawingObject{
 
 	/**
 	 * The Constructor
@@ -102,6 +113,14 @@ public class CTaxiwayNode extends ANode{
 	public void setRunway(CRunway aRunway) {
 		iRunway = aRunway;
 		iRunway.setATCController(iATCController);
+	}
+
+	@Override
+	public CDrawingInform getDrawingInform() {
+		// TODO Auto-generated method stub
+		CDrawingInform  lDrawingInform = new CDrawingInform(iCoordination, new CAltitude(0,EGEOUnit.FEET), EShape.CIRCLE, Color.BLACK,true,10.0);
+		return lDrawingInform;		
+		
 	}
 
 	

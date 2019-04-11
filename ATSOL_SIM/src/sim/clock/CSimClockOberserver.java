@@ -120,7 +120,7 @@ public class CSimClockOberserver implements ISimClockObserverable, ISimClockOber
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		iRunning = false;
 		iThreadList.clear();
 		
 		for(int loopList = 0; loopList<iObserverableList.size();loopList++) {
@@ -128,6 +128,7 @@ public class CSimClockOberserver implements ISimClockObserverable, ISimClockOber
 		}
 		iObserverableList.clear();
 		iObserverList.clear();
+		iCountPublicationIsDone = 0;
 	}
 	
 	
@@ -182,9 +183,10 @@ public class CSimClockOberserver implements ISimClockObserverable, ISimClockOber
 
 		
 		// Run Clock
+ 		iCountPublicationIsDone= 0;
 		while(iCurrentTIme.getTimeInMillis() <= iEndTIme.getTimeInMillis() && iRunning) {			
 			
-			// Wait untill Observable Element is done (e.g., Aircraft, Controller...)
+			// Wait until Observable Element is done (e.g., Aircraft, Controller...)
 			while(iCountPublicationIsDone != iObserverableList.size() && iRunning) {		
 				try {
 					Thread.sleep(1);
@@ -195,16 +197,16 @@ public class CSimClockOberserver implements ISimClockObserverable, ISimClockOber
 			}
 			iCountPublicationIsDone = 0;			
 			
-			// Display Current Time
-			System.out.println("Current Time : " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(iCurrentTIme.getTimeInMillis())));
-			
+
 			// Add Current Time and Observable Element will running
 			iCurrentTIme.add(Calendar.MILLISECOND, iIncrementStepInMiliSec);
+			// Display Current Time
+			System.out.println("Current Time : " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(iCurrentTIme.getTimeInMillis())));
+//			System.out.println("Current Time : " + iCurrentTIme.getTimeInMillis());
+			
 			
 			// Notify to Observer
 			notifyTimeIncrementToElement();
-			
-			
 			
 			
 			
@@ -213,13 +215,14 @@ public class CSimClockOberserver implements ISimClockObserverable, ISimClockOber
 			CAtsolSimGuiControl.getInstance().drawDrawingObjectList();
 
 			
-			// Sleep to Animation
 //			try {
-//				Thread.sleep(100);
+//				Thread.sleep(1000);
 //			} catch (InterruptedException e) {
 //				// TODO Auto-generated catch block
 //				e.printStackTrace();
 //			}
+			
+
 		}
 		iRunning = false;
 		
@@ -268,9 +271,10 @@ public class CSimClockOberserver implements ISimClockObserverable, ISimClockOber
 	}
 
 	@Override
-	public synchronized void pubSaidImDone() {
+	public synchronized void pubSaidImDone(String aWho) {
 		// TODO Auto-generated method stub		
 		iCountPublicationIsDone += 1;
+//		System.out.println(aWho + " said to Clock im done");
 //		System.out.println("Done Element counts : " + iCountPublicationIsDone);
 //		System.out.println("Elements in Clock  : " + iObserverableList.size());
 	}

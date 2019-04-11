@@ -1,7 +1,4 @@
-package elements.mobile.vehicle;
-
-import elements.mobile.vehicle.AAircraft;
-
+package elements.property;
 /**
  * 
  * Dtails....
@@ -38,42 +35,47 @@ import elements.mobile.vehicle.AAircraft;
  *
  */
 
-public class CAircraft extends AAircraft {
+public enum EAPC {
 
+	A,B,C,D,E,F;
+	
+private int value;
+	
+	
 
-	/*
-	================================================================
-	
-			           Initializing Section
-	
-	================================================================
-	*/
-
-	/*
-	================================================================
-	
-						Methods Section
-	
-	================================================================
+	/**
+	 * getValue
+	 * 
+	 * Do What
+	 * 
+	 * @return value int
+	 * 
+	 * @date : Apr 3, 2019
+	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
+	 *
+	 * @version : 
+	 * Apr 3, 2019 : Coded by S. J. Yun.
 	 */
+	public int getValue() {
+		return value;
+	}
 
-
-	/*
-	================================================================
-	
-						Listeners Section
-	
-	================================================================
+	/**
+	 * setValue
+	 * 
+	 * Do What
+	 * 
+	 * @param aValue the value to set
+	 * 
+	 * @date : Apr 3, 2019
+	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
+	 *
+	 * @version : 
+	 * Apr 3, 2019 : Coded by S. J. Yun.
 	 */
-
-	/*
-	================================================================
-	
-							The Others
-	
-	================================================================
-	 */
-}
+	public void setValue(int aValue) {
+		this.value = aValue;
+	}}
 
 
 

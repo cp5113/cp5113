@@ -67,21 +67,29 @@ public class CAircraftPerformance extends AVehiclePerformance {
 	private double TakeoffSpeedNorm;
 	private double ClimbSpeed1000Norm;
 	
+	private EADG	ADG;
+	private EAPC	APC;
+	private EWTC    WTC;
+	
+	
+	
+	
+			
 	/**
 	 * The Constructor
 	 * 
 	 * Do What
 	 * 
-	 * @date : Mar 25, 2019
+	 * @date : Apr 3, 2019
 	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
 	 *
 	 * @version : 
-	 * Mar 25, 2019 : Coded by S. J. Yun.
+	 * Apr 3, 2019 : Coded by S. J. Yun.
 	 */
-	protected CAircraftPerformance(CAircraftType aOwnerAircraftType, 
-			double aTaxiingSpeedMax, double aTaxiingSpeedNorm, double aAccelerationOnGroundMax,
-			double aDecelerationOnGroundMax, double aAccelerationOnRunwayMax, double aDecelerationOnRunwayMax,
-			double aExitSpeedNorm, double aTakeoffSpeedNorm, double aClimbSpeed1000Norm) {
+	public CAircraftPerformance(CAircraftType aOwnerAircraftType, double aTaxiingSpeedMax, double aTaxiingSpeedNorm,
+			double aAccelerationOnGroundMax, double aDecelerationOnGroundMax, double aAccelerationOnRunwayMax,
+			double aDecelerationOnRunwayMax, double aExitSpeedNorm, double aTakeoffSpeedNorm,
+			double aClimbSpeed1000Norm, EADG aADG, EAPC aAPC, EWTC aWTC) {
 		super();
 		iOwnerAircraftType = aOwnerAircraftType;
 		TaxiingSpeedMax = aTaxiingSpeedMax;
@@ -93,6 +101,9 @@ public class CAircraftPerformance extends AVehiclePerformance {
 		ExitSpeedNorm = aExitSpeedNorm;
 		TakeoffSpeedNorm = aTakeoffSpeedNorm;
 		ClimbSpeed1000Norm = aClimbSpeed1000Norm;
+		ADG = aADG;
+		APC = aAPC;
+		WTC = aWTC;
 	}
 
 	/**
@@ -109,7 +120,7 @@ public class CAircraftPerformance extends AVehiclePerformance {
 	public CAircraftPerformance( 
 			double aTaxiingSpeedMax, double aTaxiingSpeedNorm, double aAccelerationOnGroundMax,
 			double aDecelerationOnGroundMax, double aAccelerationOnRunwayMax, double aDecelerationOnRunwayMax,
-			double aExitSpeedNorm, double aTakeoffSpeedNorm, double aClimbSpeed1000Norm) {
+			double aExitSpeedNorm, double aTakeoffSpeedNorm, double aClimbSpeed1000Norm, EADG aADG, EAPC aAPC, EWTC aWTC) {
 		super();		
 		TaxiingSpeedMax = aTaxiingSpeedMax;
 		TaxiingSpeedNorm = aTaxiingSpeedNorm;
@@ -120,10 +131,11 @@ public class CAircraftPerformance extends AVehiclePerformance {
 		ExitSpeedNorm = aExitSpeedNorm;
 		TakeoffSpeedNorm = aTakeoffSpeedNorm;
 		ClimbSpeed1000Norm = aClimbSpeed1000Norm;
+		ADG = aADG;
+		APC = aAPC;
+		WTC = aWTC;
 	}
 
-	
-			
 	/*
 	================================================================
 	
@@ -164,6 +176,18 @@ public class CAircraftPerformance extends AVehiclePerformance {
 
 	public void setOwnerAircraftType(CAircraftType aAircraftType) {
 		iOwnerAircraftType = aAircraftType;
+	}
+
+	public synchronized EADG getADG() {
+		return ADG;
+	}
+
+	public synchronized EAPC getAPC() {
+		return APC;
+	}
+
+	public synchronized EWTC getWTC() {
+		return WTC;
 	}
 	
 	/*

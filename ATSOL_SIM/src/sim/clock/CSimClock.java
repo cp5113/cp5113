@@ -74,17 +74,6 @@ public class CSimClock implements ISimClockObserverable, Runnable{
 	
 	
 
-	
-
-
-
-	
-	
-	
-	
-	
-
-
 	/*
 	================================================================
 	

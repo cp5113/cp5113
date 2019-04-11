@@ -53,7 +53,35 @@ public class CVelocity {
 	================================================================
 	*/
 	private double				iVelocity;
-	private EVelocityUnit		iUnit = EVelocityUnit.NAUTICAL_MILE_PER_HOUR;
+	private EVelocityUnit		iUnit = EVelocityUnit.METER_PER_SEC;
+	/**
+	 * The Constructor
+	 * 
+	 * Do What
+	 * 
+	 * @date : Apr 8, 2019
+	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
+	 *
+	 * @version : 
+	 * Apr 8, 2019 : Coded by S. J. Yun.
+	 */
+	public CVelocity(double aVelocity, EVelocityUnit aUnit) {
+		super();
+		iVelocity = aVelocity;
+		iUnit = aUnit;
+	}
+	public synchronized double getVelocity() {
+		return iVelocity;
+	}
+	public synchronized void setVelocity(double aVelocity) {
+		iVelocity = aVelocity;
+	}
+	public synchronized EVelocityUnit getUnit() {
+		return iUnit;
+	}
+	public synchronized void setUnit(EVelocityUnit aUnit) {
+		iUnit = aUnit;
+	}
 	
 	
 	
@@ -64,6 +92,7 @@ public class CVelocity {
 	
 	================================================================
 	 */
+	
 
 	/*
 	================================================================

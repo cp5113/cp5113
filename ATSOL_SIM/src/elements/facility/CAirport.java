@@ -41,6 +41,10 @@ package elements.facility;
  */
 
 import java.util.List;
+
+import algorithm.routing.DijkstraAlgorithm;
+import algorithm.routing.IRoutingAlgorithm;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -82,8 +86,6 @@ public class CAirport extends AFacility  implements INode {
 	private	CCoordination	iARP;
 	private CAltitude		iElevation;
 	private CDegree			iVariation;
-	
-	
 	
 	
 	// "Has" Relationship - Facilities and Network	

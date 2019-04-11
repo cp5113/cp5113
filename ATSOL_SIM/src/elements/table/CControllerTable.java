@@ -56,6 +56,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
+import algorithm.routing.DijkstraAlgorithm;
 import elements.AElement;
 import elements.IElementControlledByClock;
 import elements.airspace.CAirRoute;
@@ -193,6 +194,11 @@ public class CControllerTable extends ATable {
 						}
 					}
 				}
+				
+				// Set Routing Algorithm
+				DijkstraAlgorithm lDijkstraAlgorithm = new DijkstraAlgorithm(lAirport.getTaxiwayLinkList(), lAirport.getTaxiwayNodeList());
+				lController.setRoutingAlgorithm(lDijkstraAlgorithm);
+						
 				
 				break;
 			case "LocalController":

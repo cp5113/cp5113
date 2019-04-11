@@ -1,2 +1,2 @@
-AircraftType,AircraftSubTypeList,Range,TaxiingSpeedMax,TaxiingSpeedNorm,AccelerationOnGroundMax,DecelerationOnGroundMax,AccelerationOnRunwayMax,DecelerationOnRunwayMax,ExitSpeedNorm,TakeoffSpeedNorm,ClimbSpeed1000Norm
-B737,B734/B738,M,15.43332,7.71666,1.028888,1.028888,,,,,0
+AircraftType,AircraftSubTypeList,Range,TaxiingSpeedMax,TaxiingSpeedNorm,AccelerationOnGroundMax,DecelerationOnGroundMax,AccelerationOnRunwayMax,DecelerationOnRunwayMax,ExitSpeedNorm,TakeoffSpeedNorm,ClimbSpeed1000Norm,APC,WTC,ADG
+B737,B734/B738,M,15.43332,7.71666,1.028888,1.028888,,,,,0,C,M,C

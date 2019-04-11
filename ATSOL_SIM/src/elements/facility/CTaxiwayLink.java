@@ -91,20 +91,11 @@ public class CTaxiwayLink extends ALink implements IDrawingObject{
 			lCoordinationList.add(lTaxiwayNode.getCoordination());
 		}
 		
-		CDrawingInform  lDrawingInform = new CDrawingInform(lCoordinationList, new CAltitude(0,EGEOUnit.FEET), EShape.LINE, Color.BLACK,true);
+		CDrawingInform  lDrawingInform = new CDrawingInform(lCoordinationList, new CAltitude(0,EGEOUnit.FEET), EShape.LINE, Color.BLACK,true,10.0);
 		return lDrawingInform;			
 	}
 
-	@Override
-	public void setATCControllerToChildren(IATCController aController) {
-		// TODO Auto-generated method stub
-		Iterator<ANode> iter = this.iNodeList.iterator();
-		while(iter.hasNext()) {
-			CTaxiwayNode lNode = (CTaxiwayNode) iter.next();
-			lNode.setATCController(aController);
-			lNode.setATCControllerToChildren(aController);
-		}
-	}
+
 
 	/*
 	================================================================

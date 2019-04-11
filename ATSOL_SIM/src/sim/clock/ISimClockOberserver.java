@@ -61,7 +61,7 @@ public interface ISimClockOberserver {
 	public boolean isRunning();
 	public void setRunning(boolean aIsRunning);
 	public void stopClock();
-	public void pubSaidImDone();
+	public void pubSaidImDone(String aWho);
 	
 	
 	/*

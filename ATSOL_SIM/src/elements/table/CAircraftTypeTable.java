@@ -60,6 +60,9 @@ import elements.facility.CTaxiwayLink;
 import elements.facility.CTaxiwayNode;
 import elements.property.CAircraftPerformance;
 import elements.property.CAircraftType;
+import elements.property.EADG;
+import elements.property.EAPC;
+import elements.property.EWTC;
 import elements.util.geo.CAltitude;
 import elements.util.geo.CCoordination;
 import elements.util.geo.CDegree;
@@ -128,11 +131,15 @@ public class CAircraftTypeTable extends ATable {
 			// Create Object Properties - String
 			String lACType = lData.get("AircraftType");
 			String lRange = lData.get("Range");
+			EWTC lWTC   = EWTC.valueOf(lData.get("WTC"));
+			EAPC lAPC   = EAPC.valueOf(lData.get("APC"));
+			EADG lADG   = EADG.valueOf(lData.get("ADG"));
+			
 			String[] lACSubTypeListString = lData.get("AircraftSubTypeList").split("/");
 			
 			
 			// Get AC Performance
-			CAircraftPerformance lACPerformance =new CAircraftPerformance(parseDouble(lData.get("TaxiingSpeedMax")),	parseDouble(lData.get("TaxiingSpeedNorm")),	parseDouble(lData.get("AccelerationOnGroundMax")),	parseDouble(lData.get("DecelerationOnGroundMax")),	parseDouble(lData.get("AccelerationOnRunwayMax")),	parseDouble(lData.get("DecelerationOnRunwayMax")),	parseDouble(lData.get("ExitSpeedNorm")),	parseDouble(lData.get("TakeoffSpeedNorm")),	parseDouble(lData.get("ClimbSpeed1000Norm")));
+			CAircraftPerformance lACPerformance =new CAircraftPerformance(parseDouble(lData.get("TaxiingSpeedMax")),	parseDouble(lData.get("TaxiingSpeedNorm")),	parseDouble(lData.get("AccelerationOnGroundMax")),	parseDouble(lData.get("DecelerationOnGroundMax")),	parseDouble(lData.get("AccelerationOnRunwayMax")),	parseDouble(lData.get("DecelerationOnRunwayMax")),	parseDouble(lData.get("ExitSpeedNorm")),	parseDouble(lData.get("TakeoffSpeedNorm")),	parseDouble(lData.get("ClimbSpeed1000Norm")), lADG,lAPC, lWTC);
 			// Create Basic A/C
 			CAircraftType lAircraftType = new CAircraftType(lACType,lACPerformance,lRange);
 			lACPerformance.setOwnerAircraftType(lAircraftType); // Connect Each other
@@ -142,7 +149,7 @@ public class CAircraftTypeTable extends ATable {
 			// Create SubType Aircraft
 			for(int i = 0; i < lACSubTypeListString.length; i++) {
 				// Create Object Properties - Class
-				CAircraftPerformance lACSubtypePerformance =new CAircraftPerformance(parseDouble(lData.get("TaxiingSpeedMax")),	parseDouble(lData.get("TaxiingSpeedNorm")),	parseDouble(lData.get("AccelerationOnGroundMax")),	parseDouble(lData.get("DecelerationOnGroundMax")),	parseDouble(lData.get("AccelerationOnRunwayMax")),	parseDouble(lData.get("DecelerationOnRunwayMax")),	parseDouble(lData.get("ExitSpeedNorm")),	parseDouble(lData.get("TakeoffSpeedNorm")),	parseDouble(lData.get("ClimbSpeed1000Norm")));
+				CAircraftPerformance lACSubtypePerformance =new CAircraftPerformance(parseDouble(lData.get("TaxiingSpeedMax")),	parseDouble(lData.get("TaxiingSpeedNorm")),	parseDouble(lData.get("AccelerationOnGroundMax")),	parseDouble(lData.get("DecelerationOnGroundMax")),	parseDouble(lData.get("AccelerationOnRunwayMax")),	parseDouble(lData.get("DecelerationOnRunwayMax")),	parseDouble(lData.get("ExitSpeedNorm")),	parseDouble(lData.get("TakeoffSpeedNorm")),	parseDouble(lData.get("ClimbSpeed1000Norm")), lADG,lAPC, lWTC);
 				CAircraftType lAircraftSubType = new CAircraftType(lACSubTypeListString[i],lACSubtypePerformance,lRange);
 				lACSubtypePerformance.setOwnerAircraftType(lAircraftSubType); // Connect Each other
 				addElement(lAircraftSubType);

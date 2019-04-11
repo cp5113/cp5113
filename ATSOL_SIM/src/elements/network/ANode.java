@@ -72,8 +72,10 @@ public abstract class ANode extends AFacility implements INode{
 	protected   Double					iLatitude;
 	protected   Double					iLogitude;
 	protected 	ArrayList<ANode>		iAdjacentNode = new ArrayList<ANode>();
-	protected 	HashMap<String,Boolean> iACTypeAPC = new HashMap<String, Boolean>(); 
+	protected 	HashMap<String,Boolean> iACTypeADG = new HashMap<String, Boolean>(); 
 	protected	ANode					iChildren;
+	
+	protected   ArrayList<ALink>		iOwnerLinkList = new ArrayList<ALink>();
 	
 	
 	/**
@@ -117,14 +119,14 @@ public abstract class ANode extends AFacility implements INode{
 
 
 
-	public synchronized HashMap<String, Boolean> getACTypeAPC() {
-		return iACTypeAPC;
+	public synchronized HashMap<String, Boolean> getACTypeADG() {
+		return iACTypeADG;
 	}
 
 
 
-	public synchronized void setACTypeAPC(HashMap<String, Boolean> aACTypeAPC) {
-		iACTypeAPC = aACTypeAPC;
+	public synchronized void setACTypeADG(HashMap<String, Boolean> aACTypeAPC) {
+		iACTypeADG = aACTypeAPC;
 	}
 
 
@@ -219,7 +221,12 @@ public abstract class ANode extends AFacility implements INode{
 		iChildren = aChildren;
 	}
 	
-
+	public synchronized void addOwnerLink(ALink aLink) {
+		iOwnerLinkList.add(aLink);
+	}
+	public synchronized ArrayList<ALink> getOwnerLinkList() {
+		return iOwnerLinkList;
+	}
 	/*
 	================================================================
 

@@ -68,8 +68,8 @@ public class CAtsolSimGuiView extends Application {
 	}
 	public static void main(String[] args) {
 		launch(args);	
-		System.out.println("Test");
-	}
+		System.exit(0);	
+}
 	
 
 }

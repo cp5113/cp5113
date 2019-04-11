@@ -49,6 +49,10 @@ import elements.table.ITableAble;
  * @author S. J. Yun
  *
  */
+/**
+ * @author S. J. Yun
+ *
+ */
 public abstract class AElement implements ITableAble{
 	/*
 	================================================================
@@ -57,6 +61,9 @@ public abstract class AElement implements ITableAble{
 	
 	================================================================
 	*/
+	protected Object		iThreadLockerThis  = new Object();
+	protected Object		iThreadLockerOwner;
+	
 	protected	String					iName;
 	protected 	int						iID;
 	protected 	String					iType		= this.getClass().getSimpleName();//this.getClass().getSimpleName().substring(1, this.getClass().getSimpleName().length()-1);
@@ -72,6 +79,8 @@ public abstract class AElement implements ITableAble{
 	protected	long				iCurrentTimeInMilliSecond;
 
 	protected 	boolean				iIsWorking;
+	
+	protected boolean				iThreadContinueableAtInitialState = false;
 	/**
 	 * getiName
 	 * 
@@ -196,6 +205,24 @@ public abstract class AElement implements ITableAble{
 	}
 	public void setIsWorking(boolean aIsWorking) {
 		iIsWorking = aIsWorking;
+	}
+	public synchronized Object getThreadLockerThis() {
+		return iThreadLockerThis;
+	}
+	public synchronized void setThreadLockerThis(Object aThreadLockerThis) {
+		iThreadLockerThis = aThreadLockerThis;
+	}
+	public synchronized Object getThreadLockerOwner() {
+		return iThreadLockerOwner;
+	}
+	public synchronized void setThreadLockerOwner(Object aThreadLockerOwner) {
+		iThreadLockerOwner = aThreadLockerOwner;
+	}
+	public synchronized boolean isThreadContinueableAtInitialState() {
+		return iThreadContinueableAtInitialState;
+	}
+	public synchronized void setThreadContinueableAtInitialState(boolean aThreadContinueableAtInitialState) {
+		iThreadContinueableAtInitialState = aThreadContinueableAtInitialState;
 	}
 	
 	

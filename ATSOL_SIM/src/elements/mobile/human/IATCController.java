@@ -5,6 +5,8 @@
  */
 package elements.mobile.human;
 
+import java.util.concurrent.SynchronousQueue;
+
 import elements.AElement;
 import elements.mobile.vehicle.AVehicle;
 import elements.mobile.vehicle.CAircraft;
@@ -69,7 +71,7 @@ public interface IATCController {
 	abstract void controlAircraft();
 	abstract void handOffAircraft(IATCController aToController, CAircraft aAircraft);	
 	abstract void handOnAircraft(IATCController aFromController,  CAircraft aAircraft);	
-	
+	abstract void initializeAircraft(CAircraft aAircraft);
 	
 	/*
 	================================================================

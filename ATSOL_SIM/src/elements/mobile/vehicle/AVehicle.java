@@ -47,14 +47,23 @@ import java.util.List;
 import elements.IElementObservableClock;
 import elements.mobile.AMobile;
 import elements.mobile.human.IATCController;
+import elements.mobile.vehicle.state.CAircraftNothingMoveState;
+import elements.mobile.vehicle.state.IVehicleMoveState;
+import elements.network.ALink;
+import elements.network.ANode;
 import elements.operator.AOperator;
 import elements.property.AVehiclePerformance;
 import elements.property.AVehicleType;
+import elements.property.EMode;
 import elements.table.ITableAble;
 import elements.util.geo.CAltitude;
 import elements.util.geo.CCoordination;
 import elements.util.geo.EGEOUnit;
+import elements.util.phy.CVelocity;
+import elements.util.phy.EVelocityUnit;
 import javafx.scene.paint.Color;
+import sim.CAtsolSimMain;
+import sim.clock.CSimClockOberserver;
 import sim.clock.ISimClockOberserver;
 import sim.gui.CDrawingInform;
 import sim.gui.EShape;
@@ -85,6 +94,8 @@ public abstract class AVehicle extends AMobile implements ITableAble, IDrawingOb
 	protected		CVehicleStatus			iNextStatus;
 	
 	protected		IATCController			iATCController;
+	
+	protected		IVehicleMoveState		iVehicleMoveState = new CAircraftNothingMoveState();
 
 	
 	protected		List<AVehiclePlan>		iPlanList 				= Collections.synchronizedList(new ArrayList<AVehiclePlan>());
@@ -94,10 +105,13 @@ public abstract class AVehicle extends AMobile implements ITableAble, IDrawingOb
 	protected		CCoordination			iPreviousPostion 	= new CCoordination(-9999999, -9999999, EGEOUnit.METER);
 	protected		CCoordination			iNextPostion  		= new CCoordination(-9999999, -9999999, EGEOUnit.METER);
 	protected		CAltitude				iCurrentAltitude 	= new CAltitude(0, EGEOUnit.FEET);
+	protected		CVelocity				iCurrentVelocity	= new CVelocity(0, EVelocityUnit.METER_PER_SEC);
 	
+	protected 	CDrawingInform				iDrawingInform = new CDrawingInform(iCurrentPostion,iCurrentAltitude,EShape.DOT,Color.RED,true,30.0);
+	protected		List<ANode>				iRoutingInfo;
+	protected		List<ALink>				iRoutingInfoLink;
 	
-	protected 	CDrawingInform				iDrawingInform = new CDrawingInform(iCurrentPostion,iCurrentAltitude,EShape.DOT,Color.RED,true);
-	
+	protected	EMode						iMode;
 	
 	
 	protected		AOperator				iOperator;
@@ -107,6 +121,34 @@ public abstract class AVehicle extends AMobile implements ITableAble, IDrawingOb
 	
 	
 	
+	public synchronized List<? extends ANode> getRoutingInfo() {
+		return iRoutingInfo;
+	}
+	public synchronized void setRoutingInfo(List<? extends ANode> aRoutingInfo) {
+		iRoutingInfo = (List<ANode>) aRoutingInfo;
+		
+		// Find Routing Link
+		List<ALink> lRouteListLink = new ArrayList<ALink>();
+		for(int loopNode = 0; loopNode<aRoutingInfo.size()-1; loopNode++) {
+			for(int loopLink = 0; loopLink < aRoutingInfo.get(loopNode).getOwnerLinkList().size(); loopLink++) {
+				if(aRoutingInfo.get(loopNode).getOwnerLinkList().get(loopLink).getNodeList().contains(aRoutingInfo.get(loopNode+1))) {
+					lRouteListLink.add(aRoutingInfo.get(loopNode).getOwnerLinkList().get(loopLink));
+					break;
+				}
+			}
+		}
+		setRoutingInfoLink(lRouteListLink);
+	}
+	
+	public synchronized ALink getRoutingLinkInfoUsingNode(ANode aNode) {
+		return iRoutingInfoLink.get(iRoutingInfo.indexOf(aNode)-1);
+	}
+	public synchronized List<ALink> getRoutingInfoLink() {
+		return iRoutingInfoLink;
+	}
+	public synchronized void setRoutingInfoLink(List<? extends ALink> aRoutingInfoLink) {
+		iRoutingInfoLink = (List<ALink>) aRoutingInfoLink;
+	}
 	public CVehicleStatus getCurrentStatus() {
 		return iCurrentStatus;
 	}
@@ -180,7 +222,30 @@ public abstract class AVehicle extends AMobile implements ITableAble, IDrawingOb
 		// TODO Auto-generated method stub
 		return iDrawingInform;
 	}
-
+	public synchronized EMode getMode() {
+		return iMode;
+	}
+	public synchronized void setMode(EMode aMode) {
+		iMode = aMode;
+	}
+	
+	
+	public void setMoveState(IVehicleMoveState aVehicleMoveState) {
+		iVehicleMoveState = aVehicleMoveState;
+	}
+	
+	public IVehicleMoveState  getMoveState() {
+		return iVehicleMoveState;
+	}
+	public void doMoveVehicle() {
+		iVehicleMoveState.doMove(CSimClockOberserver.getInstance().getIncrementStepInMiliSec(),iCurrentTimeInMilliSecond, this);
+	}
+	public synchronized CAltitude getCurrentAltitude() {
+		return iCurrentAltitude;
+	}
+	public synchronized CVelocity getCurrentVelocity() {
+		return iCurrentVelocity;
+	}
 	 
 	/*
 	================================================================

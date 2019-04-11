@@ -93,6 +93,11 @@ public abstract class ATable {
 		
 	}
 	
+	public void clearTalbe() {
+		iElementList.clear();
+		iElementTable.clear();
+	}
+	
 	
 	abstract public void createTable(ArrayList<File> aFileArrayList); 
 	

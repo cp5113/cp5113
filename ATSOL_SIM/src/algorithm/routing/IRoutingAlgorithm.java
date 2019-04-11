@@ -1,9 +1,10 @@
-/**
- * ATSOL_SIM
- * elements.mobile
- * CAreaController.java
- */
-package elements.mobile.human;
+package algorithm.routing;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import elements.network.ANode;
+
 /**
  * 
  * Dtails....
@@ -24,81 +25,61 @@ package elements.mobile.human;
  *  <li>l...... : Local variable </li>
  *  <li>s...... : Static variable </li>
  *  <li>a...... : Argument </li>
+ *  <li>n...... : ENUM </li>
  *
  *  <li>VARIABLE_NAME : Constant variable </li>
  * </ul>
  * </p>
  * 
  * 
- * @date : May 9, 2017
+ * @date : Apr 8, 2019
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * May 9, 2017 : Coded by S. J. Yun.
+ * Apr 8, 2019 : Coded by S. J. Yun.
  *
  *
  */
 
-import java.util.Calendar;
-
-import elements.mobile.vehicle.CAircraft;
-import sim.clock.ISimClockOberserver;
-
-/**
- * @author S. J. Yun
- *
- */
-public class CAreaController extends AATCController{
-
-
+public interface IRoutingAlgorithm {
 	/*
 	================================================================
-
+	
 			           Initializing Section
-
+	
 	================================================================
-	 */
+	*/
 
 	/*
 	================================================================
-
+	
 						Methods Section
-
+	
 	================================================================
 	 */
-
+	public LinkedList<? extends ANode> findShortedPath(List<? extends ANode> aNodeStartMiddleEnd);
+	
 
 	/*
 	================================================================
-
-							The Others
-
+	
+						Listeners Section
+	
 	================================================================
 	 */
 
-	public CAreaController(String aName, int aAge, int aExperienceDay, ESkill aNSkill, EGender aNGender) {
-		super(aName, aAge, aExperienceDay, aNSkill, aNGender);
-		// TODO Auto-generated constructor stub
-	}
-
-
-	/** (non-Javadoc)
-	 * @see elements.mobile.human.IATCController#controlAircraft()
+	/*
+	================================================================
+	
+							The Others
+	
+	================================================================
 	 */
-	@Override
-	public synchronized void controlAircraft() {
-		// TODO Auto-generated method stub
-		System.out.println(this.iAircraftList);
-		System.out.println();
-	}
-	@Override
-	public void initializeAircraft(CAircraft aAircraft) {
-		// TODO Auto-generated method stub
-		
-	}
-
 
 }
+
+
+
 
 
 

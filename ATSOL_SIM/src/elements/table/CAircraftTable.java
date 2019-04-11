@@ -40,43 +40,27 @@ package elements.table;
  *
  */
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
-import elements.AElement;
-import elements.IElementControlledByClock;
 import elements.airspace.CAirRoute;
 import elements.airspace.CWaypoint;
 import elements.facility.CAirport;
 import elements.facility.CSpot;
-import elements.facility.CTaxiwayLink;
-import elements.facility.CTaxiwayNode;
 import elements.mobile.vehicle.CAircraft;
 import elements.mobile.vehicle.CFlightPlan;
 import elements.network.INode;
-import elements.property.CAircraftPerformance;
 import elements.property.CAircraftType;
 import elements.util.geo.CAltitude;
-import elements.util.geo.CCoordination;
-import elements.util.geo.CDegree;
 import elements.util.geo.EGEOUnit;
-import elements.util.geo.EUnit;
 import sim.CAtsolSimMain;
-import util.file.CListUtil;
 import util.file.SReadCSV;
 
 /**

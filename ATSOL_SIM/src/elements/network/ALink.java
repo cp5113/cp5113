@@ -41,10 +41,15 @@ package elements.network;
  */
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 
 import elements.AElement;
+import elements.COccupyingInform;
 import elements.facility.AFacility;
+import elements.facility.CTaxiwayNode;
 import elements.mobile.human.IATCController;
+import elements.mobile.vehicle.AVehicle;
 import elements.util.geo.CDegree;
 
 /**
@@ -71,8 +76,10 @@ public abstract class ALink extends AFacility {
 	protected 	CDegree					iHeading;
 	protected	CDegree					iOppositeHeading;
 	
-
+	protected	ArrayList<COccupyingInform>		iOccupyingSchedule	    = new ArrayList<COccupyingInform>();
 	
+	
+	protected double					iSpeedLimitKts          = 15;
 	
 	/*
 	================================================================
@@ -81,6 +88,43 @@ public abstract class ALink extends AFacility {
 
 	================================================================
 	 */
+	public synchronized void addToOccupyingSchedule(long aStartTime, long aEndTime, AElement aElement, ANode aDestinationNode) {
+		iOccupyingSchedule.add(new COccupyingInform(this, aStartTime, aEndTime, aElement,aDestinationNode));
+		Collections.sort(iOccupyingSchedule);
+	}
+	public synchronized void removeFromOccupyingSchedule(AElement aElement) {
+		for(int i=0; i<iOccupyingSchedule.size();i++) {
+			if( iOccupyingSchedule.get(i).getOccupyingObject().equals(aElement)) {
+				iOccupyingSchedule.remove(i);				
+				break;
+			}
+		}
+	}
+	public synchronized boolean isOppositDirectionElementInTimeWindow(long aStartTime, long aEndTime,ANode aDestinationNode) {
+		boolean lOutput = false;
+		
+		
+		for(int i=0; i<iOccupyingSchedule.size(); i++) {
+		
+			if(!aDestinationNode.equals(iOccupyingSchedule.get(i).getDestination())) {
+				if(aStartTime >= iOccupyingSchedule.get(i).getStartTime() && aStartTime <=iOccupyingSchedule.get(i).getEndTime()) {
+					return true;
+				}
+				if(aEndTime >= iOccupyingSchedule.get(i).getStartTime() && aEndTime <=iOccupyingSchedule.get(i).getEndTime()) {
+					return true;
+				}
+			}
+		}		
+		
+		return lOutput;
+	}
+	
+	public void addToOccupyingSchedule(COccupyingInform aCOccupyingInform) {
+		iOccupyingSchedule.add(new COccupyingInform(this, aCOccupyingInform.getStartTime(), aCOccupyingInform.getEndTime(), aCOccupyingInform.getOccupyingObject(),aCOccupyingInform.getDestination()));
+		Collections.sort(iOccupyingSchedule);
+	}
+	
+	
 	public synchronized boolean isIsOccuping() {
 		return iIsOccuping;
 	}
@@ -135,7 +179,26 @@ public abstract class ALink extends AFacility {
 	public synchronized void setOppositeHeading(CDegree aOppositeHeading) {
 		iOppositeHeading = aOppositeHeading;
 	}
+	@Override
+	public void setATCControllerToChildren(IATCController aController) {
+		// TODO Auto-generated method stub
+		Iterator<ANode> iter = this.iNodeList.iterator();
+		while(iter.hasNext()) {
+			CTaxiwayNode lNode = (CTaxiwayNode) iter.next();
+			lNode.setATCController(aController);
+			lNode.setATCControllerToChildren(aController);
+		}
+	}
+	public synchronized double getSpeedLimitKts() {
+		return iSpeedLimitKts;
+	}
+	public synchronized void setSpeedLimitKts(double aSpeedLimitKts) {
+		iSpeedLimitKts = aSpeedLimitKts;
+	}
 
+
+	
+	
 	/*
 	================================================================
 
