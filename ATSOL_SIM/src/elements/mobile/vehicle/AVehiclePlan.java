@@ -75,6 +75,8 @@ public abstract class AVehiclePlan implements Comparable<AVehiclePlan>{
 	private List<Calendar>		iActualTimeList			= Collections.synchronizedList(new ArrayList<Calendar>());
 	private List<CAltitude>		iAltitudeList			= Collections.synchronizedList(new ArrayList<CAltitude>());
 	
+	private long				iSTDinMilliSec			= 0;
+	private long				iSTAinMilliSec			= 0;
 	
 	/*
 	================================================================
@@ -91,6 +93,22 @@ public abstract class AVehiclePlan implements Comparable<AVehiclePlan>{
 
 	}
 	
+	public synchronized long getSTDinMilliSec() {
+		return iSTDinMilliSec;
+	}
+
+	public synchronized void setSTDinMilliSec(long aSTDinMilliSec) {
+		iSTDinMilliSec = aSTDinMilliSec;
+	}
+
+	public synchronized long getSTAinMilliSec() {
+		return iSTAinMilliSec;
+	}
+
+	public synchronized void setSTAinMilliSec(long aSTAinMilliSec) {
+		iSTAinMilliSec = aSTAinMilliSec;
+	}
+
 	public void addPlanItem(INode aNode, Calendar aScheduleTime) {
 		iNodeList.add(aNode);
 		iScheduleTimeList.add(aScheduleTime);

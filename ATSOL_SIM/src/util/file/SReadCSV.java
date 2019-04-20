@@ -181,8 +181,14 @@ public class SReadCSV {
 				HashMap<String,String> lAlineHashMap = new HashMap<String,String>();
 				StringBuilder lUniqueKey = new StringBuilder();
 				for(int loopHeader = 0; loopHeader < lHeader.length; loopHeader++) {
-					lAlineHashMap.put(lHeader[loopHeader], lDataSplited[loopHeader]);
-					lUniqueKey.append(lDataSplited[loopHeader]);
+					try {
+						lAlineHashMap.put(lHeader[loopHeader], lDataSplited[loopHeader]);
+						lUniqueKey.append(lDataSplited[loopHeader]);
+					}catch(Exception e) {
+						lAlineHashMap.put(lHeader[loopHeader], "");
+						lUniqueKey.append("");
+					}
+					
 				}
 				
 				// Merge to global Data

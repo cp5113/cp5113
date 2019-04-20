@@ -41,11 +41,14 @@ package elements.network;
  */
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import elements.AElement;
 import elements.facility.AFacility;
 import elements.facility.CAirport;
+import elements.mobile.vehicle.AVehicle;
 import elements.property.CAircraftType;
 import elements.util.geo.CAltitude;
 import elements.util.geo.CCoordination;
@@ -74,7 +77,7 @@ public abstract class ANode extends AFacility implements INode{
 	protected 	ArrayList<ANode>		iAdjacentNode = new ArrayList<ANode>();
 	protected 	HashMap<String,Boolean> iACTypeADG = new HashMap<String, Boolean>(); 
 	protected	ANode					iChildren;
-	
+	protected   List<AVehicle>		iVehicleWillUseList = Collections.synchronizedList(new ArrayList<AVehicle>());
 	protected   ArrayList<ALink>		iOwnerLinkList = new ArrayList<ALink>();
 	
 	
@@ -118,6 +121,10 @@ public abstract class ANode extends AFacility implements INode{
 	}
 
 
+
+	public synchronized List<AVehicle> getVehicleWillUseList() {
+		return iVehicleWillUseList;
+	}
 
 	public synchronized HashMap<String, Boolean> getACTypeADG() {
 		return iACTypeADG;

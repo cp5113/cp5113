@@ -67,6 +67,7 @@ public class CAircraftPerformance extends AVehiclePerformance {
 	private double TakeoffSpeedNorm;
 	private double ClimbSpeed1000Norm;
 	
+	
 	private EADG	ADG;
 	private EAPC	APC;
 	private EWTC    WTC;

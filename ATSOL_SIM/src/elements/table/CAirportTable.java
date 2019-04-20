@@ -56,6 +56,7 @@ import algorithm.routing.DijkstraAlgorithm;
 import elements.AElement;
 import elements.IElementControlledByClock;
 import elements.facility.CAirport;
+import elements.facility.CRunway;
 import elements.facility.CSpot;
 import elements.facility.CTaxiwayLink;
 import elements.facility.CTaxiwayNode;
@@ -106,12 +107,72 @@ public class CAirportTable extends ATable {
 				createGroundSpot(aFileArrayList.get(loopFile));
 			}else if(aFileArrayList.get(loopFile).getName().contains("AirportGroundLink")) {
 				createGroundLink(aFileArrayList.get(loopFile));
+			}else if(aFileArrayList.get(loopFile).getName().contains("AirportRunwayLink")) {
+				createRunwayLink(aFileArrayList.get(loopFile));
 			}
 		}
 		
 				
 	}
-	
+	private void createRunwayLink(File aFile) {
+		/*
+		 * / Read CSV
+		 */
+		HashMap<String, HashMap<String, String>> lDataList =  SReadCSV.readCSVHashMap(aFile, CAirport.class, ",");
+		if(lDataList.isEmpty()) return;
+		/*
+		 * Create Airport Table
+		 */
+		for(String key : lDataList.keySet()) {
+			// Extract Data
+			HashMap<String,String> lData = lDataList.get(key);
+
+			// get Properties
+			String lRunwayName = lData.get("Name");			
+			String lAirportStr = lData.get("Airport");
+			boolean lIsArrival  = lData.get("Arrival").equalsIgnoreCase("TRUE");
+			boolean lIsDeparture= lData.get("Departure").equalsIgnoreCase("TRUE");
+			String[] lLinkList   = lData.get("LinkList").split("/");
+						
+			// Find Linked Airport			
+			CAirport lTargetAirport  = (CAirport) getElementTable().get(lAirportStr);
+			
+			
+			// Create Runway Object
+			CRunway lRunway = new CRunway(lRunwayName, lIsArrival, lIsDeparture);
+			lRunway.setOwnerObject(lTargetAirport);
+			
+			// Find Linklist
+			for(int loopLink = 0; loopLink < lLinkList.length; loopLink++) {
+				for(CTaxiwayLink loopTwyLink : lTargetAirport.getTaxiwayLinkList()) {				
+					if(loopTwyLink.getName().equalsIgnoreCase(lLinkList[loopLink])) {
+						lRunway.getTaxiwayLink().add(loopTwyLink);						
+					}
+				}
+			}
+			
+			
+			// Calculate Distance
+			for(CTaxiwayLink loopLink : lRunway.getTaxiwayLink()) {
+				lRunway.setDistance(lRunway.getDistance() + loopLink.getDistance());				
+			}
+			for(int i = 0; i < lRunway.getTaxiwayLink().size() ; i++) {
+				double lremainingDistance = 0;				
+				for(int j = i; j<lRunway.getTaxiwayLink().size() ; j++) {
+					lremainingDistance += lRunway.getTaxiwayLink().get(j).getDistance();
+				}
+				lRunway.getDistanceList().add(i, lremainingDistance);
+			}
+			
+			// Add to Airport
+			lTargetAirport.getRunwayList().add(lRunway);
+
+
+
+		} // for(String key : lDataList.keySet()) 
+		
+		
+	}
 	
 	private void createGroundLink(File aFile) {
 		/*
@@ -170,6 +231,11 @@ public class CAirportTable extends ATable {
 			
 			// Add to Airport
 			lTargetAirport.getTaxiwayLinkList().add(lTaxiwayLink);
+			
+			// Calculate Longgest Link Length
+			if(lTargetAirport.getLonggestLinkLength() <= lTaxiwayLink.getDistance()) {
+				lTargetAirport.setLonggestLinkLength(lTaxiwayLink.getDistance());
+			}
 
 		} // for(String key : lDataList.keySet()) 
 		
@@ -181,6 +247,11 @@ public class CAirportTable extends ATable {
 //			DijkstraAlgorithm lDijsktra = new DijkstraAlgorithm(lAirport.getTaxiwayLinkList(), lAirport.getTaxiwayNodeList());
 //			lAirport.setRoutingAlgorithm(lDijsktra);
 //		}
+		
+		
+		
+
+		
 		
 	}
 

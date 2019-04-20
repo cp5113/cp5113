@@ -5,6 +5,7 @@
 \data\network\AirportGroundNode.csv
 \data\network\AirportGroundSPOT.csv
 \data\network\AirportGroundLink.csv
+\data\network\AirportRunwayLink.csv
 @Waypoint
 \data\airspace\Waypoint.csv
 @Route

@@ -94,7 +94,7 @@ public class CAircraftTable extends ATable {
 		
  		for(int loopFile = 0; loopFile< aFileArrayList.size() ; loopFile++) {
 			if(aFileArrayList.get(loopFile).getName().contains("FlightSchedule.csv")) {
-				createAircraftTypeTable(aFileArrayList.get(loopFile));
+				createAircraftTable(aFileArrayList.get(loopFile));
 			}
 		}
 				
@@ -103,7 +103,7 @@ public class CAircraftTable extends ATable {
 	
 	
 
-	private void createAircraftTypeTable(File aFile) {
+	private void createAircraftTable(File aFile) {
 
 		SimpleDateFormat lSimpleDateFormat  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		/*
@@ -218,7 +218,7 @@ public class CAircraftTable extends ATable {
 			
 			// Add Node list into Flight Plan			
 			for(int loopNode = 0; loopNode < lNodeList.size(); loopNode++) {
-				if(loopNode==0) {
+				if(loopNode==0) { // Departure Time
 					Calendar lCal                       = Calendar.getInstance();
 					try {
 						lCal.setTime(lSimpleDateFormat.parse(lScheduleTimeDeparture));
@@ -226,7 +226,7 @@ public class CAircraftTable extends ATable {
 						lCal.setTimeInMillis(0);
 					}
 					lFlightPlan.addPlanItem(lNodeList.get(loopNode), lCal);
-				}else if(loopNode==lNodeList.size()-1) {
+				}else if(loopNode==lNodeList.size()-1) { // Arrival Time
 					Calendar lCal                       = Calendar.getInstance();
 					try {
 						lCal.setTime(lSimpleDateFormat.parse(lScheduleTimeArrival));
@@ -234,15 +234,23 @@ public class CAircraftTable extends ATable {
 						lCal.setTimeInMillis(0);
 					}
 					lFlightPlan.addPlanItem(lNodeList.get(loopNode), lCal);
-				}else {
+				}else { // Middle Time
 					lFlightPlan.addPlanItem(lNodeList.get(loopNode),null);
 				}				
 				
+				// Altitude (Origin /Destination)
 				if(lNodeList.get(loopNode) instanceof CWaypoint && (lFlightPlan.getOriginationNode() instanceof CWaypoint || lFlightPlan.getDestinationNode() instanceof CWaypoint)) {
 					lFlightPlan.setAltitude(loopNode, new CAltitude(parseDouble(lCrusingAltitude), EGEOUnit.FEET));
 				}
 				
 			}
+			
+			// Add STD and STA
+			lFlightPlan.setSTDinMilliSec(lFlightPlan.getScheduleTimeList().get(0).getTimeInMillis());
+			lFlightPlan.setSTAinMilliSec(lFlightPlan.getScheduleTimeList().get(lFlightPlan.getScheduleTimeList().size()-1).getTimeInMillis());
+			
+			
+			
 			// Add Flight Plan
 			lAircraft.getPlanList().add(lFlightPlan);
 			Collections.sort(lAircraft.getPlanList());

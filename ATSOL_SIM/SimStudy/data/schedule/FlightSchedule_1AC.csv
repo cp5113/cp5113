@@ -1,0 +1,2 @@
+Callsign,AircraftType,Range,Registration,Origin,Destination,CrusingAltitude,ScheduleTimeDeparture,ScheduleTimeArrival,SpotArrival,SpotDeparture,DepartureRunway,ArrivalRunway,Airline,Route
+AAR122,B734,M,HL7506,RKSI,RJGG,,2014-08-03 08:50:00,,,32,33L,,AAR,RKSI_BOPTA

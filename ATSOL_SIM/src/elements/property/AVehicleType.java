@@ -48,6 +48,10 @@ public abstract class AVehicleType {
 	protected AVehiclePerformance		iPerformance;
 	protected String					iRange;
 	
+	private double iLength =39.5;
+	private double iWidth  = 34.32;
+	private double iSafetyDistanceWidth  = 34.32 + 4.5;
+	private double iSafetyDistanceLength = 39.5 + 10.0;
 
 	/*
 	================================================================
@@ -56,7 +60,28 @@ public abstract class AVehicleType {
 	
 	================================================================
 	 */
-
+	
+	public String getVehicleType() {
+		return iType;
+	}
+	public synchronized double getWidth() {
+		return iWidth;
+	}
+	public synchronized void setWidth(double aWidth) {
+		iWidth = aWidth;
+	}
+	public void setVehicleType(String aAircraftType) {
+		iType = aAircraftType;
+	}
+	public AVehiclePerformance getPerformance() {
+		return iPerformance;
+	}
+	public void setVehicletPerformance(AVehiclePerformance aVehiclePerformance) {
+		iPerformance = aVehiclePerformance;
+	}
+	public String toString() {
+		return iType + "/" + iRange;
+	}
 	/*
 	================================================================
 	
@@ -64,6 +89,27 @@ public abstract class AVehicleType {
 	
 	================================================================
 	 */
+	public synchronized double getLength() {
+		return iLength;
+	}
+	public synchronized void setLength(double aLength) {
+		iLength = aLength;
+	}
+	public synchronized double getSafetyDistanceWidth() {
+		return iSafetyDistanceWidth;
+	}
+	public synchronized void setSafetyDistanceWidth(double aSafetyDistanceWidth) {
+		iSafetyDistanceWidth = aSafetyDistanceWidth;
+	}
+	public synchronized double getSafetyDistanceLength() {
+		return iSafetyDistanceLength;
+	}
+	public synchronized void setSafetyDistanceLength(double aSafetyDistanceLength) {
+		iSafetyDistanceLength = aSafetyDistanceLength;
+	}
+	public synchronized void setPerformance(AVehiclePerformance aPerformance) {
+		iPerformance = aPerformance;
+	}
 
 	/*
 	================================================================

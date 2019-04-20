@@ -17,7 +17,8 @@ public class DijkstraAlgorithm implements IRoutingAlgorithm{
 
 	private List<ANode> iNode;
 	private List<ALink> iLink;
-
+	
+	private List<ALink> iLinkIgnore = new ArrayList<ALink>();
 	private Set<ANode> iUsedNodes= new HashSet<ANode>();
 	private Set<ANode> iQofNodes= new HashSet<ANode>(); // Queue
 	private LinkedList<ANode> iOutput;
@@ -92,7 +93,7 @@ public class DijkstraAlgorithm implements IRoutingAlgorithm{
 			iQofNodes.clear();
 			iDistance.clear();
 			iCostChangeByWhom.clear();		
-			iOutput.clear();
+//			iOutput.clear();
 
 			// Extract Nodes this phase
 			iNodeOrigin	= iNode.get(iNode.indexOf(aNodeStartMiddleEnd.get(loop_node-1)));;
@@ -158,7 +159,12 @@ public class DijkstraAlgorithm implements IRoutingAlgorithm{
 	}
 
 	private void insertNodeIntoQ(ANode aNode){
-		for(ALink loopLink : iLink){			
+		for(ALink loopLink : iLink){
+			// Skip Link
+			if(iLinkIgnore.contains(loopLink)) continue;
+				
+			
+			
 			double l_AdjacentCost = 0.0;	
 			ANode l_AdjacentNode = null;
 
@@ -222,6 +228,26 @@ public class DijkstraAlgorithm implements IRoutingAlgorithm{
 		if (pt2[0] >= 0 && pt2[1] <  0){l_initialDegree = 90  - l_initialDegree;} // 4
 		return l_initialDegree;
 				
+	}
+
+	@Override
+	public LinkedList<? extends ANode> findShortedPathIgnoreNodeList(List<? extends ANode> aNodeStartMiddleEnd,
+			List<? extends ALink> aIgnoredLinkList) {
+		
+		iLinkIgnore.clear();
+		
+		for(ALink loopLinkInputIg : aIgnoredLinkList) {
+			iLinkIgnore.add(loopLinkInputIg);
+		}
+		
+		// Run Algorithm
+		 LinkedList<? extends ANode> output =  findShortedPath(aNodeStartMiddleEnd);
+		
+		
+		// Restore Ignore List
+		iLinkIgnore.clear();
+		
+		return output;
 	}
 
 	//	public <T> LinkedList<T> reverseLinkedList (LinkedList<T> aLinkedList)

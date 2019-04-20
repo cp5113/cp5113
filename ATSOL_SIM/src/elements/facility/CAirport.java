@@ -47,11 +47,15 @@ import algorithm.routing.IRoutingAlgorithm;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 
 import elements.mobile.human.CGroundController;
 import elements.mobile.human.CLocalController;
 import elements.mobile.human.IATCController;
+import elements.mobile.vehicle.CAircraft;
+import elements.mobile.vehicle.state.CAircraftTaxiingMoveState;
 import elements.network.INode;
 import elements.util.geo.CAltitude;
 import elements.util.geo.CCoordination;
@@ -99,9 +103,11 @@ public class CAirport extends AFacility  implements INode {
 	private List<CLocalController>	 			iLocalControllerList		 = Collections.synchronizedList(new ArrayList<CLocalController>());
 	private List<CGroundController> 			iGroundControllerList		 = Collections.synchronizedList(new ArrayList<CGroundController>());
 
+	private	double								iLonggestLinkLength		= 0;
 	
-	
-	
+	private List<CAircraft>						iDepartureAircraftList      = Collections.synchronizedList(new LinkedList<CAircraft>());
+	private List<CAircraft>						iArrivalAircraftList        = Collections.synchronizedList(new LinkedList<CAircraft>());
+	private List<CAircraft>						iAircraftList				=  Collections.synchronizedList(new LinkedList<CAircraft>());
 	
 	
 	/*
@@ -111,9 +117,76 @@ public class CAirport extends AFacility  implements INode {
 	
 	================================================================
 	 */
+	public synchronized void addDepartureList(CAircraft aAircraft) {
+		iDepartureAircraftList.add(aAircraft);
+		sortDepartureACList();
+		
+		// Reconstruct All List
+		iAircraftList.clear();
+		iAircraftList.addAll(iDepartureAircraftList);
+		iAircraftList.addAll(iArrivalAircraftList);
 
+	}
+	public synchronized void addArrivalList(CAircraft aAircraft) {
+		iArrivalAircraftList.add(aAircraft);
+		sortArrivalACList();
+		// Reconstruct All List
+		iAircraftList.clear();
+		iAircraftList.addAll(iDepartureAircraftList);
+		iAircraftList.addAll(iArrivalAircraftList);
+	}
+	public synchronized void removeDepartureList(CAircraft aAircraft) {
+		iDepartureAircraftList.remove(aAircraft);		
+		sortDepartureACList();
+		// Reconstruct All List
+		iAircraftList.clear();
+		iAircraftList.addAll(iDepartureAircraftList);
+		iAircraftList.addAll(iArrivalAircraftList);
+	}
+	public synchronized void removeArrivalList(CAircraft aAircraft) {
+		iArrivalAircraftList.remove(aAircraft);		
+		sortArrivalACList();
+		// Reconstruct All List
+		iAircraftList.clear();
+		iAircraftList.addAll(iDepartureAircraftList);
+		iAircraftList.addAll(iArrivalAircraftList);
+	}
+	
+	private	synchronized void sortDepartureACList() {
+		Collections.sort(iDepartureAircraftList, new Comparator<CAircraft>() {
+			@Override
+			public int compare(CAircraft aArg0, CAircraft aArg1) {
+				if(aArg0.getCurrentPlan().getSTDinMilliSec() < aArg1.getCurrentPlan().getSTDinMilliSec()) {
+					return -1;
+				}else if(aArg0.getCurrentPlan().getSTDinMilliSec() > aArg1.getCurrentPlan().getSTDinMilliSec()) {
+					return 1;
+				}
+				return 0;
+			}
+		});
+
+	}
+	private synchronized void sortArrivalACList() {
+		Collections.sort(iArrivalAircraftList, new Comparator<CAircraft>() {
+			@Override
+			public int compare(CAircraft aArg0, CAircraft aArg1) {
+				if(aArg0.getCurrentPlan().getSTAinMilliSec() < aArg1.getCurrentPlan().getSTAinMilliSec()) {
+					return -1;
+				}else if(aArg0.getCurrentPlan().getSTAinMilliSec() > aArg1.getCurrentPlan().getSTAinMilliSec()) {
+					return 1;
+				}
+				return 0;
+			}
+		});
+	}
 	public synchronized ELocation getLocation() {
 		return iLocation;
+	}
+	public synchronized double getLonggestLinkLength() {
+		return iLonggestLinkLength;
+	}
+	public synchronized void setLonggestLinkLength(double aLonggestLinkLength) {
+		iLonggestLinkLength = aLonggestLinkLength;
 	}
 	public synchronized void setLocation(ELocation aLocation) {
 		iLocation = aLocation;

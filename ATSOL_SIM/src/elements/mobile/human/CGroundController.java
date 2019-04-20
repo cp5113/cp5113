@@ -108,11 +108,12 @@ public class CGroundController extends AATCController {
 			// If Departure and STD is same with current Time
 			// Do Push-back
 			if(!(lAircraft.getMoveState() instanceof CAircraftTaxiingMoveState) && lAircraft.getMode() == EMode.DEP && iCurrentTimeInMilliSecond>lTimeSTDThis && iNextEventTime<0) {
-
+				
+		
 				// Find Route
 				List<CTaxiwayNode> lOD = new ArrayList<CTaxiwayNode>();
 				lOD.add(((CSpot) lFlightPlan.getNode(0)).getTaxiwayNode()); // CurrentNode
-				lOD.add(((CAirport)lFlightPlan.getOriginationNode()).getTaxiwayNodeList().get(259)); // Destination Node				
+				lOD.add(((CAirport)lFlightPlan.getOriginationNode()).getTaxiwayNodeList().get(258)); // Destination Node				
 				LinkedList<CTaxiwayNode> lRouteList =  (LinkedList<CTaxiwayNode>) iRoutingAlgorithm.findShortedPath(lOD);				
 				lAircraft.setRoutingInfo(lRouteList);
 
@@ -133,7 +134,9 @@ public class CGroundController extends AATCController {
 						
 				}
 				
-				
+				// Set Route to Aircraft
+				lRouteList.remove(0);				
+				lAircraft.setRoutingInfo(lRouteList);
 				
 				// Notify Taxischedule to taxiway link
 				for(int loopSche = 0; loopSche < lTaxiwayUsageSchedule.size(); loopSche++) {
@@ -142,13 +145,16 @@ public class CGroundController extends AATCController {
 				
 				
 				// Create Plan List				
-				for(int loopR = lRouteList.size()-1; loopR>0; loopR--) {
+				for(int loopR = lRouteList.size()-1; loopR>=0; loopR--) {
 					Calendar cal = Calendar.getInstance();
 					cal.setTimeInMillis(0);
 					lFlightPlan.insertPlanItem(1, lRouteList.get(loopR), cal, new CAltitude(0, EGEOUnit.FEET));
 				}
-				lFlightPlan.removePlanItem(lFlightPlan.getNode(0)); // Remove Spot
 				
+				// Reconstruct Flight Plan and Aircraft Status
+				lFlightPlan.removePlanItem(lFlightPlan.getNode(0)); // Remove Spot
+				lAircraft.setCurrentNode((ANode) lFlightPlan.getNode(0));
+				lAircraft.setCurrentLink(lAircraft.getRoutingLinkInfoUsingNode((ANode) lFlightPlan.getNode(0)));
 
 				
 				// Set Aircraft State
@@ -224,7 +230,7 @@ public class CGroundController extends AATCController {
 		CSpot lAssignSpotResult = null;
 		
 		CAirport lAirportControlled= (CAirport)iOwnedFacilty;
-		CAircraftPerformance lPerformance = ((CAircraftType)aAircraft.getVehcleType()).getAircraftPerformance();
+		CAircraftPerformance lPerformance = (CAircraftPerformance) ((CAircraftType)aAircraft.getVehcleType()).getPerformance();
 		
 		// Validate CSpot is available wingspan and empty
 		if(aOriginSpot.getACTypeADG().get(lPerformance.getADG().toString()) && !aOriginSpot.isIsOccuping()) {

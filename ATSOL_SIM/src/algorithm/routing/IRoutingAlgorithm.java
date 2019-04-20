@@ -3,6 +3,7 @@ package algorithm.routing;
 import java.util.LinkedList;
 import java.util.List;
 
+import elements.network.ALink;
 import elements.network.ANode;
 
 /**
@@ -58,7 +59,7 @@ public interface IRoutingAlgorithm {
 	================================================================
 	 */
 	public LinkedList<? extends ANode> findShortedPath(List<? extends ANode> aNodeStartMiddleEnd);
-	
+	public LinkedList<? extends ANode> findShortedPathIgnoreNodeList(List<? extends ANode> aNodeStartMiddleEnd,List<? extends ALink> aIgnoredLinkList);
 
 	/*
 	================================================================

@@ -91,7 +91,7 @@ public class CDispatchAircraftThreadByTime implements IElementControlledByClock{
 		iIsPrepared = false;
 		
 		int lSearchIndex = 0;
-		while(true) {
+		while(iVehicleAndPlanAndTimes.size()>0) {
 			
 			CAircraft lAircraft = (CAircraft) iVehicleAndPlanAndTimes.get(lSearchIndex).getVehicle();
 			CFlightPlan lFlightPlan = (CFlightPlan) iVehicleAndPlanAndTimes.get(lSearchIndex).getVechiPlan();

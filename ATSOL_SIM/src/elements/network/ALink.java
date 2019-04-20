@@ -75,7 +75,7 @@ public abstract class ALink extends AFacility {
 	protected	double					iDistance				=	0.0;
 	protected 	CDegree					iHeading;
 	protected	CDegree					iOppositeHeading;
-	
+	protected	ArrayList<AElement>		iOccupyingList			= new ArrayList<AElement>();	
 	protected	ArrayList<COccupyingInform>		iOccupyingSchedule	    = new ArrayList<COccupyingInform>();
 	
 	
@@ -88,6 +88,21 @@ public abstract class ALink extends AFacility {
 
 	================================================================
 	 */
+	public void enteringLink(AElement aElement) {
+		iOccupyingList.add(aElement);
+	}
+	public void exitingLink(AElement aElement) {
+		iOccupyingList.remove(aElement);
+	}
+	public int getNumOfElementUsingLink() {
+		return iOccupyingList.size();
+	}
+	public ArrayList<AElement> getOccupyingList(){
+		return iOccupyingList;
+	}
+	public ArrayList<COccupyingInform>	getOccupyingSchedule(){
+		return iOccupyingSchedule;
+	}
 	public synchronized void addToOccupyingSchedule(long aStartTime, long aEndTime, AElement aElement, ANode aDestinationNode) {
 		iOccupyingSchedule.add(new COccupyingInform(this, aStartTime, aEndTime, aElement,aDestinationNode));
 		Collections.sort(iOccupyingSchedule);
@@ -195,7 +210,9 @@ public abstract class ALink extends AFacility {
 	public synchronized void setSpeedLimitKts(double aSpeedLimitKts) {
 		iSpeedLimitKts = aSpeedLimitKts;
 	}
-
+	public synchronized	double getSpeedLimitMps() {
+		return iSpeedLimitKts * 0.514444444;
+	}
 
 	
 	

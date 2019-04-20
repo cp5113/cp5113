@@ -9,6 +9,7 @@ import elements.facility.CTaxiwayNode;
 import elements.mobile.vehicle.CAircraft;
 import elements.mobile.vehicle.CFlightPlan;
 import elements.network.ANode;
+import elements.property.CAircraftPerformance;
 import elements.property.CAircraftType;
 
 /**
@@ -71,8 +72,8 @@ public class CUnUniformModelPerformance {
 	public static List<COccupyingInform> estimateTaxiingTime(CAircraft aAircraft, double deltaT, long eventStartT){
 		// 	Get base information
 		CAircraftType lACType = (CAircraftType)aAircraft.getVehcleType();
-		double  lNormSpeed    = lACType.getAircraftPerformance().getTaxiingSpeedNorm();
-		double  lMaxAccel     = lACType.getAircraftPerformance().getAccelerationOnGroundMax();
+		double  lNormSpeed    = ((CAircraftPerformance)lACType.getPerformance()).getTaxiingSpeedNorm();
+		double  lMaxAccel     = ((CAircraftPerformance)lACType.getPerformance()).getAccelerationOnGroundMax();
 		double lCurrentV = aAircraft.getCurrentVelocity().getVelocity();
 		
 		
@@ -98,7 +99,7 @@ public class CUnUniformModelPerformance {
 			// Verify Taxi Speed
 			double lTargetSpeed = 10;
 			if(lLink.getSpeedLimitKts()>0 && 
-					lLink.getSpeedLimitKts()<=lACType.getAircraftPerformance().getTaxiingSpeedMax()) {
+					lLink.getSpeedLimitKts()<=((CAircraftPerformance)lACType.getPerformance()).getTaxiingSpeedMax()) {
 				lTargetSpeed = lLink.getSpeedLimitKts();
 			}else {
 				lTargetSpeed = lNormSpeed;

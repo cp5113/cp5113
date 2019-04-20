@@ -107,42 +107,161 @@ public abstract class AVehicle extends AMobile implements ITableAble, IDrawingOb
 	protected		CAltitude				iCurrentAltitude 	= new CAltitude(0, EGEOUnit.FEET);
 	protected		CVelocity				iCurrentVelocity	= new CVelocity(0, EVelocityUnit.METER_PER_SEC);
 	
-	protected 	CDrawingInform				iDrawingInform = new CDrawingInform(iCurrentPostion,iCurrentAltitude,EShape.DOT,Color.RED,true,30.0);
+	protected 	CDrawingInform				iDrawingInform = new CDrawingInform(iCurrentPostion,iCurrentAltitude,EShape.DOT,Color.BLUE,true,30.0);
 	protected		List<ANode>				iRoutingInfo;
 	protected		List<ALink>				iRoutingInfoLink;
-	
+	protected		double					iRoutingRemainingDistance = 0.0;
 	protected	EMode						iMode;
 	
+	protected 		ANode					iCurrentNode;
+	protected 		ALink					iCurrentLink;
 	
 	protected		AOperator				iOperator;
-	protected		AVehiclePerformance		iPerformance;
+	protected		AVehicle				iLeadingVehicle = null;
 	
 	protected ISimClockOberserver iSimClockObserver;
 	
 	
 	
+	public synchronized AVehicle getLeadingVehicle() {
+		return iLeadingVehicle;
+	}
+	public synchronized void setLeadingVehicle(AVehicle aLeadingVehicle) {
+		iLeadingVehicle = aLeadingVehicle;
+	}
+	public synchronized double getRoutingRemainingDistance() {		
+		calculateRemainingRouteDistance();
+		return iRoutingRemainingDistance;
+	}
+	public synchronized void setRoutingRemainingDistance(double aRoutingRemainingDistance) {		
+		iRoutingRemainingDistance = aRoutingRemainingDistance;
+	}
 	public synchronized List<? extends ANode> getRoutingInfo() {
 		return iRoutingInfo;
 	}
 	public synchronized void setRoutingInfo(List<? extends ANode> aRoutingInfo) {
-		iRoutingInfo = (List<ANode>) aRoutingInfo;
 		
-		// Find Routing Link
+		// clear Node
+		if(iRoutingInfo !=null) {
+			for(ANode loopRoutingNode : iRoutingInfo) {
+				loopRoutingNode.getVehicleWillUseList().remove(this);
+			}
+		}
+		
+		// Set Routing Info List (Nodes)
+		iRoutingInfo = (List<ANode>) aRoutingInfo;
+		iRoutingRemainingDistance = 0.0;
+		
+		// Set Routing Info List (Links)
 		List<ALink> lRouteListLink = new ArrayList<ALink>();
 		for(int loopNode = 0; loopNode<aRoutingInfo.size()-1; loopNode++) {
 			for(int loopLink = 0; loopLink < aRoutingInfo.get(loopNode).getOwnerLinkList().size(); loopLink++) {
 				if(aRoutingInfo.get(loopNode).getOwnerLinkList().get(loopLink).getNodeList().contains(aRoutingInfo.get(loopNode+1))) {
 					lRouteListLink.add(aRoutingInfo.get(loopNode).getOwnerLinkList().get(loopLink));
+					iRoutingRemainingDistance += lRouteListLink.get(lRouteListLink.size()-1).getDistance();
 					break;
 				}
 			}
-		}
+		}		
+
 		setRoutingInfoLink(lRouteListLink);
+		
+		// Let nodes know this aircraft will use the nodes
+		for(ANode loopNode : iRoutingInfo) {
+			loopNode.getVehicleWillUseList().add(this);
+		}
+		
+	}
+	
+	public void letNodeKnowsThisAircraftWillComming(){
+	
+	}
+	
+	public double calculateRemainingRouteDistance() {
+		// Calculate distance from current position to the other node (longest length far from here) 
+		double lRemainingDistanceFromHere = 0;
+		// Calculate distance from current position to next node
+		lRemainingDistanceFromHere += Math.sqrt((this.getCurrentPostion().getXCoordination() - this.getRoutingInfo().get(0).getCoordination().getXCoordination()) * (this.getCurrentPostion().getXCoordination() - this.getRoutingInfo().get(0).getCoordination().getXCoordination()) + 
+				(this.getCurrentPostion().getYCoordination() - this.getRoutingInfo().get(0).getCoordination().getYCoordination()) * (this.getCurrentPostion().getYCoordination() - this.getRoutingInfo().get(0).getCoordination().getYCoordination()) );  
+
+		// calculate distance remaining links
+		int startIndex = 0;
+		if(this.getRoutingInfo().size() != this.getRoutingInfoLink().size()) {
+			startIndex = 0;	
+		}else {
+			startIndex = 1;
+		}
+
+
+		for(int loopLink = startIndex; loopLink < this.getRoutingInfoLink().size(); loopLink++) {
+			lRemainingDistanceFromHere += this.getRoutingInfoLink().get(loopLink).getDistance();			
+		}
+		if(lRemainingDistanceFromHere<500) {
+//			System.out.println();
+		}
+		this.iRoutingRemainingDistance = lRemainingDistanceFromHere;
+		return lRemainingDistanceFromHere;
+	}
+	
+	public synchronized double calculateRemainingRouteDistance(ANode aDestinationNode) {
+		// Calculate distance from current position to the other node (longest length far from here) 
+		double lRemainingDistanceFromHere = 0;
+		// Calculate distance from current position to next node
+		lRemainingDistanceFromHere += Math.sqrt((this.getCurrentPostion().getXCoordination() - this.getRoutingInfo().get(0).getCoordination().getXCoordination()) * (this.getCurrentPostion().getXCoordination() - this.getRoutingInfo().get(0).getCoordination().getXCoordination()) + 
+				(this.getCurrentPostion().getYCoordination() - this.getRoutingInfo().get(0).getCoordination().getYCoordination()) * (this.getCurrentPostion().getYCoordination() - this.getRoutingInfo().get(0).getCoordination().getYCoordination()) );  
+		
+		if(this.getRoutingInfo().get(0).equals(aDestinationNode)) {
+			this.setRoutingRemainingDistance(lRemainingDistanceFromHere);
+			return lRemainingDistanceFromHere;
+		}
+		
+		// calculate distance remaining links
+		int startIndex = 0;
+		if(this.getRoutingInfo().size() != this.getRoutingInfoLink().size()) {
+			startIndex = 0;	
+		}else {
+			startIndex = 1;
+		}
+
+		
+		for(int loopLink = startIndex; loopLink < this.getRoutingInfoLink().size(); loopLink++) {
+			lRemainingDistanceFromHere += this.getRoutingInfoLink().get(loopLink).getDistance();
+			if(iRoutingInfoLink.get(loopLink).getNodeList().contains(aDestinationNode)) {
+				break;
+			}						
+		}
+		this.setRoutingRemainingDistance(lRemainingDistanceFromHere);
+		return lRemainingDistanceFromHere;
 	}
 	
 	public synchronized ALink getRoutingLinkInfoUsingNode(ANode aNode) {
-		return iRoutingInfoLink.get(iRoutingInfo.indexOf(aNode)-1);
+		return iRoutingInfoLink.get(iRoutingInfo.indexOf(aNode));
 	}
+	
+	public synchronized void removeRoutingInfo(int aNodeIndex) {
+
+		// Let node knows this vehicle departed from this node in route
+		iRoutingInfo.get(aNodeIndex).getVehicleWillUseList().remove(this);	
+		
+		
+		
+		// Find Connected Link
+		int numOfLinkHasNode = 0;
+		for(ALink loopLink : iRoutingInfoLink) {
+			if(loopLink.getNodeList().contains(iRoutingInfo.get(aNodeIndex))) {
+				numOfLinkHasNode++;
+			}
+		}
+		// Remove Routing Link info
+		if(numOfLinkHasNode == 2) {
+			iRoutingInfoLink.remove(aNodeIndex);
+		}
+		// Remove Routing Node info
+		iRoutingInfo.remove(aNodeIndex);
+		
+
+	}
+	
 	public synchronized List<ALink> getRoutingInfoLink() {
 		return iRoutingInfoLink;
 	}
@@ -198,10 +317,10 @@ public abstract class AVehicle extends AMobile implements ITableAble, IDrawingOb
 		iOperator = aOperator;
 	}
 	public AVehiclePerformance getPerformance() {
-		return iPerformance;
+		return iVehcleType.getPerformance();
 	}
 	public void setPerformance(AVehiclePerformance aPerformance) {
-		iPerformance = aPerformance;
+		iVehcleType.setVehicletPerformance(aPerformance);
 	}
 	public AVehiclePlan getCurrentPlan() {
 		return iCurrentPlan;
@@ -245,6 +364,18 @@ public abstract class AVehicle extends AMobile implements ITableAble, IDrawingOb
 	}
 	public synchronized CVelocity getCurrentVelocity() {
 		return iCurrentVelocity;
+	}
+	public synchronized ANode getCurrentNode() {
+		return iCurrentNode;
+	}
+	public synchronized void setCurrentNode(ANode aCurrentNode) {
+		iCurrentNode = aCurrentNode;
+	}
+	public synchronized ALink getCurrentLink() {
+		return iCurrentLink;
+	}
+	public synchronized void setCurrentLink(ALink aCurrentLink) {
+		iCurrentLink = aCurrentLink;
 	}
 	 
 	/*

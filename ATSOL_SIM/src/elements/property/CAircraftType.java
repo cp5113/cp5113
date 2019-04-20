@@ -88,21 +88,7 @@ public class CAircraftType extends AVehicleType implements ITableAble {
 	
 	================================================================
 	 */
-	public String getAircraftType() {
-		return iType;
-	}
-	public void setAircraftType(String aAircraftType) {
-		iType = aAircraftType;
-	}
-	public CAircraftPerformance getAircraftPerformance() {
-		return (CAircraftPerformance) iPerformance;
-	}
-	public void setAircraftPerformance(CAircraftPerformance aAircraftPerformance) {
-		iPerformance = aAircraftPerformance;
-	}
-	public String toString() {
-		return iType + "/" + iRange;
-	}
+
 	
 	
 	/*
