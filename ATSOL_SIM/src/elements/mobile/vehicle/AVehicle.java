@@ -119,10 +119,18 @@ public abstract class AVehicle extends AMobile implements ITableAble, IDrawingOb
 	protected		AOperator				iOperator;
 	protected		AVehicle				iLeadingVehicle = null;
 	
+	protected		double					iPushbackPauseTimeInMilliSeconds = 180000; // 3 minutes
+	
 	protected ISimClockOberserver iSimClockObserver;
 	
 	
 	
+	public synchronized IATCController getATCController() {
+		return iATCController;
+	}
+	public synchronized void setATCController(IATCController aATCController) {
+		iATCController = aATCController;
+	}
 	public synchronized AVehicle getLeadingVehicle() {
 		return iLeadingVehicle;
 	}
@@ -136,7 +144,7 @@ public abstract class AVehicle extends AMobile implements ITableAble, IDrawingOb
 	public synchronized void setRoutingRemainingDistance(double aRoutingRemainingDistance) {		
 		iRoutingRemainingDistance = aRoutingRemainingDistance;
 	}
-	public synchronized List<? extends ANode> getRoutingInfo() {
+	public synchronized List<ANode> getRoutingInfo() {
 		return iRoutingInfo;
 	}
 	public synchronized void setRoutingInfo(List<? extends ANode> aRoutingInfo) {

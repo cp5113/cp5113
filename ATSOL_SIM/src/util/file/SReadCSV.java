@@ -182,6 +182,7 @@ public class SReadCSV {
 				StringBuilder lUniqueKey = new StringBuilder();
 				for(int loopHeader = 0; loopHeader < lHeader.length; loopHeader++) {
 					try {
+//						System.out.println(lHeader[loopHeader]);
 						lAlineHashMap.put(lHeader[loopHeader], lDataSplited[loopHeader]);
 						lUniqueKey.append(lDataSplited[loopHeader]);
 					}catch(Exception e) {

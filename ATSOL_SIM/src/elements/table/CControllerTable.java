@@ -63,11 +63,13 @@ import elements.airspace.CAirRoute;
 import elements.airspace.CWaypoint;
 import elements.facility.AFacility;
 import elements.facility.CAirport;
+import elements.facility.CRunway;
 import elements.facility.CSpot;
 import elements.facility.CTaxiwayLink;
 import elements.facility.CTaxiwayNode;
 import elements.mobile.human.AATCController;
 import elements.mobile.human.CGroundController;
+import elements.mobile.human.CLocalController;
 import elements.mobile.human.EGender;
 import elements.mobile.human.ESkill;
 import elements.mobile.vehicle.CAircraft;
@@ -160,6 +162,7 @@ public class CControllerTable extends ATable {
 			
 			// Create Object
 			AATCController lController = null; 
+			CAirport lAirport = null;
 			switch(lControllerType) {
 			case "GroundController":
 				
@@ -167,7 +170,7 @@ public class CControllerTable extends ATable {
 				lController = new CGroundController(lName, parseDouble(lAge).intValue(), parseDouble(lExperienceDay).intValue(), ESkill.valueOf(lSkill), EGender.valueOf(lGender));
 				
 				// Add to Airport
-				CAirport lAirport = (CAirport) CAtsolSimMain.getInstance().getiAirportTable().getElementTable().get(lFacilityID);
+				lAirport = (CAirport) CAtsolSimMain.getInstance().getiAirportTable().getElementTable().get(lFacilityID);
 				if(lAirport==null) {
 					System.out.println("No facility in Airport or Airspace for the controller " + lController.getName());
 					continue;
@@ -202,7 +205,35 @@ public class CControllerTable extends ATable {
 				
 				break;
 			case "LocalController":
-
+				
+				// Create Controller
+				lController = new CLocalController(lName, parseDouble(lAge).intValue(), parseDouble(lExperienceDay).intValue(), ESkill.valueOf(lSkill), EGender.valueOf(lGender));
+				
+				// Add to Airport
+				lAirport = (CAirport) CAtsolSimMain.getInstance().getiAirportTable().getElementTable().get(lFacilityID);
+				if(lAirport==null) {
+					System.out.println("No facility in Airport or Airspace for the controller " + lController.getName());
+					continue;
+				}
+				lAirport.getLocalControllerList().add((CLocalController) lController);
+				
+				// Set Runway to controller
+				for(CRunway loopRwy : lAirport.getRunwayList()) {
+					if(lSpecificLinkList== null || lSpecificLinkList[0].equalsIgnoreCase("")) {						
+						lController.addFacility(loopRwy);
+						loopRwy.setATCController(lController);
+						loopRwy.setATCControllerToChildren(lController);
+					}else {
+						for(int loopSpecific = 0; loopSpecific < lSpecificLinkList.length; loopSpecific++) {
+							if(lSpecificLinkList[loopSpecific].equalsIgnoreCase(loopRwy.getName())) {
+								lController.addFacility(loopRwy);
+								loopRwy.setATCController(lController);
+								loopRwy.setATCControllerToChildren(lController);
+							}
+						}
+					}
+				}
+				
 				break;
 			case "RampController":
 

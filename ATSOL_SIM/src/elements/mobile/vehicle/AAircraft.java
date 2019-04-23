@@ -5,24 +5,22 @@
  */
 package elements.mobile.vehicle;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-
-import elements.IElementControlledByClock;
-import elements.IElementObservableClock;
+import api.CPushBackPauseTimeAPI;
 import elements.airspace.CWaypoint;
 import elements.facility.CAirport;
+import elements.facility.CTaxiwayNode;
 import elements.mobile.human.AATCController;
-import elements.mobile.human.IATCController;
+import elements.mobile.human.CGroundController;
+import elements.mobile.human.CLocalController;
+import elements.mobile.vehicle.state.CAircraftNothingMoveState;
+import elements.mobile.vehicle.state.CAircraftTaxiingMoveState;
+import elements.mobile.vehicle.state.EAircraftMovementMode;
+import elements.mobile.vehicle.state.EAircraftMovementStatus;
+import elements.network.ANode;
 import elements.operator.CAirline;
-import elements.property.CAircraftType;
-import elements.table.ITableAble;
-import javafx.scene.paint.Color;
+import elements.property.EMode;
 import sim.clock.CSimClockOberserver;
 import sim.clock.ISimClockOberserver;
-import sim.gui.CDrawingInform;
-import sim.gui.EShape;
-import sim.gui.IDrawingObject;
 
 /**
  * 
@@ -74,10 +72,13 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 	*/
 	private		String							iRegistration;	
 	private 	CAirline						iAirline;
-	
-	
-	
-
+	protected		EAircraftMovementStatus			iMovementStatus;
+	protected		EAircraftMovementMode			iMovementMode;
+	protected	long							iPushbackPauseTimeInMilliSeconds = 1;//4 * 60 * 1000;
+	protected   long							iPushbackPausedTimeInMilliSeconds = 0;
+	protected	CTaxiwayNode					iDirectionTaxwayNodeAfterPushBack;
+	protected 	CTaxiwayNode					iRunwayEntryPoint;
+	protected 	CTaxiwayNode					iRunwayEntryPointReference;
 	@Override
 	public String toString() {
 		return iRegistration;
@@ -91,11 +92,75 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 	================================================================
 	 */
 
-	
+	public double calculateDistanceBtwNodes(ANode a, ANode b) {
+		double output = 0;
+		output = Math.sqrt((a.getCoordination().getXCoordination() - b.getCoordination().getXCoordination()) *(a.getCoordination().getXCoordination() - b.getCoordination().getXCoordination()) +
+				(a.getCoordination().getYCoordination() - b.getCoordination().getYCoordination()) *(a.getCoordination().getYCoordination() - b.getCoordination().getYCoordination())); 
+		return output;
+	}
 
 	public synchronized String getRegistration() {
 		return iRegistration;
 	}
+
+
+
+	public synchronized CTaxiwayNode getRunwayEntryPointReference() {
+		return iRunwayEntryPointReference;
+	}
+
+
+
+	public synchronized void setRunwayEntryPointReference(CTaxiwayNode aRunwayEntryPointReference) {
+		iRunwayEntryPointReference = aRunwayEntryPointReference;
+	}
+
+
+
+	public synchronized CTaxiwayNode getRunwayEntryPoint() {
+		return iRunwayEntryPoint;
+	}
+
+
+
+	public synchronized void setRunwayEntryPoint(CTaxiwayNode aRunwayEntryPoint) {
+		iRunwayEntryPoint = aRunwayEntryPoint;
+	}
+
+
+
+	public synchronized CTaxiwayNode getDirectionTaxwayNodeAfterPushBack() {
+		return iDirectionTaxwayNodeAfterPushBack;
+	}
+
+
+
+	public synchronized void setDirectionTaxwayNodeAfterPushBack(CTaxiwayNode aDirectionTaxwayNodeAfterPushBack) {
+		iDirectionTaxwayNodeAfterPushBack = aDirectionTaxwayNodeAfterPushBack;
+	}
+
+
+
+	public synchronized long getPushbackPauseTimeInMilliSeconds() {
+		CPushBackPauseTimeAPI userAPI = new CPushBackPauseTimeAPI();
+		long userPushback = userAPI.calculatePushbackPauseTimeInMilliseconds((CAircraft)this);
+		if(userPushback>=0) {
+			iPushbackPauseTimeInMilliSeconds = userPushback;
+		}
+		return iPushbackPauseTimeInMilliSeconds;
+	}
+
+
+	public synchronized long getPushbackPausedTimeInMilliSeconds() {
+		return iPushbackPausedTimeInMilliSeconds;
+	}
+
+
+	public synchronized void addPushbackPausedTimeInMilliSeconds(long aPushbackPausedTimeInMilliSeconds) {
+		iPushbackPausedTimeInMilliSeconds += aPushbackPausedTimeInMilliSeconds;
+	}
+
+
 
 	public synchronized void setRegistration(String aRegistration) {
 		iRegistration = aRegistration;
@@ -230,27 +295,57 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 	
 			
 			
-//			System.out.println(iCurrentTimeInMilliSecond + " : " + ((CFlightPlan)this.getCurrentPlan()).getCallsign() + "'s Controller Status is " + ((AATCController)this.iATCController).isThreadContinueableAtInitialState());
-			// Wait Controller's Instruction
-			synchronized (iThreadLockerOwner) {
-				while(!((AATCController)this.iATCController).isThreadContinueableAtInitialState()) {
-					try {						
-//						System.out.println(iCurrentTimeInMilliSecond + " : " + ((CFlightPlan)this.getCurrentPlan()).getCallsign() + " is waiting..");
-						iThreadLockerOwner.wait();
-					} catch (InterruptedException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}					
-				}				
-			}
-//			System.out.println(iCurrentTimeInMilliSecond + " : " + ((CFlightPlan)this.getCurrentPlan()).getCallsign() + " waiting is done..");
+////			System.out.println(iCurrentTimeInMilliSecond + " : " + ((CFlightPlan)this.getCurrentPlan()).getCallsign() + "'s Controller Status is " + ((AATCController)this.iATCController).isThreadContinueableAtInitialState());
+//			// Wait Controller's Instruction
+//			synchronized (iThreadLockerOwner) {
+//				while(!((AATCController)this.iATCController).isThreadContinueableAtInitialState()) {
+//					try {						
+////						System.out.println(iCurrentTimeInMilliSecond + " : " + ((CFlightPlan)this.getCurrentPlan()).getCallsign() + " is waiting..");
+//						iThreadLockerOwner.wait();
+//					} catch (InterruptedException e1) {
+//						// TODO Auto-generated catch block
+//						e1.printStackTrace();
+//					}					
+//				}				
+//			}
+////			System.out.println(iCurrentTimeInMilliSecond + " : " + ((CFlightPlan)this.getCurrentPlan()).getCallsign() + " waiting is done..");
 			
 			
 			// Do Move Aircraft
 			if(iNextEventTime<0 || iNextEventTime<=iCurrentTimeInMilliSecond) {
 				iNextEventTime = -9999;
+				
+				
+				// Request Pushback
+				if((this.getMoveState() instanceof CAircraftNothingMoveState) && this.getMode() == EMode.DEP &&
+					 iATCController instanceof CGroundController && lCurrentPlan.getScheduleTimeList().get(0).getTimeInMillis()<=iCurrentTimeInMilliSecond) {
+					((CGroundController)iATCController).requestPushBack((CAircraft) this);
+				}
+				
+				// Request Taxi after Pushback
+				if((this.getMoveState() instanceof CAircraftTaxiingMoveState) && 
+				   this.getMovementMode() == EAircraftMovementMode.PUSHBACK	&&this.getMode() == EMode.DEP &&
+				    this.getPushbackPausedTimeInMilliSeconds()>=this.getPushbackPauseTimeInMilliSeconds()) {
+					((CGroundController)iATCController).requestTaxiToRunway((CAircraft) this);
+				}
+				
+				// Request Lineup Clearance
+				if((this.getMoveState() instanceof CAircraftTaxiingMoveState) && 
+					this.getATCController() instanceof CLocalController &&
+					this.getMovementMode() == EAircraftMovementMode.TAXIING	&& this.getMode() == EMode.DEP &&					
+					this.calculateRemainingRouteDistance(this.getDepartureRunway().findEnteringNodeForDeparture()) < 150) {					
+					((CLocalController)iATCController).requestLineUp((CAircraft) this);
+				}
+				// Move This Aircraft
 				doMoveVehicle();
+				
 			};
+			
+			
+			
+			
+			
+			
 			
 			
 			

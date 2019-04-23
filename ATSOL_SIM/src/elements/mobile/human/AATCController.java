@@ -73,6 +73,7 @@ public abstract class AATCController extends AHuman implements IATCController, I
 	protected List<CAircraft> iAircraftList = Collections.synchronizedList(new ArrayList<CAircraft>());
 	protected List<AFacility> iFacilityControlledList= Collections.synchronizedList(new ArrayList<AFacility>());
 	
+	protected List<CAircraft> iRequestEventAircraftList = Collections.synchronizedList(new ArrayList<CAircraft>());
 	protected AFacility		  iOwnedFacilty;
 
 	protected IRoutingAlgorithm iRoutingAlgorithm;
@@ -127,6 +128,33 @@ public abstract class AATCController extends AHuman implements IATCController, I
 		return instructionTimeMilliSeconds;
 	}
 	
+	
+	protected long calculatePushbackInstructionTime() {
+		long instructionTimeMilliSeconds = 0;
+		// Incheon Ground, korean Air 1124 Ready for push back
+		// Korean air 1124 push back approved heading west
+		// push back approved heading west, korean air 1124 
+		
+		// 24 words
+		// 150 words per minute (Medium speed ICAO 2006b 2-1)
+		instructionTimeMilliSeconds = (24/150 * 60 + 3)*1000;
+		return instructionTimeMilliSeconds;
+	}
+	
+	
+	protected long calculateFrequencyChangeInstructionTime() {
+		long instructionTimeMilliSeconds = 0;
+		// Korean air 1124, Incheon Ground Contact Incheon Tower 118.05 good day
+		// Contact Incehon Tower 118.05, Korean air 1124, good day 
+
+		// 21 words
+		// 150 words per minute (Medium speed ICAO 2006b 2-1)
+		
+		instructionTimeMilliSeconds = (21/150 * 60 + 3)*1000;
+		return instructionTimeMilliSeconds;
+	}
+	
+	
 	public synchronized void setRoutingAlgorithm(IRoutingAlgorithm aRoutingAlgoritm) {
 		iRoutingAlgorithm = aRoutingAlgoritm;
 	}
@@ -173,17 +201,36 @@ public abstract class AATCController extends AHuman implements IATCController, I
 	
 	@Override
 	public synchronized void handOffAircraft(IATCController aToController, CAircraft aAircraft) {
-		// TODO Auto-generated method stub
+		
+		// Remove From This Aircraft
+		iAircraftList.remove(iAircraftList.indexOf(aAircraft));
+		
+		// Hand off
+		aAircraft.setATCController(aToController);
+		
+		// Add to the other controller
+		if(aToController != null) {
+			aToController.handOnAircraft(this, aAircraft);
+		}
+		
+		// Communication
+		aAircraft.setNextEventTime(iCurrentTimeInMilliSecond + calculateFrequencyChangeInstructionTime());
+		this.setNextEventTime(iCurrentTimeInMilliSecond + calculateFrequencyChangeInstructionTime());
+		
+		
+		// Thread
 		
 	}
 
+	
+
+
 	@Override
 	public synchronized void handOnAircraft(IATCController aFromController, CAircraft aAircraft) {
-		// TODO Auto-generated method stub
 		
-		// Hand on AC
-//		System.out.println("I Got Aircraft \"" + aAircraft +"\", from Controller \"" + aFromController + "\"");		
+		// Hand on AC		
 		addAircraft(aAircraft);
+		aAircraft.setATCController(this);
 		aAircraft.setThreadLockerOwner(this.iThreadLockerThis);
 		
 		// Initialize AC
@@ -202,6 +249,8 @@ public abstract class AATCController extends AHuman implements IATCController, I
 	
 	
 	
+	
+	
 	/*
 	================================================================
 	
@@ -211,15 +260,20 @@ public abstract class AATCController extends AHuman implements IATCController, I
 	 */
 	
 	
+	public synchronized List<CAircraft> getRequestEventAircraftList() {
+		return iRequestEventAircraftList;
+	}
+
+
 	@Override
 	public void notifyToClockImDone() {
-		// TODO Auto-generated method stub
+		
 		iSimClockObserver.pubSaidImDone("Controller");
 	}
 
 	@Override
 	public void addClock(ISimClockOberserver aSimclock) {
-		// TODO Auto-generated method stub
+		
 		iSimClockObserver = aSimclock;
 	}
 	@Override
@@ -281,14 +335,14 @@ public abstract class AATCController extends AHuman implements IATCController, I
 	}
 	@Override
 	public void removeClock() {
-		// TODO Auto-generated method stub
+		
 		iSimClockObserver = null;
 	}
 	
 	
 	@Override
 	public synchronized void waitUntilClockStatusIsChanged() {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	

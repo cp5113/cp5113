@@ -41,8 +41,18 @@ package elements.mobile.human;
  */
 
 import java.util.Calendar;
+import java.util.List;
 
+import elements.facility.CRunway;
+import elements.facility.CTaxiwayNode;
 import elements.mobile.vehicle.CAircraft;
+import elements.mobile.vehicle.CFlightPlan;
+import elements.mobile.vehicle.state.CAircraftLineUpMoveState;
+import elements.mobile.vehicle.state.EAircraftMovementMode;
+import elements.mobile.vehicle.state.EAircraftMovementStatus;
+import elements.network.ANode;
+import elements.util.geo.CAltitude;
+import elements.util.geo.EGEOUnit;
 import sim.clock.ISimClockOberserver;
 
 /**
@@ -76,12 +86,56 @@ public class CLocalController extends AATCController {
 	@Override
 	public synchronized void controlAircraft() {
 		// TODO Auto-generated method stub
-		System.out.println(this.iAircraftList);
-		System.out.println();
+//		System.out.println(this.getName() + this.iAircraftList);
+		
+		
 	}
 	@Override
 	public void initializeAircraft(CAircraft aAircraft) {
 		// TODO Auto-generated method stub
+		System.err.println("You must create initializeAircraft Method of LocalController");
+		
+	}
+
+	public void requestLineUp(CAircraft aAircraft) {
+		
+				
+		// Find Runway
+		CRunway lRunway = aAircraft.getDepartureRunway();
+		CFlightPlan lFlightPlan = aAircraft.getCurrentFlightPlan();
+		CTaxiwayNode lRunwayEntry = aAircraft.getRunwayEntryPoint();
+		// Verification
+		if(!iFacilityControlledList.contains(lRunway)) {
+			System.err.println("Error in Request Line up in LocalController : Runway is not same");
+		}
+		
+		
+		// Runway Safety Control
+		if(lRunway.getDepartureAircraftList().size()>0) {
+			return;
+		}
+
+		
+		// Create Routing
+		CTaxiwayNode lRunwayEntrySecond = lRunway.getTaxiwayNodeList().get(lRunway.getTaxiwayNodeList().indexOf(lRunwayEntry)+1);
+		aAircraft.setRunwayEntryPointReference(lRunwayEntrySecond);
+		List<ANode>  lOriginalRoute     = aAircraft.getRoutingInfo(); 
+		int 		 lInsertIndex       = aAircraft.getRoutingInfo().indexOf(lRunwayEntry)+1;
+		lOriginalRoute.add(lInsertIndex,lRunwayEntrySecond);
+		aAircraft.setRoutingInfo(lOriginalRoute);
+		
+		// Create Flight Plan
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(0);
+		lFlightPlan.insertPlanItem(lInsertIndex, lOriginalRoute.get(lInsertIndex),cal,new CAltitude(0,EGEOUnit.FEET));
+		
+		
+		// Set Aircraft MoveState
+		aAircraft.setMovementMode(EAircraftMovementMode.LINEUP);
+		aAircraft.setMoveState(new CAircraftLineUpMoveState());
+		
+		// Runway Control
+		lRunway.getDepartureAircraftList().add(aAircraft);
 		
 	}
 

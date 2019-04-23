@@ -1,6 +1,12 @@
 package elements.mobile.vehicle;
 
+import elements.facility.CRunway;
 import elements.mobile.vehicle.AAircraft;
+import elements.mobile.vehicle.state.EAircraftMovementMode;
+import elements.mobile.vehicle.state.EAircraftMovementStatus;
+import elements.network.ALink;
+import elements.network.ANode;
+import elements.util.geo.CCoordination;
 
 /**
  * 
@@ -39,6 +45,93 @@ import elements.mobile.vehicle.AAircraft;
  */
 
 public class CAircraft extends AAircraft {
+
+	@Override
+	public CCoordination getCurrentPosition() {
+
+		return iCurrentPostion;
+	}
+
+
+
+	@Override
+	public double getCurrentVelocityMps() {
+
+		return iCurrentVelocity.getVelocity();
+	}
+
+	@Override
+	public double getCurrentAltitudeFeet() {
+
+		return iCurrentAltitude.getAltitude();
+	}
+
+	@Override
+	public CFlightPlan getCurrentFlightPlan() {
+
+		return (CFlightPlan) iCurrentPlan;
+	}
+
+	@Override
+	public CFlightPlan getNextFlightPlan() {
+		if(iPlanList.size()>1) {
+			return (CFlightPlan) iPlanList.get(1);			
+		}
+		return null;
+	}
+
+	@Override
+	public void setDepartureRunway(CRunway aDepartureRunway) {
+		((CFlightPlan)(iCurrentPlan)).setDepartureRunway(aDepartureRunway);
+	}
+
+	@Override
+	public void setArrivalRunway(CRunway aArrivalRunway) {
+		((CFlightPlan)(iCurrentPlan)).setDepartureRunway(aArrivalRunway);
+	}
+
+
+
+	@Override
+	public CRunway getDepartureRunway() {
+		// TODO Auto-generated method stub
+		return ((CFlightPlan)(iCurrentPlan)).getDepartureRunway();
+	}
+
+
+
+	@Override
+	public CRunway getArrivalRunway() {
+		// TODO Auto-generated method stub
+		return ((CFlightPlan)(iCurrentPlan)).getArrivalRunway();
+	}
+
+
+	@Override
+	public EAircraftMovementStatus getMovementStatus() {
+		return iMovementStatus;
+	}
+
+
+	@Override
+	public void setMovementStatus(EAircraftMovementStatus aMovementStatus) {
+		iMovementStatus = aMovementStatus;
+	}
+
+
+
+	@Override
+	public EAircraftMovementMode getMovementMode() {
+		return iMovementMode;
+	}
+
+
+
+	@Override
+	public void setMovementMode(EAircraftMovementMode aMovementMode) {
+		iMovementMode = aMovementMode;
+	}
+
 
 
 	/*

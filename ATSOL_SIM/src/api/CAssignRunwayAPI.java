@@ -1,4 +1,10 @@
-package elements.property;
+package api;
+
+import api.inf.IAssignRunway;
+import elements.facility.CAirport;
+import elements.mobile.vehicle.CFlightPlan;
+import elements.mobile.vehicle.IAircraft;
+
 /**
  * 
  * Dtails....
@@ -26,53 +32,23 @@ package elements.property;
  * </p>
  * 
  * 
- * @date : Apr 3, 2019
+ * @date : Apr 22, 2019
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * Apr 3, 2019 : Coded by S. J. Yun.
+ * Apr 22, 2019 : Coded by S. J. Yun.
  *
  *
  */
 
-public enum EWTC {
-	NaN,L,M,H,SH;
-private int value;
-	
+public class CAssignRunwayAPI implements IAssignRunway {
 
-	/**
-	 * getValue
-	 * 
-	 * Do What
-	 * 
-	 * @return value int
-	 * 
-	 * @date : Apr 3, 2019
-	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
-	 *
-	 * @version : 
-	 * Apr 3, 2019 : Coded by S. J. Yun.
-	 */
-	public int getValue() {
-		return value;
+	@Override
+	public void assignRunway(long aCurrentTimeInMilliSeconds, IAircraft aAircraft, CFlightPlan aFlightPlan,
+			CAirport aAirport) {
 	}
 
-	/**
-	 * setValue
-	 * 
-	 * Do What
-	 * 
-	 * @param aValue the value to set
-	 * 
-	 * @date : Apr 3, 2019
-	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
-	 *
-	 * @version : 
-	 * Apr 3, 2019 : Coded by S. J. Yun.
-	 */
-	public void setValue(int aValue) {
-		this.value = aValue;
-	}}
+}
 
 
 

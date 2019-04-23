@@ -36,7 +36,7 @@ package elements.property;
  */
 
 public enum EADG {
-	A,B,C,D,E,F;
+	NaN,A,B,C,D,E,F;
 private int value;
 	
 

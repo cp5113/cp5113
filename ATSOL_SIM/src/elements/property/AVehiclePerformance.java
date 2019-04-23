@@ -44,7 +44,7 @@ package elements.property;
  * @author S. J. Yun
  *
  */
-public abstract class AVehiclePerformance {
+public abstract class AVehiclePerformance implements Cloneable{
 	/*
 	================================================================
 	
@@ -56,10 +56,7 @@ public abstract class AVehiclePerformance {
 	protected		double			iFuelCapacity;  // Weight
 	protected		double			iCargoCapacity; // Weight
 	
-	protected		double			iWidth;
-	protected		double			iLength;
-	protected		double			iHeight;
-	
+
 	protected		double			iBasicWeight; 
 	
 	

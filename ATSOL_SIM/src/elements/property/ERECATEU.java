@@ -26,17 +26,17 @@ package elements.property;
  * </p>
  * 
  * 
- * @date : Apr 3, 2019
+ * @date : 2019. 4. 23.
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * Apr 3, 2019 : Coded by S. J. Yun.
+ * 2019. 4. 23. : Coded by S. J. Yun.
  *
  *
  */
 
-public enum EWTC {
-	NaN,L,M,H,SH;
+public enum ERECATEU {
+	NaN,LIGHT,LOWERMEDIUM,UPPERMEDIUM,LOWERHEAVY,UPPERHEAVY,SUPERHEAVY; 
 private int value;
 	
 
@@ -47,11 +47,11 @@ private int value;
 	 * 
 	 * @return value int
 	 * 
-	 * @date : Apr 3, 2019
+	 * @date : 2019. 4. 23.
 	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
 	 *
 	 * @version : 
-	 * Apr 3, 2019 : Coded by S. J. Yun.
+	 * 2019. 4. 23. : Coded by S. J. Yun.
 	 */
 	public int getValue() {
 		return value;
@@ -64,11 +64,11 @@ private int value;
 	 * 
 	 * @param aValue the value to set
 	 * 
-	 * @date : Apr 3, 2019
+	 * @date : 2019. 4. 23.
 	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
 	 *
 	 * @version : 
-	 * Apr 3, 2019 : Coded by S. J. Yun.
+	 * 2019. 4. 23. : Coded by S. J. Yun.
 	 */
 	public void setValue(int aValue) {
 		this.value = aValue;

@@ -50,8 +50,11 @@ public abstract class AVehicleType {
 	
 	private double iLength =39.5;
 	private double iWidth  = 34.32;
+	private double iHeight;
+	
 	private double iSafetyDistanceWidth  = 34.32 + 4.5;
 	private double iSafetyDistanceLength = 39.5 + 10.0;
+	
 
 	/*
 	================================================================
@@ -109,6 +112,12 @@ public abstract class AVehicleType {
 	}
 	public synchronized void setPerformance(AVehiclePerformance aPerformance) {
 		iPerformance = aPerformance;
+	}
+	public synchronized double getHeight() {
+		return iHeight;
+	}
+	public synchronized void setHeight(double aHeight) {
+		iHeight = aHeight;
 	}
 
 	/*

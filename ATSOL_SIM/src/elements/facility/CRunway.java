@@ -46,6 +46,7 @@ import java.util.List;
 import elements.mobile.human.IATCController;
 import elements.mobile.vehicle.CAircraft;
 import elements.network.ALink;
+import elements.network.ANode;
 
 /**
  * @author S. J. Yun
@@ -54,6 +55,7 @@ import elements.network.ALink;
 public class CRunway extends ALink{
 	
 	private List<CTaxiwayLink> iTaxiwayLink = new ArrayList<CTaxiwayLink>();
+	private List<CTaxiwayNode> iTaxiwayNode = new ArrayList<CTaxiwayNode>();
 	private boolean iIsArrival = false;
 	private boolean iIsDeparture = false;
 	private List<Double> iDistanceList = new ArrayList<Double>();
@@ -61,9 +63,11 @@ public class CRunway extends ALink{
 	private List<CAircraft> iDepartureAircraftList= new ArrayList<CAircraft>();
 	private List<CAircraft> iArrivalAircraftList= new ArrayList<CAircraft>();
 	
+	private double iRunwaySafetyWidth = 100; 
+	
 	@Override
 	public void setATCControllerToChildren(IATCController aController) {
-		// TODO Auto-generated method stub
+		
 		iATCController = aController;
 	
 	}
@@ -75,7 +79,7 @@ public class CRunway extends ALink{
 	================================================================
 	*/
 
-
+	
 
 	/**
 	 * The Constructor
@@ -95,27 +99,46 @@ public class CRunway extends ALink{
 		iIsDeparture = aIsDeparture;
 	}
 
+	public ANode findEnteringNodeForDeparture() {
+		double x1 = iTaxiwayLink.get(0).getNodeList().get(0).getCoordination().getXCoordination();
+		double y1 = iTaxiwayLink.get(0).getNodeList().get(0).getCoordination().getYCoordination();
+		double x2 = iTaxiwayLink.get(0).getNodeList().get(1).getCoordination().getXCoordination();
+		double y2 = iTaxiwayLink.get(0).getNodeList().get(1).getCoordination().getYCoordination();
+		
+		double xe = iTaxiwayLink.get(iTaxiwayLink.size()-1).getNodeList().get(0).getCoordination().getXCoordination();
+		double ye = iTaxiwayLink.get(iTaxiwayLink.size()-1).getNodeList().get(0).getCoordination().getYCoordination();
+		
+		double distance1e = (x1-xe)*(x1-xe) + (y1-ye)*(y1-ye);
+		double distance2e = (x2-xe)*(x2-xe) + (y2-ye)*(y2-ye);
+		
+		if(distance1e>distance2e) {
+			return iTaxiwayLink.get(0).getNodeList().get(0);
+		}else if(distance1e<distance2e) {
+			return iTaxiwayLink.get(0).getNodeList().get(1);
+		}
+		
+		return null;
+	}
 
-
-	public synchronized boolean isIsArrival() {
+	public synchronized boolean isArrival() {
 		return iIsArrival;
 	}
 
 
 
-	public synchronized void setIsArrival(boolean aIsArrival) {
+	public synchronized void setArrival(boolean aIsArrival) {
 		iIsArrival = aIsArrival;
 	}
 
 
 
-	public synchronized boolean isIsDeparture() {
+	public synchronized boolean isDeparture() {
 		return iIsDeparture;
 	}
 
 
 
-	public synchronized void setIsDeparture(boolean aIsDeparture) {
+	public synchronized void setDeparture(boolean aIsDeparture) {
 		iIsDeparture = aIsDeparture;
 	}
 
@@ -143,8 +166,63 @@ public class CRunway extends ALink{
 		return iArrivalAircraftList;
 	}
 
+	public synchronized List<CTaxiwayNode> getTaxiwayNodeList(){
+		return iTaxiwayNode;
+	}
 
 
+
+	public double getRunwaySafetyWidth() {
+		
+		return iRunwaySafetyWidth;
+	}
+	public void setRunwaySafetyWidth(double aRunwaySafetyWidth) {
+		
+		iRunwaySafetyWidth = aRunwaySafetyWidth;
+	}
+
+	public void sortNodeList() {
+		ArrayList<CTaxiwayNode> tempList = new ArrayList<CTaxiwayNode>();
+		for(int loopLink = 0; loopLink < iTaxiwayLink.size()-1; loopLink++) {
+			CTaxiwayNode lNode11 = (CTaxiwayNode) iTaxiwayLink.get(loopLink).getNodeList().get(0);
+			CTaxiwayNode lNode12 = (CTaxiwayNode) iTaxiwayLink.get(loopLink).getNodeList().get(1);
+			CTaxiwayNode lNode21 = (CTaxiwayNode) iTaxiwayLink.get(loopLink+1).getNodeList().get(0);
+			CTaxiwayNode lNode22 = (CTaxiwayNode) iTaxiwayLink.get(loopLink+1).getNodeList().get(1);
+			
+			if(lNode11.equals(lNode21)) {
+				// lNode12 lNode11 Lnode 22
+				if(!tempList.contains(lNode12)) {					
+				tempList.add(lNode12);				
+				tempList.add(lNode11);
+				}
+				tempList.add(lNode22);
+			}else if(lNode11.equals(lNode22)) {
+				// lNode12 lNode11 Lnode 21
+				if(!tempList.contains(lNode12)) {
+				tempList.add(lNode12);				
+				tempList.add(lNode11);
+				}
+				tempList.add(lNode21);				
+			}else if(lNode12.equals(lNode21)) {
+				// lNode11 lNode12 Lnode 22
+				if(!tempList.contains(lNode11)) {
+				tempList.add(lNode11);				
+				tempList.add(lNode12);
+				}
+				tempList.add(lNode22);
+			}else if(lNode12.equals(lNode22)) {
+				// lNode11 lNode12 Lnode 21
+				if(!tempList.contains(lNode11)) {
+				tempList.add(lNode11);
+				tempList.add(lNode12);
+				}
+				tempList.add(lNode21);
+			}
+			
+			
+		}
+		
+	}
 	
 	
 	
@@ -172,6 +250,7 @@ public class CRunway extends ALink{
 	================================================================
 	 */
 }
+
 
 
 

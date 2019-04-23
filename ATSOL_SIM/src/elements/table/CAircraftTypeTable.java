@@ -62,6 +62,7 @@ import elements.property.CAircraftPerformance;
 import elements.property.CAircraftType;
 import elements.property.EADG;
 import elements.property.EAPC;
+import elements.property.ERECATEU;
 import elements.property.EWTC;
 import elements.util.geo.CAltitude;
 import elements.util.geo.CCoordination;
@@ -132,10 +133,14 @@ public class CAircraftTypeTable extends ATable {
 			String lACType = lData.get("AircraftType");
 			String lRange = lData.get("Range");
 			EWTC lWTC   = EWTC.valueOf(lData.get("WTC"));
-			EAPC lAPC   = EAPC.valueOf(lData.get("APC"));
+			EAPC lAPC   = EAPC.valueOf(lData.get("APC"));			
 			EADG lADG   = EADG.valueOf(lData.get("ADG"));
-			
-			String[] lACSubTypeListString = lData.get("AircraftSubTypeList").split("/");
+			ERECATEU lRECATEU;
+			try {
+				 lRECATEU = ERECATEU.valueOf(lData.get("RECATEU").toUpperCase());
+			}catch(Exception e) {
+				 lRECATEU = ERECATEU.NaN;
+			}
 			
 			
 			// Get AC Performance
@@ -143,15 +148,121 @@ public class CAircraftTypeTable extends ATable {
 			// Create Basic A/C
 			CAircraftType lAircraftType = new CAircraftType(lACType,lACPerformance,lRange);
 			lACPerformance.setOwnerAircraftType(lAircraftType); // Connect Each other
+
+			lAircraftType.setLength(parseDouble(lData.get("Length")));
+			lAircraftType.setHeight(parseDouble(lData.get("Height")));
+			lAircraftType.setWidth(parseDouble(lData.get("Wingspan")));
+			
+			
+			lACPerformance.setAccelerationOnGroundMax(parseDouble(lData.get("AccelerationOnGroundMax")));
+			lACPerformance.setAccelerationOnRunwayMax(parseDouble(lData.get("AccelerationOnRunwayMax")));
+			lACPerformance.setAccomodation(lData.get("Accomodation"));			
+			lACPerformance.setAircraftSubTypeList(lData.get("AircraftSubTypeList"));
+			lACPerformance.setAlternativeName(lData.get("AlternativeName"));
+			lACPerformance.setCeiling_Cruise(parseDouble(lData.get("Ceiling_Cruise")));
+			lACPerformance.setClimbSpeed1000Norm(parseDouble(lData.get("ClimbSpeed1000Norm")));
+			lACPerformance.setDecelerationOnGroundMax(parseDouble(lData.get("DecelerationOnGroundMax")));
+			lACPerformance.setDecelerationOnRunwayMax(parseDouble(lData.get("DecelerationOnRunwayMax")));
+			lACPerformance.setExitSpeedNorm(parseDouble(lData.get("ExitSpeedNorm")));
+			lACPerformance.setIAS_Approach(parseDouble(lData.get("IAS_Approach")));
+			lACPerformance.setIAS_to_5000(parseDouble(lData.get("IAS_to_5000")));
+			lACPerformance.setIAS_to_FL100_Dec(parseDouble(lData.get("IAS_to_FL100_Dec")));
+			lACPerformance.setIAS_to_FL150(parseDouble(lData.get("IAS_to_FL150")));
+			lACPerformance.setIAS_to_FL240(parseDouble(lData.get("IAS_to_FL240")));
+			lACPerformance.setIAS_to_FL240_Dec(parseDouble(lData.get("IAS_to_FL240_Dec")));
+			lACPerformance.setIAS_to_MCAH(parseDouble(lData.get("IAS_to_MCAH")));
+			lACPerformance.setLandingDistance(parseDouble(lData.get("LandingDistance")));
+			lACPerformance.setMACH_Cruise(parseDouble(lData.get("MACH_Cruise")));
+			lACPerformance.setMCS_Approach(parseDouble(lData.get("MCS_Approach")));
+			lACPerformance.setMTOW(parseDouble(lData.get("MTOW")));
+			lACPerformance.setNote(lData.get("Note"));
+			lACPerformance.setPax(parseDouble(lData.get("Pax")));
+			lACPerformance.setPowerPlant(lData.get("PowerPlant"));
+			lACPerformance.setRange_Cruise(parseDouble(lData.get("Range_Cruise")));
+			lACPerformance.setRECATEU(lRECATEU);
+			lACPerformance.setROC_to_5000(parseDouble(lData.get("ROC_to_5000")));
+			lACPerformance.setROC_to_FL150(parseDouble(lData.get("ROC_to_FL150")));
+			lACPerformance.setROC_to_FL240(parseDouble(lData.get("ROC_to_FL240")));
+			lACPerformance.setROC_to_MACH(parseDouble(lData.get("ROC_to_MACH")));
+			lACPerformance.setROD_Approach(parseDouble(lData.get("ROD_Approach")));
+			lACPerformance.setROD_to_FL100(parseDouble(lData.get("ROD_to_FL100")));
+			lACPerformance.setROD_to_FL240(parseDouble(lData.get("ROD_to_FL240")));
+			lACPerformance.setTakeoffDistance(parseDouble(lData.get("TakeoffDistance")));
+			lACPerformance.setTakeoffSpeedNorm(parseDouble(lData.get("TakeoffSpeedNorm")));
+			lACPerformance.setTAS_Cruise(parseDouble(lData.get("TAS_Cruise")));
+			lACPerformance.setTaxiingSpeedMax(parseDouble(lData.get("TaxiingSpeedMax")));
+			lACPerformance.setTaxiingSpeedNorm(parseDouble(lData.get("TaxiingSpeedNorm")));
+			lACPerformance.setV2(parseDouble(lData.get("V2")));
+			lACPerformance.setVat(parseDouble(lData.get("Vat")));
+			
+			
+			
+			
+			
 			// Merge to Table			
 			addElement(lAircraftType);
 			
+			
+			
+			
+			
 			// Create SubType Aircraft
+			String[] lACSubTypeListString = lData.get("AircraftSubTypeList").split("/");
 			for(int i = 0; i < lACSubTypeListString.length; i++) {
 				// Create Object Properties - Class
 				CAircraftPerformance lACSubtypePerformance =new CAircraftPerformance(parseDouble(lData.get("TaxiingSpeedMax")),	parseDouble(lData.get("TaxiingSpeedNorm")),	parseDouble(lData.get("AccelerationOnGroundMax")),	parseDouble(lData.get("DecelerationOnGroundMax")),	parseDouble(lData.get("AccelerationOnRunwayMax")),	parseDouble(lData.get("DecelerationOnRunwayMax")),	parseDouble(lData.get("ExitSpeedNorm")),	parseDouble(lData.get("TakeoffSpeedNorm")),	parseDouble(lData.get("ClimbSpeed1000Norm")), lADG,lAPC, lWTC);
 				CAircraftType lAircraftSubType = new CAircraftType(lACSubTypeListString[i],lACSubtypePerformance,lRange);
 				lACSubtypePerformance.setOwnerAircraftType(lAircraftSubType); // Connect Each other
+				
+				lAircraftSubType.setLength(parseDouble(lData.get("Length")));
+				lAircraftSubType.setHeight(parseDouble(lData.get("Height")));
+				lAircraftSubType.setWidth(parseDouble(lData.get("Wingspan")));
+				
+				
+				lACSubtypePerformance.setAccelerationOnGroundMax(parseDouble(lData.get("AccelerationOnGroundMax")));
+				lACSubtypePerformance.setAccelerationOnRunwayMax(parseDouble(lData.get("AccelerationOnRunwayMax")));
+				lACSubtypePerformance.setAccomodation(lData.get("Accomodation"));			
+				lACSubtypePerformance.setAircraftSubTypeList(lData.get("AircraftSubTypeList"));
+				lACSubtypePerformance.setAlternativeName(lData.get("AlternativeName"));
+				lACSubtypePerformance.setCeiling_Cruise(parseDouble(lData.get("Ceiling_Cruise")));
+				lACSubtypePerformance.setClimbSpeed1000Norm(parseDouble(lData.get("ClimbSpeed1000Norm")));
+				lACSubtypePerformance.setDecelerationOnGroundMax(parseDouble(lData.get("DecelerationOnGroundMax")));
+				lACSubtypePerformance.setDecelerationOnRunwayMax(parseDouble(lData.get("DecelerationOnRunwayMax")));
+				lACSubtypePerformance.setExitSpeedNorm(parseDouble(lData.get("ExitSpeedNorm")));
+				lACSubtypePerformance.setIAS_Approach(parseDouble(lData.get("IAS_Approach")));
+				lACSubtypePerformance.setIAS_to_5000(parseDouble(lData.get("IAS_to_5000")));
+				lACSubtypePerformance.setIAS_to_FL100_Dec(parseDouble(lData.get("IAS_to_FL100_Dec")));
+				lACSubtypePerformance.setIAS_to_FL150(parseDouble(lData.get("IAS_to_FL150")));
+				lACSubtypePerformance.setIAS_to_FL240(parseDouble(lData.get("IAS_to_FL240")));
+				lACSubtypePerformance.setIAS_to_FL240_Dec(parseDouble(lData.get("IAS_to_FL240_Dec")));
+				lACSubtypePerformance.setIAS_to_MCAH(parseDouble(lData.get("IAS_to_MCAH")));
+				lACSubtypePerformance.setLandingDistance(parseDouble(lData.get("LandingDistance")));
+				lACSubtypePerformance.setMACH_Cruise(parseDouble(lData.get("MACH_Cruise")));
+				lACSubtypePerformance.setMCS_Approach(parseDouble(lData.get("MCS_Approach")));
+				lACSubtypePerformance.setMTOW(parseDouble(lData.get("MTOW")));
+				lACSubtypePerformance.setNote(lData.get("Note"));
+				lACSubtypePerformance.setPax(parseDouble(lData.get("Pax")));
+				lACSubtypePerformance.setPowerPlant(lData.get("PowerPlant"));
+				lACSubtypePerformance.setRange_Cruise(parseDouble(lData.get("Range_Cruise")));
+				lACSubtypePerformance.setRECATEU(lRECATEU);
+				lACSubtypePerformance.setROC_to_5000(parseDouble(lData.get("ROC_to_5000")));
+				lACSubtypePerformance.setROC_to_FL150(parseDouble(lData.get("ROC_to_FL150")));
+				lACSubtypePerformance.setROC_to_FL240(parseDouble(lData.get("ROC_to_FL240")));
+				lACSubtypePerformance.setROC_to_MACH(parseDouble(lData.get("ROC_to_MACH")));
+				lACSubtypePerformance.setROD_Approach(parseDouble(lData.get("ROD_Approach")));
+				lACSubtypePerformance.setROD_to_FL100(parseDouble(lData.get("ROD_to_FL100")));
+				lACSubtypePerformance.setROD_to_FL240(parseDouble(lData.get("ROD_to_FL240")));
+				lACSubtypePerformance.setTakeoffDistance(parseDouble(lData.get("TakeoffDistance")));
+				lACSubtypePerformance.setTakeoffSpeedNorm(parseDouble(lData.get("TakeoffSpeedNorm")));
+				lACSubtypePerformance.setTAS_Cruise(parseDouble(lData.get("TAS_Cruise")));
+				lACSubtypePerformance.setTaxiingSpeedMax(parseDouble(lData.get("TaxiingSpeedMax")));
+				lACSubtypePerformance.setTaxiingSpeedNorm(parseDouble(lData.get("TaxiingSpeedNorm")));
+				lACSubtypePerformance.setV2(parseDouble(lData.get("V2")));
+				lACSubtypePerformance.setVat(parseDouble(lData.get("Vat")));
+				
+				
+				
+				
 				addElement(lAircraftSubType);
 			} //for(int i = 0; i < lACSubTypeListString.length; i++) {
 			

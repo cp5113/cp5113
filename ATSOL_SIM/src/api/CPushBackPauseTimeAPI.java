@@ -1,4 +1,8 @@
-package elements.mobile.vehicle;
+package api;
+
+import api.inf.IPushbackPauseTime;
+import elements.mobile.vehicle.CAircraft;
+
 /**
  * 
  * Dtails....
@@ -26,25 +30,22 @@ package elements.mobile.vehicle;
  * </p>
  * 
  * 
- * @date : Apr 3, 2019
+ * @date : 2019. 4. 23.
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * Apr 3, 2019 : Coded by S. J. Yun.
+ * 2019. 4. 23. : Coded by S. J. Yun.
  *
  *
  */
 
-import elements.facility.CRunway;
-import elements.mobile.vehicle.state.EAircraftMovementMode;
-import elements.mobile.vehicle.state.EAircraftMovementStatus;
-import elements.network.ALink;
-import elements.network.ANode;
-import elements.network.INode;
-import elements.util.geo.CCoordination;
-import elements.util.phy.CVelocity;
+public class CPushBackPauseTimeAPI implements IPushbackPauseTime{
 
-public interface IAircraft {
+	@Override
+	public long calculatePushbackPauseTimeInMilliseconds(CAircraft aAircraft) {
+		// TODO Auto-generated method stub
+		return -9999999;
+	}
 	/*
 	================================================================
 	
@@ -60,33 +61,7 @@ public interface IAircraft {
 	
 	================================================================
 	 */
-	public CCoordination 	getCurrentPosition();
-	public ANode     		getCurrentNode();
-	public ALink     		getCurrentLink();
-	public double			getCurrentVelocityMps();
-	public double			getCurrentAltitudeFeet();
-	public CFlightPlan		getCurrentFlightPlan();
-	public CFlightPlan		getNextFlightPlan();
-	
-	
-	public CRunway			getDepartureRunway();
-	public CRunway			getArrivalRunway();
-	public void				setDepartureRunway(CRunway aDepartureRunway);
-	public void 			setArrivalRunway(CRunway aArrivalRunway);
-	
-	
-	
-	
-	
 
-	public EAircraftMovementStatus getMovementStatus();
-
-	public void setMovementStatus(EAircraftMovementStatus aMovementStatus);
-	
-	
-	public EAircraftMovementMode getMovementMode();
-
-	public void setMovementMode(EAircraftMovementMode aMovementMode);
 	/*
 	================================================================
 	
@@ -102,7 +77,6 @@ public interface IAircraft {
 	
 	================================================================
 	 */
-
 }
 
 

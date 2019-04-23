@@ -37,7 +37,7 @@ package elements.property;
 
 public enum EAPC {
 
-	A,B,C,D,E,F;
+	NaN,A,B,C,D,E,F;
 	
 private int value;
 	

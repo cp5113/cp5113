@@ -1,2 +1,4 @@
 Name,Age,ExperienceDay,Skill,Gender,FacilityID,SpecificLink,ControllerType
 IncheonGround,33,300,HIGH,MALE,RKSI,,GroundController
+IncheonTower1,33,300,HIGH,FEMALE,RKSI,34/16,LocalController
+IncheonTower2,33,300,HIGH,FEMALE,RKSI,33R/33L/15R/15L,LocalController

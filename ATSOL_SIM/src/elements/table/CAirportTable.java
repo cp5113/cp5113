@@ -60,6 +60,7 @@ import elements.facility.CRunway;
 import elements.facility.CSpot;
 import elements.facility.CTaxiwayLink;
 import elements.facility.CTaxiwayNode;
+import elements.network.ANode;
 import elements.util.geo.CAltitude;
 import elements.util.geo.CCoordination;
 import elements.util.geo.CDegree;
@@ -128,7 +129,8 @@ public class CAirportTable extends ATable {
 			HashMap<String,String> lData = lDataList.get(key);
 
 			// get Properties
-			String lRunwayName = lData.get("Name");			
+			String lRunwayName = lData.get("Name");
+			String lRunwaySafetyWidthStr = lData.get("RunwaySafetyWidth");
 			String lAirportStr = lData.get("Airport");
 			boolean lIsArrival  = lData.get("Arrival").equalsIgnoreCase("TRUE");
 			boolean lIsDeparture= lData.get("Departure").equalsIgnoreCase("TRUE");
@@ -141,15 +143,22 @@ public class CAirportTable extends ATable {
 			// Create Runway Object
 			CRunway lRunway = new CRunway(lRunwayName, lIsArrival, lIsDeparture);
 			lRunway.setOwnerObject(lTargetAirport);
+			lRunway.setRunwaySafetyWidth(parseDouble(lRunwaySafetyWidthStr));
 			
 			// Find Linklist
 			for(int loopLink = 0; loopLink < lLinkList.length; loopLink++) {
 				for(CTaxiwayLink loopTwyLink : lTargetAirport.getTaxiwayLinkList()) {				
 					if(loopTwyLink.getName().equalsIgnoreCase(lLinkList[loopLink])) {
-						lRunway.getTaxiwayLink().add(loopTwyLink);						
+						lRunway.getTaxiwayLink().add(loopTwyLink);			
+						
+						for(ANode loopNode : loopTwyLink.getNodeList()) {
+							lRunway.getTaxiwayNodeList().add((CTaxiwayNode) loopNode);
+						}
+						
 					}
 				}
 			}
+			lRunway.sortNodeList();
 			
 			
 			// Calculate Distance

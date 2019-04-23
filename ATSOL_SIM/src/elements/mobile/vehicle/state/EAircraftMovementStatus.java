@@ -1,4 +1,4 @@
-package elements.property;
+package elements.mobile.vehicle.state;
 /**
  * 
  * Dtails....
@@ -26,19 +26,21 @@ package elements.property;
  * </p>
  * 
  * 
- * @date : Apr 3, 2019
+ * @date : Apr 22, 2019
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * Apr 3, 2019 : Coded by S. J. Yun.
+ * Apr 22, 2019 : Coded by S. J. Yun.
  *
  *
  */
 
-public enum EWTC {
-	NaN,L,M,H,SH;
-private int value;
+public enum EAircraftMovementStatus {
+
+	TAXIING_CONST,TAXIING_ACCEL,TAXIING_DECEL,TAXIING_STOP, TAXIING_DECEL_FOLLOWING, TAXIING_DECEL_CONFLICT,PUSHBACK,PUSHBACK_DECEL,PUSHBACK_HOLD,TOWED,TOWED_HOLD;
 	
+	private int value;
+
 
 	/**
 	 * getValue
@@ -47,11 +49,11 @@ private int value;
 	 * 
 	 * @return value int
 	 * 
-	 * @date : Apr 3, 2019
+	 * @date : Apr 22, 2019
 	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
 	 *
 	 * @version : 
-	 * Apr 3, 2019 : Coded by S. J. Yun.
+	 * Apr 22, 2019 : Coded by S. J. Yun.
 	 */
 	public int getValue() {
 		return value;
@@ -64,11 +66,11 @@ private int value;
 	 * 
 	 * @param aValue the value to set
 	 * 
-	 * @date : Apr 3, 2019
+	 * @date : Apr 22, 2019
 	 * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
 	 *
 	 * @version : 
-	 * Apr 3, 2019 : Coded by S. J. Yun.
+	 * Apr 22, 2019 : Coded by S. J. Yun.
 	 */
 	public void setValue(int aValue) {
 		this.value = aValue;

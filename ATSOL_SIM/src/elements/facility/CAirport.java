@@ -108,6 +108,8 @@ public class CAirport extends AFacility  implements INode {
 	private List<CAircraft>						iDepartureAircraftList      = Collections.synchronizedList(new LinkedList<CAircraft>());
 	private List<CAircraft>						iArrivalAircraftList        = Collections.synchronizedList(new LinkedList<CAircraft>());
 	private List<CAircraft>						iAircraftList				=  Collections.synchronizedList(new LinkedList<CAircraft>());
+
+	
 	
 	
 	/*
