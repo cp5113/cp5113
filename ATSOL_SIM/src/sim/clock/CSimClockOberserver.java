@@ -187,7 +187,7 @@ public class CSimClockOberserver implements ISimClockObserverable, ISimClockOber
 		while(iCurrentTIme.getTimeInMillis() <= iEndTIme.getTimeInMillis() && iRunning) {			
 			
 			// Wait until Observable Element is done (e.g., Aircraft, Controller...)
-			while(iCountPublicationIsDone != iObserverableList.size() && iRunning) {		
+			while(iCountPublicationIsDone < iObserverableList.size() && iRunning) {		
 				try {
 					Thread.sleep(1);
 				} catch (InterruptedException e) {
@@ -214,14 +214,14 @@ public class CSimClockOberserver implements ISimClockObserverable, ISimClockOber
 			// Draw Map
 			CAtsolSimGuiControl.getInstance().drawDrawingObjectList();
 
-			
+//			
 //			try {
-//				Thread.sleep(100);
+//				Thread.sleep(50);
 //			} catch (InterruptedException e) {
 //				// TODO Auto-generated catch block
 //				e.printStackTrace();
 //			}
-			
+//			
 
 		}
 		iRunning = false;

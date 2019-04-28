@@ -163,8 +163,8 @@ public class CAircraftTaxiingMoveState implements IVehicleMoveState {
 				if(lAircraft.getMode()==EMode.DEP && lAircraft.getMovementMode()==EAircraftMovementMode.TAXIING) {
 					lRemainingDistance = lRemainingDistance - lFlightPlan.getDepartureRunway().getRunwaySafetyWidth();
 				}
-				double lStoppingDistanceCurrentSpeed = calculateStoppingDistance(lSpeedCurrent,lDecelMax);
-				double lStoppingDistanceMaximumSpeed = calculateStoppingDistance(lSpeedTarget,lDecelMax);
+				double lStoppingDistanceCurrentSpeed = lAircraft.calculateStoppingDistance(lSpeedCurrent,lDecelMax);
+				double lStoppingDistanceMaximumSpeed = lAircraft.calculateStoppingDistance(lSpeedTarget,lDecelMax);
 				
 				
 				// Find Leading Aircraft
@@ -318,7 +318,7 @@ public class CAircraftTaxiingMoveState implements IVehicleMoveState {
 				
 				
 				// Verify next Point overshoot next node
-				if(!validDataInRange(lXNext,lXOrigin,lXTarget) || !validDataInRange(lYNext,lYOrigin,lYTarget)) {
+				if(!SValidateRangeChecker.validDataInRange(lXNext,lXOrigin,lXTarget) || !SValidateRangeChecker.validDataInRange(lYNext,lYOrigin,lYTarget)) {
 					
 //					System.out.println("Damn it");
 					
@@ -339,7 +339,7 @@ public class CAircraftTaxiingMoveState implements IVehicleMoveState {
 				
 				lSpeedCurrent 	= Math.sqrt(lSpeedNextX *lSpeedNextX + lSpeedNextY * lSpeedNextY); 
 				lAircraft.getCurrentPostion().setXYCoordination(lXCurrent, lYCurrent);
-				lAircraft.getCurrentVelocity().setVelocity(lSpeedCurrent);
+				lAircraft.setCurrentVelocity(lSpeedCurrent);
 				
 //				CAtsolSimGuiControl.getInstance().drawDrawingObjectList();
 				
@@ -361,7 +361,7 @@ public class CAircraftTaxiingMoveState implements IVehicleMoveState {
 					lXCurrent = lXTarget;
 					lYCurrent = lYTarget;
 					lAircraft.getCurrentPostion().setXYCoordination(lXCurrent, lYCurrent);
-					lAircraft.getCurrentVelocity().setVelocity(lSpeedCurrent);
+					lAircraft.setCurrentVelocity(lSpeedCurrent);
 					
 					// Restore Delta t to original
 					deltaT = deltaTOrigin;
@@ -385,6 +385,7 @@ public class CAircraftTaxiingMoveState implements IVehicleMoveState {
 					lTaxiwayLink.removeFromOccupyingSchedule(lAircraft);
 //				}
 				
+			  lAircraft.getCurrentNode().getVehicleWillUseList().remove(lAircraft.getCurrentNode().getVehicleWillUseList().indexOf(lAircraft));
 				// When reach end of taxiway link
 				// Remove this node from flight plan
 				lFlightPlan.removePlanItem(lFlightPlan.getNode(0));
@@ -408,10 +409,7 @@ public class CAircraftTaxiingMoveState implements IVehicleMoveState {
 	
 	
 	
-	private double calculateStoppingDistance(double aSpeedCurrent, double aDecelMax) {
-		// TODO Auto-generated method stub
-		return (aSpeedCurrent*aSpeedCurrent)/(2*aDecelMax/2);
-	}
+	
 
 
 
@@ -520,7 +518,7 @@ public class CAircraftTaxiingMoveState implements IVehicleMoveState {
 		if(lMaximumSpeedThisAC==0) {
 			lMaximumSpeedThisAC = ((CAircraftPerformance)aAircraft.getPerformance()).getTaxiingSpeedNorm();
 		}
-		double lMaximumStoppingDistanceThisAC = calculateStoppingDistance(lMaximumSpeedThisAC,((CAircraftPerformance)aAircraft.getPerformance()).getDecelerationOnGroundMax());
+		double lMaximumStoppingDistanceThisAC = aAircraft.calculateStoppingDistance(lMaximumSpeedThisAC,((CAircraftPerformance)aAircraft.getPerformance()).getDecelerationOnGroundMax());
 		
 		for(ACuseSameNode loopSameNodeAC : lSameNodeACList) {
 			
@@ -543,7 +541,7 @@ public class CAircraftTaxiingMoveState implements IVehicleMoveState {
 				if(lMaximumSpeedOtherAC==0) {
 					lMaximumSpeedOtherAC = ((CAircraftPerformance)loopSameNodeAC.iAircraft.getPerformance()).getTaxiingSpeedNorm();
 				}
-				double lMaximumStoppingDistanceOtherAC = calculateStoppingDistance(lMaximumSpeedOtherAC, ((CAircraftPerformance)loopSameNodeAC.iAircraft.getPerformance()).getDecelerationOnGroundMax());
+				double lMaximumStoppingDistanceOtherAC = aAircraft.calculateStoppingDistance(lMaximumSpeedOtherAC, ((CAircraftPerformance)loopSameNodeAC.iAircraft.getPerformance()).getDecelerationOnGroundMax());
 
 				// Calculate Leaderable Aircraft's Remaining Distance to Conflict Node
 				double lLeaderableACRemainingDistanceToConflictNode =  loopSameNodeAC.iAircraft.calculateRemainingRouteDistance(loopSameNodeAC.iNode);

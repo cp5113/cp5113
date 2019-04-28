@@ -57,10 +57,7 @@ public class CAircraftPerformance extends AVehiclePerformance implements Cloneab
 	================================================================
 	*/
 	private CAircraftType iOwnerAircraftType;	
-	private double TaxiingSpeedMax;
-	private double TaxiingSpeedNorm;
-	private double AccelerationOnGroundMax;
-	private double DecelerationOnGroundMax;
+	
 	private double AccelerationOnRunwayMax;
 	private double DecelerationOnRunwayMax;
 	private double ExitSpeedNorm;
@@ -171,9 +168,7 @@ public class CAircraftPerformance extends AVehiclePerformance implements Cloneab
 		WTC = aWTC;
 	}
 
-	public double getAccelerationOnGroundMax() {
-		return AccelerationOnGroundMax;
-	}
+
 	public double getAccelerationOnRunwayMax() {
 		return AccelerationOnRunwayMax;
 	}
@@ -197,9 +192,6 @@ public class CAircraftPerformance extends AVehiclePerformance implements Cloneab
 	}
 	public double getClimbSpeed1000Norm() {
 		return ClimbSpeed1000Norm;
-	}
-	public double getDecelerationOnGroundMax() {
-		return DecelerationOnGroundMax;
 	}
 
 	public double getDecelerationOnRunwayMax() {
@@ -325,14 +317,6 @@ public class CAircraftPerformance extends AVehiclePerformance implements Cloneab
 		return TAS_Cruise;
 	}
 
-	public double getTaxiingSpeedMax() {
-		return TaxiingSpeedMax;
-	}
-
-	public double getTaxiingSpeedNorm() {
-		return TaxiingSpeedNorm;
-	}
-
 	public synchronized double getV2() {
 		return V2;
 	}
@@ -343,10 +327,6 @@ public class CAircraftPerformance extends AVehiclePerformance implements Cloneab
 
 	public synchronized EWTC getWTC() {
 		return WTC;
-	}
-
-	public synchronized void setAccelerationOnGroundMax(double aAccelerationOnGroundMax) {
-		AccelerationOnGroundMax = aAccelerationOnGroundMax;
 	}
 
 	public synchronized void setAccelerationOnRunwayMax(double aAccelerationOnRunwayMax) {
@@ -381,9 +361,7 @@ public class CAircraftPerformance extends AVehiclePerformance implements Cloneab
 		ClimbSpeed1000Norm = aClimbSpeed1000Norm;
 	}
 
-	public synchronized void setDecelerationOnGroundMax(double aDecelerationOnGroundMax) {
-		DecelerationOnGroundMax = aDecelerationOnGroundMax;
-	}
+
 
 	public synchronized void setDecelerationOnRunwayMax(double aDecelerationOnRunwayMax) {
 		DecelerationOnRunwayMax = aDecelerationOnRunwayMax;

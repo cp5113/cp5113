@@ -40,7 +40,9 @@ package elements.mobile.human;
  *
  */
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 import elements.facility.CRunway;
@@ -48,6 +50,7 @@ import elements.facility.CTaxiwayNode;
 import elements.mobile.vehicle.CAircraft;
 import elements.mobile.vehicle.CFlightPlan;
 import elements.mobile.vehicle.state.CAircraftLineUpMoveState;
+import elements.mobile.vehicle.state.CAircraftTakeoffMoveState;
 import elements.mobile.vehicle.state.EAircraftMovementMode;
 import elements.mobile.vehicle.state.EAircraftMovementStatus;
 import elements.network.ANode;
@@ -67,7 +70,8 @@ public class CLocalController extends AATCController {
 	
 	================================================================
 	*/
-
+	
+	
 	public CLocalController(String aName, int aAge, int aExperienceDay, ESkill aNSkill, EGender aNGender) {
 		super(aName, aAge, aExperienceDay, aNSkill, aNGender);
 		// TODO Auto-generated constructor stub
@@ -130,13 +134,40 @@ public class CLocalController extends AATCController {
 		lFlightPlan.insertPlanItem(lInsertIndex, lOriginalRoute.get(lInsertIndex),cal,new CAltitude(0,EGEOUnit.FEET));
 		
 		
+		
+		// Calculate Instruction Time
+		long instructionTime = calculateLinupInstructionTime();
+		aAircraft.setNextEventTime(iCurrentTimeInMilliSecond + instructionTime);
+		this.setNextEventTime(iCurrentTimeInMilliSecond + instructionTime);
+		
 		// Set Aircraft MoveState
 		aAircraft.setMovementMode(EAircraftMovementMode.LINEUP);
 		aAircraft.setMoveState(new CAircraftLineUpMoveState());
 		
 		// Runway Control
 		lRunway.getDepartureAircraftList().add(aAircraft);
+		lRunway.getRunwayOccupyingList().add(aAircraft);
 		
+	}
+
+	public void requestTakeoff(CAircraft aAircraft) {
+
+		// Verify Runway is Cleared
+		CRunway lRunway = aAircraft.getDepartureRunway();
+		if(lRunway.getOccupyingList().size()-1 >= 1) {
+			return; // the other aircraft occupy this runway
+		}
+		
+		
+		// Calculate Instruction Time
+		long instructionTime = calculateTakeOffInstructionTime();
+		aAircraft.setNextEventTime(iCurrentTimeInMilliSecond + instructionTime);
+		this.setNextEventTime(iCurrentTimeInMilliSecond + instructionTime);
+		
+		// Issue Takeoff Clearance Clearance
+		aAircraft.setMovementMode(EAircraftMovementMode.TAKEOFF);
+		aAircraft.setMoveState(new CAircraftTakeoffMoveState());
+				
 	}
 
 

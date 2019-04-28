@@ -154,6 +154,40 @@ public class CAircraftTypeTable extends ATable {
 			lAircraftType.setWidth(parseDouble(lData.get("Wingspan")));
 			
 			
+			switch (lAPC) {
+			case A:
+				lAircraftType.setSafetyDistanceLength(lAircraftType.getLength()/2 + 16.25);
+				lAircraftType.setSafetyDistanceWidth(lAircraftType.getWidth()/2 + 16.25);
+				break;
+			case B:
+				lAircraftType.setSafetyDistanceLength(lAircraftType.getLength()/2 + 21.5);
+				lAircraftType.setSafetyDistanceWidth(lAircraftType.getWidth()/2 + 21.5);
+				break;
+			case C:
+				lAircraftType.setSafetyDistanceLength(lAircraftType.getLength()/2 + 26);
+				lAircraftType.setSafetyDistanceWidth(lAircraftType.getWidth()/2 + 26);
+				break;
+			case D:
+				lAircraftType.setSafetyDistanceLength(lAircraftType.getLength()/2 + 40.5);
+				lAircraftType.setSafetyDistanceWidth(lAircraftType.getWidth()/2 + 40.5);
+				break;
+			case E:
+				lAircraftType.setSafetyDistanceLength(lAircraftType.getLength()/2 + 47.5);
+				lAircraftType.setSafetyDistanceWidth(lAircraftType.getWidth()/2 + 47.5);
+				break;
+			case F:
+				lAircraftType.setSafetyDistanceLength(lAircraftType.getLength()/2 + 57.5);
+				lAircraftType.setSafetyDistanceWidth(lAircraftType.getWidth()/2 + 57.5);
+				break;
+			case NaN:
+				lAircraftType.setSafetyDistanceLength(lAircraftType.getLength()/2 + 16.25);
+				lAircraftType.setSafetyDistanceWidth(lAircraftType.getWidth()/2 + 16.25);
+				break;
+			}
+			
+			
+			
+			
 			lACPerformance.setAccelerationOnGroundMax(parseDouble(lData.get("AccelerationOnGroundMax")));
 			lACPerformance.setAccelerationOnRunwayMax(parseDouble(lData.get("AccelerationOnRunwayMax")));
 			lACPerformance.setAccomodation(lData.get("Accomodation"));			

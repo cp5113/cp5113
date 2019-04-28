@@ -29,21 +29,21 @@ import elements.mobile.vehicle.AVehicle;
  * </p>
  * 
  * 
- * @date : Apr 8, 2019
+ * @date : 2019. 4. 28.
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * Apr 8, 2019 : Coded by S. J. Yun.
+ * 2019. 4. 28. : Coded by S. J. Yun.
  *
  *
  */
 
-public class CAircraftNothingMoveState implements IVehicleMoveState {
+public class CAircraftTerminationMoveState implements IVehicleMoveState {
 
 	@Override
 	public void doMove(long aIncrementTimeStep, long aCurrentTime, AVehicle aThisVechicle) {
-		// Do nothing...
-		aThisVechicle.getCurrentVelocity();
+		System.out.println(aIncrementTimeStep + " : " + aThisVechicle + " is terminated.");
+
 	}
 	/*
 	================================================================

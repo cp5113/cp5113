@@ -61,7 +61,36 @@ public abstract class AVehiclePerformance implements Cloneable{
 	
 	
 	protected		String			iProductionCompany;
+	protected double TaxiingSpeedMax;
+	protected double TaxiingSpeedNorm;
+	protected double AccelerationOnGroundMax;
+	protected double DecelerationOnGroundMax;
 	
+	
+	public synchronized double getTaxiingSpeedMax() {
+		return TaxiingSpeedMax;
+	}
+	public synchronized void setTaxiingSpeedMax(double aTaxiingSpeedMax) {
+		TaxiingSpeedMax = aTaxiingSpeedMax;
+	}
+	public synchronized double getTaxiingSpeedNorm() {
+		return TaxiingSpeedNorm;
+	}
+	public synchronized void setTaxiingSpeedNorm(double aTaxiingSpeedNorm) {
+		TaxiingSpeedNorm = aTaxiingSpeedNorm;
+	}
+	public synchronized double getAccelerationOnGroundMax() {
+		return AccelerationOnGroundMax;
+	}
+	public synchronized void setAccelerationOnGroundMax(double aAccelerationOnGroundMax) {
+		AccelerationOnGroundMax = aAccelerationOnGroundMax;
+	}
+	public synchronized double getDecelerationOnGroundMax() {
+		return DecelerationOnGroundMax;
+	}
+	public synchronized void setDecelerationOnGroundMax(double aDecelerationOnGroundMax) {
+		DecelerationOnGroundMax = aDecelerationOnGroundMax;
+	}
 	
 	
 	
@@ -73,6 +102,8 @@ public abstract class AVehiclePerformance implements Cloneable{
 	
 	================================================================
 	 */
+	
+	
 
 	/*
 	================================================================

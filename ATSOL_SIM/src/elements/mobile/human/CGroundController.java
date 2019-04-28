@@ -40,10 +40,12 @@ package elements.mobile.human;
  *
  */
 
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -58,6 +60,8 @@ import elements.facility.CSpot;
 import elements.facility.CTaxiwayNode;
 import elements.mobile.vehicle.CAircraft;
 import elements.mobile.vehicle.CFlightPlan;
+import elements.mobile.vehicle.state.CAircraftGroundConflictStopMoveState;
+import elements.mobile.vehicle.state.CAircraftNothingMoveState;
 import elements.mobile.vehicle.state.CAircraftTaxiingMoveState;
 import elements.mobile.vehicle.state.EAircraftMovementMode;
 import elements.mobile.vehicle.state.EAircraftMovementStatus;
@@ -67,8 +71,14 @@ import elements.property.CAircraftPerformance;
 import elements.property.CAircraftType;
 import elements.property.EMode;
 import elements.util.geo.CAltitude;
+import elements.util.geo.CCoordination;
 import elements.util.geo.EGEOUnit;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Shape;
 import sim.CAtsolSimMain;
+import sim.gui.control.CAtsolSimGuiControl;
 import util.performance.CUnUniformModelPerformance;
 
 /**
@@ -113,12 +123,129 @@ public class CGroundController extends AATCController {
 				handOffAircraft(lAircraft.getDepartureRunway().getATCController(), lAircraft);					
 			}
 			
+			if(iCurrentTimeInMilliSecond >= 1407023571000L) {
+//				System.out.println();
+			}
 			
 			
-			
-			
-		}
-	}
+			// Conflict Detection
+			ArrayList<CAircraft> lOtherACList = new ArrayList<CAircraft>();
+			if(!(lAircraft.getMoveState() instanceof CAircraftNothingMoveState)) {
+				
+//				// Ignore already stopping
+//				if(lAircraft.getMoveState() instanceof CAircraftGroundConflictStopMoveState) continue;
+				
+				// Create Search aircraft List
+				lOtherACList.addAll(iAircraftList);
+				try {
+					lOtherACList.remove(lAircraft);
+				}catch(Exception e) {
+					System.out.println();
+				}
+				
+				// Detect and resolution Conflict
+				for(CAircraft loopOther : lOtherACList) {
+					if((loopOther.getMoveState() instanceof CAircraftNothingMoveState)) continue;
+					Polygon lthisACSafety = lAircraft.getSafetyPolygonInform();
+					Polygon lthisACShape = lAircraft.getShapePolygonInform();
+					Polygon lotherACSafety = loopOther.getSafetyPolygonInform();
+					Polygon lotherACShape = loopOther.getShapePolygonInform();
+//					System.out.println();
+//					System.out.println();
+					
+					// Detect Conflict
+					Shape lConflictSafetyAndSafetyInfo;
+					Shape lConflictSafetyAndShapeInfo;
+					boolean lConflictSafetyAndSafety=false;
+					boolean lConflictSafetyAndShape=false;;
+					synchronized (lthisACSafety) {
+						synchronized (lotherACShape) {
+							synchronized (lthisACShape) {
+								synchronized (lotherACSafety) {
+									lConflictSafetyAndSafetyInfo = Shape.intersect(lthisACSafety, lotherACSafety);
+									lConflictSafetyAndShapeInfo  = Shape.intersect(lthisACSafety, lotherACShape);									
+									lConflictSafetyAndSafety = lConflictSafetyAndSafetyInfo.getBoundsInLocal().isEmpty() == false;
+									lConflictSafetyAndShape  = lConflictSafetyAndShapeInfo.getBoundsInLocal().isEmpty() == false;
+									if(lConflictSafetyAndSafety) {
+										System.out.println("Conflict Detection : " + lAircraft + "-" + loopOther + " (Safety -> Safety)");
+									}
+									if(lConflictSafetyAndShape) {
+										System.out.println("Conflict Detection : " + lAircraft + "-" + loopOther + " (Safety -> Shape)");
+									}
+								}
+							}
+						}
+					}
+
+					
+					
+					/*
+					 * Valid Priority
+					 */ 
+
+					// When Conflict resolved, continue Taxiing
+					if(!lConflictSafetyAndSafety && !lConflictSafetyAndShape) {
+						if(lAircraft.getConflictVehicle()!=null) {
+							lAircraft.setConflictVehicle(null);
+							lAircraft.setMoveState(new CAircraftTaxiingMoveState());	
+							continue;
+						}
+						continue;
+					}
+						
+						
+						
+					// Ignore when other aircraft has this aircraft as conflict vehicle					
+					if(loopOther.getConflictVehicle()!=null&&loopOther.getConflictVehicle().equals(lAircraft)) continue;
+					
+
+					// Ignore if leading Aircraft
+					if(lAircraft.getLeadingVehicle()!=null&&lAircraft.getLeadingVehicle().equals(loopOther)) continue;
+
+					// When the other aircraft's routing has my link
+					// I have a priority
+					if(loopOther.getRoutingInfoLink().contains(lAircraft.getCurrentLink())) continue;
+
+					// Departure Priority
+					// If other aircraft is arrival,
+					// I have a priority
+					if(loopOther.getMode() == EMode.ARR) continue;
+
+					
+					
+					// Low Priority
+					if(lConflictSafetyAndShape) {
+						// set conflict vehicle
+						lAircraft.setConflictVehicle(loopOther);
+
+						// Set Status								
+						lAircraft.setMoveState(new CAircraftGroundConflictStopMoveState());
+					}
+					
+					
+
+					/*
+					 * Set Conflict behavior
+					 */ 
+
+
+
+
+					// Drawing
+					GraphicsContext gc = CAtsolSimGuiControl.iInstance.getSimCanvas().getGraphicsContext2D();
+					double x = lConflictSafetyAndShapeInfo.getBoundsInLocal().getMaxX();
+					double y = lConflictSafetyAndShapeInfo.getBoundsInLocal().getMaxY();					
+					CCoordination p = CAtsolSimGuiControl.iInstance.changeCoordinatesInCanvas(x, y);
+					gc.setStroke(Color.RED);
+					gc.strokeOval(p.getXCoordination()-2, p.getYCoordination()-2, 4, 4);
+					System.err.println("Require : Link Conflict Detection Priority");
+					
+
+				}//for(CAircraft loopOther : lOtherACList) {
+			} // if(!(lAircraft.getMoveState() instanceof CAircraftNothingMoveState)) {
+		}	// for(int loopAC = 0; loopAC < iAircraftList.size(); loopAC++) {				
+		
+	} // public synchronized void controlAircraft() {
 	
 	
 	public synchronized void requestPushBack(CAircraft aAircraft) {
@@ -601,6 +728,7 @@ public class CGroundController extends AATCController {
 	================================================================
 	 */
 }
+
 
 
 

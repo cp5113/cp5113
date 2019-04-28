@@ -155,6 +155,34 @@ public abstract class AATCController extends AHuman implements IATCController, I
 	}
 	
 	
+	protected long calculateLinupInstructionTime() {
+		long instructionTimeMilliSeconds = 0;
+		// Korean air 1124, Runway 33L Line up and Wait
+		// Runway 33L, Line up and Wait, Korean air 1124 
+
+		// 16 words
+		// 150 words per minute (Medium speed ICAO 2006b 2-1)
+		
+		instructionTimeMilliSeconds = (16/150 * 60 + 3)*1000;
+		return instructionTimeMilliSeconds;
+	}
+
+	protected long calculateTakeOffInstructionTime() {
+		long instructionTimeMilliSeconds = 0;
+		// Korean air 1124, Ruwnay 33L Wind 230 at 5 Cleared for Takeoff  
+		// Runway 33L Cleared for Takeoff Korean air 1124, good day 
+
+		// 22 words
+		// 150 words per minute (Medium speed ICAO 2006b 2-1)
+		
+		instructionTimeMilliSeconds = (22/150 * 60 + 3)*1000;
+		return instructionTimeMilliSeconds;
+	}	
+	
+	
+	
+	
+	
 	public synchronized void setRoutingAlgorithm(IRoutingAlgorithm aRoutingAlgoritm) {
 		iRoutingAlgorithm = aRoutingAlgoritm;
 	}

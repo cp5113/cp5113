@@ -41,6 +41,7 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
+import elements.airspace.CWaypoint;
 import elements.facility.CAirport;
 import elements.facility.CTaxiwayLink;
 import elements.facility.CTaxiwayNode;
@@ -49,6 +50,7 @@ import elements.util.geo.CAltitude;
 import elements.util.geo.CCoordination;
 import elements.util.geo.EGEOUnit;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -66,6 +68,7 @@ import sim.CAtsolSimMain;
 import sim.clock.CDispatchAircraftThreadByTime;
 import sim.gui.CDrawingInform;
 import sim.gui.EShape;
+import sim.gui.IDrawingAreaObject;
 import sim.gui.IDrawingObject;
 import sim.gui.view.CAtsolSimGuiView;
 
@@ -97,7 +100,7 @@ public class CAtsolSimGuiControl {
 	private Canvas   SimCanvas;
 	@FXML
 	private BorderPane RootBoderPane;
-	private static CAtsolSimGuiControl iInstance;
+	public static CAtsolSimGuiControl iInstance;
 	
 	private static IDrawingObject iDistanceLine = new IDrawingObject() {
 		private CCoordination start = new CCoordination(0, 0);
@@ -124,6 +127,9 @@ public class CAtsolSimGuiControl {
 	
 	================================================================
 	 */
+	public Canvas getSimCanvase() {
+		return SimCanvas;
+	}
 	public void MenuCloseAction() {
 		System.exit(0);
 	}
@@ -210,6 +216,7 @@ public class CAtsolSimGuiControl {
 					}
 					break;
 				case DOT:
+
 					CCoordination lCoordination = lDrawingInform.getCoordinationList().get(0);
 					double p1X = lCoordination.getXCoordination();
 					double p1Y = lCoordination.getYCoordination();
@@ -232,6 +239,9 @@ public class CAtsolSimGuiControl {
 						continue;
 					}					
 					double lRadiusCircle =  10*CAtsolSimMain.getInstance().getViewPointR();
+					if(lAnObject instanceof CWaypoint) {
+						lRadiusCircle = 5;
+					}
 					gc.setStroke(lDrawingInform.getColor());
 					gc.strokeOval(p1Circle.getXCoordination()-lRadiusCircle/2, p1Circle.getYCoordination()-lRadiusCircle/2,lRadiusCircle, lRadiusCircle);
 					
@@ -244,15 +254,65 @@ public class CAtsolSimGuiControl {
 					break;
 				} //switch(lDrawingInform.getShape()) {
 				
+				
+				
+				// Drawing Area Object
+				if(lAnObject instanceof IDrawingAreaObject) {
+					
+					// Extract Polygon information
+					ObservableList<Double> lPolygonPointList = ((IDrawingAreaObject) lAnObject).getSafetyPolygonInform().getPoints();
+					
+					if(lPolygonPointList.size()<=4) continue;
+					
+					try {
+					// Create Polygon Array
+					double[] lpolygonX = new double[9];
+					double[] lpolygonY = new double[9];
+					int countPoly = 0;
+					for(int i = 0; i < lPolygonPointList.size(); i+=2) {
+						double pX = lPolygonPointList.get(i);						
+						double pY = lPolygonPointList.get(i+1);
+						CCoordination p = changeCoordinatesInCanvas(pX, pY);
+					
+						lpolygonX[countPoly] = p.getXCoordination();
+						lpolygonY[countPoly] = p.getYCoordination();
+						countPoly++;
+					}					
+					
+					gc.strokePolygon(lpolygonX,lpolygonY, 6);
+					
+					}catch(Exception e) {
+						
+					}
+					
+					// Extract Polygon information
+					try {
+					ObservableList<Double> lShapePolygonPointList = ((IDrawingAreaObject) lAnObject).getShapePolygonInform().getPoints();
+					if(lShapePolygonPointList.size()<=1) continue;
+					// Create Polygon Array
+					double[] lShapepolygonX = new double[9];
+					double[] lShapepolygonY = new double[9];
+					int countShapePoly = 0;
+					for(int i = 0; i < lShapePolygonPointList.size(); i+=2) {
+						double pX = lShapePolygonPointList.get(i);
+						double pY = lShapePolygonPointList.get(i+1);
+						CCoordination p = changeCoordinatesInCanvas(pX, pY);
+						lShapepolygonX[countShapePoly] = p.getXCoordination();						
+						lShapepolygonY[countShapePoly] = p.getYCoordination();
+					
+						countShapePoly++;
+					}					
+					
+					gc.strokePolygon(lShapepolygonX,lShapepolygonY, 9);
+					}catch(Exception e) {
+						
+					}
+				}
+				
 			}//while(iter.hasNext()) {
 			
 			
-			try {
-				Thread.sleep(1);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		
 		});
 		
 		
@@ -262,7 +322,7 @@ public class CAtsolSimGuiControl {
 		
 	}
 	
-	private CCoordination changeCoordinatesInCanvas(double aXCoord, double aYCoord) {
+	public CCoordination changeCoordinatesInCanvas(double aXCoord, double aYCoord) {
 		// Initialize
 		CCoordination outputCoordination = new CCoordination(aXCoord, aYCoord);
 		Double lCanvasheight = SimCanvas.getHeight();

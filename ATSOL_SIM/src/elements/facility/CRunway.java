@@ -41,6 +41,7 @@ package elements.facility;
  */
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import elements.mobile.human.IATCController;
@@ -62,6 +63,7 @@ public class CRunway extends ALink{
 	
 	private List<CAircraft> iDepartureAircraftList= new ArrayList<CAircraft>();
 	private List<CAircraft> iArrivalAircraftList= new ArrayList<CAircraft>();
+	List<CAircraft> iRunwayOccupyingList = Collections.synchronizedList(new ArrayList<CAircraft>());
 	
 	private double iRunwaySafetyWidth = 100; 
 	
@@ -158,6 +160,12 @@ public class CRunway extends ALink{
 
 	public synchronized List<CAircraft> getDepartureAircraftList() {
 		return iDepartureAircraftList;
+	}
+
+
+
+	public synchronized List<CAircraft> getRunwayOccupyingList() {
+		return iRunwayOccupyingList;
 	}
 
 

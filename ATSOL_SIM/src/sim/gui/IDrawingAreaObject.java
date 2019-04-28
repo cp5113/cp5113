@@ -1,7 +1,4 @@
-package elements.mobile.vehicle.state;
-
-import elements.mobile.vehicle.AVehicle;
-
+package sim.gui;
 /**
  * 
  * Dtails....
@@ -29,22 +26,18 @@ import elements.mobile.vehicle.AVehicle;
  * </p>
  * 
  * 
- * @date : Apr 8, 2019
+ * @date : 2019. 4. 24.
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * Apr 8, 2019 : Coded by S. J. Yun.
+ * 2019. 4. 24. : Coded by S. J. Yun.
  *
  *
  */
 
-public class CAircraftNothingMoveState implements IVehicleMoveState {
+import javafx.scene.shape.Polygon;
 
-	@Override
-	public void doMove(long aIncrementTimeStep, long aCurrentTime, AVehicle aThisVechicle) {
-		// Do nothing...
-		aThisVechicle.getCurrentVelocity();
-	}
+public interface IDrawingAreaObject {
 	/*
 	================================================================
 	
@@ -60,6 +53,9 @@ public class CAircraftNothingMoveState implements IVehicleMoveState {
 	
 	================================================================
 	 */
+	public Polygon getSafetyPolygonInform();
+	public Polygon getShapePolygonInform();
+	
 
 	/*
 	================================================================
@@ -76,6 +72,7 @@ public class CAircraftNothingMoveState implements IVehicleMoveState {
 	
 	================================================================
 	 */
+
 }
 
 

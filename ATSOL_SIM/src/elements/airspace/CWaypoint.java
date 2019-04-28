@@ -6,7 +6,13 @@ import elements.facility.ELocation;
 import elements.mobile.human.IATCController;
 import elements.network.ANode;
 import elements.table.ITableAble;
+import elements.util.geo.CAltitude;
 import elements.util.geo.CCoordination;
+import elements.util.geo.EGEOUnit;
+import javafx.scene.paint.Color;
+import sim.gui.CDrawingInform;
+import sim.gui.EShape;
+import sim.gui.IDrawingObject;
 
 /**
  * 
@@ -44,7 +50,7 @@ import elements.util.geo.CCoordination;
  *
  */
 
-public class CWaypoint extends ANode implements ITableAble {
+public class CWaypoint extends ANode implements ITableAble, IDrawingObject {
 	/*
 	================================================================
 	
@@ -52,7 +58,7 @@ public class CWaypoint extends ANode implements ITableAble {
 	
 	================================================================
 	*/
-
+	
 	/**
 	 * The Constructor
 	 * 
@@ -76,6 +82,12 @@ public class CWaypoint extends ANode implements ITableAble {
 	public void setATCControllerToChildren(IATCController aController) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public CDrawingInform getDrawingInform() {
+		CDrawingInform  lDrawingInform = new CDrawingInform(iCoordination, new CAltitude(0,EGEOUnit.FEET), EShape.CIRCLE, Color.BLACK,true,100.0);
+		return lDrawingInform;		
 	}
 
 			

@@ -54,6 +54,7 @@ import elements.network.ANode;
 import elements.operator.AOperator;
 import elements.property.AVehiclePerformance;
 import elements.property.AVehicleType;
+import elements.property.CAircraftPerformance;
 import elements.property.EMode;
 import elements.table.ITableAble;
 import elements.util.geo.CAltitude;
@@ -62,18 +63,20 @@ import elements.util.geo.EGEOUnit;
 import elements.util.phy.CVelocity;
 import elements.util.phy.EVelocityUnit;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
 import sim.CAtsolSimMain;
 import sim.clock.CSimClockOberserver;
 import sim.clock.ISimClockOberserver;
 import sim.gui.CDrawingInform;
 import sim.gui.EShape;
+import sim.gui.IDrawingAreaObject;
 import sim.gui.IDrawingObject;
 
 /**
  * @author S. J. Yun
  *
  */
-public abstract class AVehicle extends AMobile implements ITableAble, IDrawingObject, IElementObservableClock, Runnable{
+public abstract class AVehicle extends AMobile implements ITableAble, IDrawingObject, IElementObservableClock, Runnable,IDrawingAreaObject{
 	
 	// Strategy Pattern과 Observer Pattern을 공부해야 함
 	// S : http://hyeonstorage.tistory.com/146
@@ -118,13 +121,37 @@ public abstract class AVehicle extends AMobile implements ITableAble, IDrawingOb
 	
 	protected		AOperator				iOperator;
 	protected		AVehicle				iLeadingVehicle = null;
+	protected		AVehicle				iConflictVehicle = null;
 	
-	protected		double					iPushbackPauseTimeInMilliSeconds = 180000; // 3 minutes
+	protected		double					iCurrentSpeedStoppingDistanceM=0;
 	
+	
+	protected   Polygon							iSafetyArea = new Polygon(new double[] {-99999999.0,-99999999.0,-99999991.0,-99999991.0});
+	protected 	Polygon							iShapeArea  = new Polygon(new double[] {-99999999.0,-99999999.0,-99999991.0,-99999991.0});
+	
+	protected		double					iRandomNumber = Math.random();
 	protected ISimClockOberserver iSimClockObserver;
 	
 	
 	
+	public synchronized double getRandomNumber() {
+		return iRandomNumber;
+	}
+	public synchronized void setRandomNumber(double aRandomNumber) {
+		iRandomNumber = aRandomNumber;
+	}
+	public synchronized AVehicle getConflictVehicle() {
+		return iConflictVehicle;
+	}
+	public synchronized void setConflictVehicle(AVehicle aConflictVehicle) {
+		iConflictVehicle = aConflictVehicle;
+	}
+	public synchronized double getCurrentSpeedStoppingDistanceM() {
+		return iCurrentSpeedStoppingDistanceM;
+	}
+	public synchronized void setCurrentSpeedStoppingDistanceM(double aCurrentSpeedStoppingDistanceM) {
+		iCurrentSpeedStoppingDistanceM = aCurrentSpeedStoppingDistanceM;
+	}
 	public synchronized IATCController getATCController() {
 		return iATCController;
 	}
@@ -370,9 +397,29 @@ public abstract class AVehicle extends AMobile implements ITableAble, IDrawingOb
 	public synchronized CAltitude getCurrentAltitude() {
 		return iCurrentAltitude;
 	}
-	public synchronized CVelocity getCurrentVelocity() {
-		return iCurrentVelocity;
+	public synchronized CVelocity getCurrentVelocity() {		
+		return iCurrentVelocity;		
 	}
+	
+	public synchronized void setCurrentVelocity(double aVelocity) {
+		iCurrentVelocity.setVelocity(aVelocity);
+		// Calculate Stopping Distance
+		if(this.getVehcleType().getPerformance() instanceof CAircraftPerformance) {			
+			CAircraftPerformance lPerformance = (CAircraftPerformance) this.getVehcleType().getPerformance();
+			this.calculateStoppingDistance(aVelocity, lPerformance.getAccelerationOnGroundMax());		
+		}
+		// Calculate Safety Area
+		createSafetyArea(true);
+		// Calculate Shape Area
+		createSafetyArea(false);
+		
+	}
+	
+	public double calculateStoppingDistance(double aSpeedCurrent, double aDecelMax) {
+		// TODO Auto-generated method stub
+		return (aSpeedCurrent*aSpeedCurrent)/(2*aDecelMax/2);
+	}
+	
 	public synchronized ANode getCurrentNode() {
 		return iCurrentNode;
 	}
@@ -386,6 +433,159 @@ public abstract class AVehicle extends AMobile implements ITableAble, IDrawingOb
 		iCurrentLink = aCurrentLink;
 	}
 	 
+	
+	
+	
+	
+	
+	
+	
+	
+	public synchronized void createSafetyArea(boolean aIsIncludingSafeArea) {
+		
+		// Pass When Current Plan is null
+		if(iCurrentPlan == null) return;
+		
+		
+		
+		// Get Current Position
+		double lXCurrent = iCurrentPostion.getXCoordination();
+		double lYCurrent = iCurrentPostion.getYCoordination();
+		
+		
+		// Get Next Position
+		if(iCurrentPlan.getNodeList().size()==0 || iCurrentPlan.getNode(0) == null) return; // Pass When no Next Position
+		double lXDest    = iCurrentPlan.getNode(0).getCoordination().getXCoordination();
+		double lYDest    = iCurrentPlan.getNode(0).getCoordination().getYCoordination();
+		
+		
+		// Calculate Cos and Sin
+		double lDist    = Math.sqrt((lXCurrent-lXDest)*(lXCurrent-lXDest) + (lYCurrent-lYDest)*(lYCurrent-lYDest)); 
+		double cosTheta  = (lXDest-lXCurrent)/lDist;
+		double sinTheta  = (lYDest-lYCurrent)/lDist;
+		
+		if(Double.isNaN(lDist) || Double.isNaN(cosTheta) || Double.isNaN(sinTheta)) {
+			return; // Maintain Previous Area System.out.println();
+		}
+		
+		// Get Width, length and Stopping Distance
+		double lWidth;
+		double lLength;
+		double lStoppingDist;
+		double lLengthAndStoppingDist;
+		if(aIsIncludingSafeArea) {
+			lWidth = this.iVehcleType.getSafetyDistanceWidth();
+			lLength = this.iVehcleType.getSafetyDistanceLength();
+			lStoppingDist = this.calculateStoppingDistance(this.getCurrentVelocity().getVelocity(), this.getPerformance().getDecelerationOnGroundMax());
+
+			lLengthAndStoppingDist = lLength + lStoppingDist + lStoppingDist*0.1;
+		}else {
+			lWidth = this.iVehcleType.getSafetyDistanceWidth();
+			lLength = this.iVehcleType.getSafetyDistanceLength();
+			lStoppingDist = 0;
+
+			lLengthAndStoppingDist = lLength + lStoppingDist;
+		}
+		
+		/*
+		 * Calculate new position
+		 *  
+		 */
+		// Left 
+		double lXnew1 = -lWidth * sinTheta + lXCurrent;
+		double lYnew1 =  lWidth * cosTheta + lYCurrent;
+		
+		// Right
+		double lXnew2 =  lWidth * sinTheta + lXCurrent;
+		double lYnew2 = -lWidth * cosTheta + lYCurrent;
+		
+		// Left Front
+		double lXnew3 = lLengthAndStoppingDist * cosTheta + lXnew1;  
+		double lYnew3 = lLengthAndStoppingDist * sinTheta + lYnew1;  
+		
+		// Right Front
+		double lXnew4 = lLengthAndStoppingDist * cosTheta + lXnew2; 
+		double lYnew4 = lLengthAndStoppingDist * sinTheta + lYnew2;  
+		
+		// Center Front
+		double lXnew5 = lLengthAndStoppingDist * cosTheta + lXCurrent;
+		double lYnew5 = lLengthAndStoppingDist * sinTheta + lYCurrent;
+		
+					
+		// Left Behind
+		double lXnew31 = -lLengthAndStoppingDist * cosTheta + lXnew1;  
+		double lYnew31 = -lLengthAndStoppingDist * sinTheta + lYnew1;  
+		
+		// Right Behind
+		double lXnew11 = -lLengthAndStoppingDist * cosTheta + lXnew2; 
+		double lYnew11 = -lLengthAndStoppingDist * sinTheta + lYnew2;  
+		
+		// Center Behind
+		double lXnew12 = -lLengthAndStoppingDist * cosTheta + lXCurrent;
+		double lYnew12 = -lLengthAndStoppingDist * sinTheta + lYCurrent;
+		
+		// Create Poly
+		if(aIsIncludingSafeArea) {
+			synchronized (iSafetyArea) {
+			
+			iSafetyArea.getPoints().setAll(new Double[]{
+					lXnew1, lYnew1,
+					lXCurrent, lYCurrent,
+					lXnew2, lYnew2,
+					lXnew4, lYnew4,
+					lXnew5, lYnew5,
+					lXnew3, lYnew3,
+					lXnew1, lYnew1,
+
+			});
+			
+			
+//			System.out.println(iSafetyArea.getLayoutX());
+//			iSafetyArea.set
+//			System.out.println();
+			
+			}
+		}else {
+			synchronized (iShapeArea) {
+							
+			iShapeArea.getPoints().setAll(new Double[]{
+					lXnew1, lYnew1,
+					lXnew3, lYnew3,
+					lXnew5, lYnew5,
+					lXnew4, lYnew4,
+					lXnew2, lYnew2,
+					lXnew11, lYnew11,
+					lXnew12, lYnew12,
+					lXnew31, lYnew31,
+					lXnew1, lYnew1,
+
+			});
+			}
+		}
+
+				
+		
+		
+	}
+	
+	@Override
+	public synchronized Polygon getSafetyPolygonInform() {
+//		createSafetyArea(true);
+		synchronized (iSafetyArea) {
+			return iSafetyArea;
+		}
+		
+	}
+	
+	@Override
+	public synchronized Polygon getShapePolygonInform() {
+//		createSafetyArea(false);	
+		synchronized (iShapeArea) {
+			return iShapeArea;
+		}
+		
+	}
+	
 	/*
 	================================================================
 	
@@ -413,6 +613,7 @@ public abstract class AVehicle extends AMobile implements ITableAble, IDrawingOb
 	================================================================
 	 */
 }
+
 
 
 

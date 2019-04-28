@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import elements.IElementObservableClock;
+import elements.airspace.CWaypoint;
 import elements.facility.CAirport;
 import elements.facility.CTaxiwayLink;
 import elements.facility.CTaxiwayNode;
@@ -196,6 +197,13 @@ public class CAtsolSimMain {
 		}
 		
 		
+		for(ITableAble loopwpt : iWaypointTable.getElementList()) {
+			iDrawingObjectList.add((IDrawingObject) loopwpt);
+		}
+//		while(iter2.hasNext()) {
+//			CTaxiwayNode lTaxiwaynode= iter2.next();			
+//			iDrawingObjectList.add(lTaxiwaynode);
+//		}
 		
 		
 //		CAirport lWaypoint = (CWaypoint)(iWaypointTable.getElementTable().get("RKSI"));

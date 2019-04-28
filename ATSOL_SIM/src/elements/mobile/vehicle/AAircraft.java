@@ -12,13 +12,17 @@ import elements.facility.CTaxiwayNode;
 import elements.mobile.human.AATCController;
 import elements.mobile.human.CGroundController;
 import elements.mobile.human.CLocalController;
+import elements.mobile.vehicle.state.CAircraftLineUpMoveState;
 import elements.mobile.vehicle.state.CAircraftNothingMoveState;
 import elements.mobile.vehicle.state.CAircraftTaxiingMoveState;
+import elements.mobile.vehicle.state.CAircraftTerminationMoveState;
 import elements.mobile.vehicle.state.EAircraftMovementMode;
 import elements.mobile.vehicle.state.EAircraftMovementStatus;
 import elements.network.ANode;
 import elements.operator.CAirline;
 import elements.property.EMode;
+import elements.util.geo.CCoordination;
+import javafx.scene.shape.Polygon;
 import sim.clock.CSimClockOberserver;
 import sim.clock.ISimClockOberserver;
 
@@ -79,6 +83,9 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 	protected	CTaxiwayNode					iDirectionTaxwayNodeAfterPushBack;
 	protected 	CTaxiwayNode					iRunwayEntryPoint;
 	protected 	CTaxiwayNode					iRunwayEntryPointReference;
+	
+	
+	
 	@Override
 	public String toString() {
 		return iRegistration;
@@ -336,6 +343,27 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 					this.calculateRemainingRouteDistance(this.getDepartureRunway().findEnteringNodeForDeparture()) < 150) {					
 					((CLocalController)iATCController).requestLineUp((CAircraft) this);
 				}
+				
+				// Request Takeoff Clearance
+				if(this.getMoveState() instanceof CAircraftLineUpMoveState &&
+				   this.getCurrentVelocity().getVelocity()<2) {
+					this.setMovementMode(EAircraftMovementMode.TAKEOFF);
+					this.setMovementStatus(EAircraftMovementStatus.TAKEOFF);
+					((CLocalController)iATCController).requestTakeoff((CAircraft) this);
+				}
+				
+				if(this.getMoveState() instanceof CAircraftTerminationMoveState) {
+					this.getCurrentPostion().setXYCoordination(-99999999999.0, -999999999.0);
+					this.setCurrentVelocity(0);
+					this.iATCController = null;
+					this.iConflictVehicle = null;
+					this.iLeadingVehicle  = null;
+					iSimClockObserver.deleteFromClock(this);
+					notifyToClockImDone();					
+					break;
+				}
+				
+				
 				// Move This Aircraft
 				doMoveVehicle();
 				

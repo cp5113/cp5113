@@ -53,6 +53,7 @@ import java.util.List;
 import elements.airspace.CAirRoute;
 import elements.airspace.CWaypoint;
 import elements.facility.CAirport;
+import elements.facility.CRunway;
 import elements.facility.CSpot;
 import elements.mobile.vehicle.CAircraft;
 import elements.mobile.vehicle.CFlightPlan;
@@ -179,7 +180,7 @@ public class CAircraftTable extends ATable {
 			lFlightPlan.setCrusingAltitude(new CAltitude(parseDouble(lCrusingAltitude), EGEOUnit.FEET));
 			lFlightPlan.setOriginationAirport(lOrigin);
 			lFlightPlan.setDestinationAirport(lDestination);		
-			
+//			
 			
 			// Arrival and Departure Spot
 			// Arrival Spot
@@ -213,6 +214,41 @@ public class CAircraftTable extends ATable {
 			}catch(Exception e) {
 				
 			}
+			
+			
+			// Arrival and Departure Runway
+			// Arrival Runway
+			try {
+				CAirport lAirport = (CAirport)lDestinNode;
+				Iterator<CRunway> loopRunway = lAirport.getRunwayList().iterator();
+				while(loopRunway.hasNext()) {
+					CRunway lRunway = loopRunway.next();
+					if(lRunway.getName().equalsIgnoreCase(lArrivalRunway)) {
+						lFlightPlan.setArrivalRunway(lRunway);
+						break;
+					}
+				}
+				
+			}catch(Exception e) {
+				
+			}
+			
+			// Departure Runway
+			try {
+				CAirport lAirport = (CAirport)lOriginNode;
+				Iterator<CRunway> loopRunway = lAirport.getRunwayList().iterator();
+				while(loopRunway.hasNext()) {
+					CRunway lRunway = loopRunway.next();
+					if(lRunway.getName().equalsIgnoreCase(lDepartureRunway)) {
+						lFlightPlan.setDepartureRunway(lRunway);
+						break;
+					}
+				}
+				
+			}catch(Exception e) {
+				
+			}
+			
 			
 			
 			

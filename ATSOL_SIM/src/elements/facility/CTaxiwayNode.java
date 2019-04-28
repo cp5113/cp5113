@@ -116,8 +116,7 @@ public class CTaxiwayNode extends ANode implements IDrawingObject{
 	}
 
 	@Override
-	public CDrawingInform getDrawingInform() {
-		// TODO Auto-generated method stub
+	public CDrawingInform getDrawingInform() {		
 		CDrawingInform  lDrawingInform = new CDrawingInform(iCoordination, new CAltitude(0,EGEOUnit.FEET), EShape.CIRCLE, Color.BLACK,true,10.0);
 		return lDrawingInform;		
 		

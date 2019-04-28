@@ -1,7 +1,4 @@
 package elements.mobile.vehicle.state;
-
-import elements.mobile.vehicle.AVehicle;
-
 /**
  * 
  * Dtails....
@@ -29,22 +26,16 @@ import elements.mobile.vehicle.AVehicle;
  * </p>
  * 
  * 
- * @date : Apr 8, 2019
+ * @date : 2019. 4. 25.
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * Apr 8, 2019 : Coded by S. J. Yun.
+ * 2019. 4. 25. : Coded by S. J. Yun.
  *
  *
  */
 
-public class CAircraftNothingMoveState implements IVehicleMoveState {
-
-	@Override
-	public void doMove(long aIncrementTimeStep, long aCurrentTime, AVehicle aThisVechicle) {
-		// Do nothing...
-		aThisVechicle.getCurrentVelocity();
-	}
+public class SValidateRangeChecker {
 	/*
 	================================================================
 	
@@ -60,7 +51,30 @@ public class CAircraftNothingMoveState implements IVehicleMoveState {
 	
 	================================================================
 	 */
-
+	public static boolean validDataInRange(double data, double rangeStart, double rangeEnd) {
+		rangeStart = Math.abs(rangeStart);
+		rangeEnd = Math.abs(rangeEnd);
+		data     = Math.abs(data);
+		
+		double min = 0;
+		double max = 0;
+		if(rangeStart<=rangeEnd) {
+			min = rangeStart;
+			max = rangeEnd;
+		}else {
+			min = rangeEnd;
+			max = rangeStart;
+		}
+		
+		
+		if(min <= data && data <= max) {
+			return true;
+		}else {
+			return false;
+		}
+		
+		
+	}
 	/*
 	================================================================
 	
