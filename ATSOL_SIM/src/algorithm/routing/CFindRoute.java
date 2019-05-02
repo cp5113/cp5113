@@ -1,4 +1,4 @@
-package sim.gui;
+package algorithm.routing;
 /**
  * 
  * Dtails....
@@ -26,18 +26,23 @@ package sim.gui;
  * </p>
  * 
  * 
- * @date : 2019. 4. 24.
+ * @date : 2019. 5. 2.
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * 2019. 4. 24. : Coded by S. J. Yun.
+ * 2019. 5. 2. : Coded by S. J. Yun.
  *
  *
  */
 
-import javafx.scene.shape.Polygon;
+import java.util.LinkedList;
 
-public interface IDrawingAreaObject {
+import elements.facility.CAirport;
+import elements.facility.CTaxiwayLink;
+import elements.facility.CTaxiwayNode;
+import elements.mobile.vehicle.CAircraft;
+
+public class CFindRoute {
 	/*
 	================================================================
 	
@@ -53,9 +58,12 @@ public interface IDrawingAreaObject {
 	
 	================================================================
 	 */
-	public Polygon getSafetyPolygonInform();
-	public Polygon getShapePolygonInform();
-	public Polygon getSafetyFrontPolygonInform(); 
+	public static LinkedList<CTaxiwayLink> findTaxiRoute(CTaxiwayNode aNodeStart, CTaxiwayNode aNodeEnd, IRoutingAlgorithm aRoutingAlgorithm, CAircraft aAircraft, CAirport aAirport){
+		
+		
+		
+		return null;
+	}
 
 	/*
 	================================================================
@@ -72,7 +80,6 @@ public interface IDrawingAreaObject {
 	
 	================================================================
 	 */
-
 }
 
 

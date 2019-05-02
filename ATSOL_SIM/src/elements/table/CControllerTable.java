@@ -61,6 +61,7 @@ import elements.AElement;
 import elements.IElementControlledByClock;
 import elements.airspace.CAirRoute;
 import elements.airspace.CWaypoint;
+import elements.area.ASector;
 import elements.facility.AFacility;
 import elements.facility.CAirport;
 import elements.facility.CRunway;
@@ -68,6 +69,7 @@ import elements.facility.CSpot;
 import elements.facility.CTaxiwayLink;
 import elements.facility.CTaxiwayNode;
 import elements.mobile.human.AATCController;
+import elements.mobile.human.CApproachController;
 import elements.mobile.human.CGroundController;
 import elements.mobile.human.CLocalController;
 import elements.mobile.human.EGender;
@@ -134,6 +136,10 @@ public class CControllerTable extends ATable {
 		 * / Read CSV
 		 */
 		HashMap<String, HashMap<String, String>> lDataList =  SReadCSV.readCSVHashMap(aFile, CAirport.class, ",");
+		
+		DijkstraAlgorithm lDijkstraAlgorithm;
+		
+		
 		if(lDataList.isEmpty()) return;
 		
 		/*
@@ -179,7 +185,7 @@ public class CControllerTable extends ATable {
 				lAirport.getGroundControllerList().add((CGroundController) lController);
 				
 				// set Airport to controller
-				lController.setOwnedFacilty(lAirport);
+				lController.addOwnedFacilty(lAirport);
 				
 				// Set TaxiwayLink to controller
 				for(int i=0; i< lAirport.getTaxiwayLinkList().size(); i++) {
@@ -193,13 +199,14 @@ public class CControllerTable extends ATable {
 								lController.addFacility(lAirport.getTaxiwayLinkList().get(i));
 								lAirport.getTaxiwayLinkList().get(i).setATCController(lController);
 								lAirport.getTaxiwayLinkList().get(i).setATCControllerToChildren(lController);
+								
 							}
 						}
 					}
 				}
 				
 				// Set Routing Algorithm
-				DijkstraAlgorithm lDijkstraAlgorithm = new DijkstraAlgorithm(lAirport.getTaxiwayLinkList(), lAirport.getTaxiwayNodeList());
+				lDijkstraAlgorithm = new DijkstraAlgorithm(lAirport.getTaxiwayLinkList(), lAirport.getTaxiwayNodeList());
 				lController.setRoutingAlgorithm(lDijkstraAlgorithm);
 						
 				
@@ -217,6 +224,10 @@ public class CControllerTable extends ATable {
 				}
 				lAirport.getLocalControllerList().add((CLocalController) lController);
 				
+				// set Airport to controller
+				lController.addOwnedFacilty(lAirport);
+				
+				
 				// Set Runway to controller
 				for(CRunway loopRwy : lAirport.getRunwayList()) {
 					if(lSpecificLinkList== null || lSpecificLinkList[0].equalsIgnoreCase("")) {						
@@ -233,13 +244,32 @@ public class CControllerTable extends ATable {
 						}
 					}
 				}
-				
+				// Set Routing Algorithm
+				lDijkstraAlgorithm = new DijkstraAlgorithm(lAirport.getTaxiwayLinkList(), lAirport.getTaxiwayNodeList());
+				lController.setRoutingAlgorithm(lDijkstraAlgorithm);
+
 				break;
 			case "RampController":
 
 				break;
 			case "ApproachController":
-
+				// Create Controller
+				lController = new CApproachController(lName, parseDouble(lAge).intValue(), parseDouble(lExperienceDay).intValue(), ESkill.valueOf(lSkill), EGender.valueOf(lGender));
+				
+				// Add to Sector
+				for(int i = 0; i < CAtsolSimMain.getInstance().getAirspaceTable().getElementList().size(); i++) {
+					ASector lSector = (ASector) CAtsolSimMain.getInstance().getAirspaceTable().getElementList().get(i);
+					if(lSector.getControllerListString().contains(lName)) {
+						lSector.addControllerList(lController);
+					}else {
+						System.out.println("No airspace for the controller " + lController.getName() + " / " + lSector);
+						continue;
+					}
+				}
+				
+				// set Airport to controller
+				lController.addOwnedFacilty(lAirport);			
+							
 				break;
 			case "ArrivalController":
 

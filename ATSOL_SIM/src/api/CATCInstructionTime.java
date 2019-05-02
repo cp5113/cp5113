@@ -1,4 +1,12 @@
-package sim.gui;
+package api;
+
+import java.util.List;
+
+import api.inf.IATCInstructionTime;
+import elements.mobile.human.AATCController;
+import elements.mobile.vehicle.CAircraft;
+import elements.network.ANode;
+
 /**
  * 
  * Dtails....
@@ -26,18 +34,47 @@ package sim.gui;
  * </p>
  * 
  * 
- * @date : 2019. 4. 24.
+ * @date : 2019. 4. 29.
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * 2019. 4. 24. : Coded by S. J. Yun.
+ * 2019. 4. 29. : Coded by S. J. Yun.
  *
  *
  */
 
-import javafx.scene.shape.Polygon;
+public class CATCInstructionTime implements IATCInstructionTime {
 
-public interface IDrawingAreaObject {
+	@Override
+	public long calculateTakeOffInstructionTime(CAircraft aAircraft, AATCController aController) {
+		// TODO Auto-generated method stub
+		return -9999999;
+	}
+
+	@Override
+	public long calculateTaxiInstructionTime(List<? extends ANode> aRoute, CAircraft aAircraft,
+			AATCController aController) {
+		// TODO Auto-generated method stub
+		return -9999999;
+	}
+
+	@Override
+	public long calculatePushbackInstructionTime(CAircraft aAircraft, AATCController aController) {
+		// TODO Auto-generated method stub
+		return -9999999;
+	}
+
+	@Override
+	public long calculateFrequencyChangeInstructionTime(CAircraft aAircraft, AATCController aController) {
+		// TODO Auto-generated method stub
+		return -9999999;
+	}
+
+	@Override
+	public long calculateLinupInstructionTime(CAircraft aAircraft, AATCController aController) {
+		// TODO Auto-generated method stub
+		return -9999999;
+	}
 	/*
 	================================================================
 	
@@ -46,6 +83,11 @@ public interface IDrawingAreaObject {
 	================================================================
 	*/
 
+	public long calculateLandingInstructionTime(CAircraft aAircraft, AATCController aAatcController) {
+		// TODO Auto-generated method stub
+		return -9999999;
+	}
+
 	/*
 	================================================================
 	
@@ -53,9 +95,6 @@ public interface IDrawingAreaObject {
 	
 	================================================================
 	 */
-	public Polygon getSafetyPolygonInform();
-	public Polygon getShapePolygonInform();
-	public Polygon getSafetyFrontPolygonInform(); 
 
 	/*
 	================================================================
@@ -72,7 +111,6 @@ public interface IDrawingAreaObject {
 	
 	================================================================
 	 */
-
 }
 
 

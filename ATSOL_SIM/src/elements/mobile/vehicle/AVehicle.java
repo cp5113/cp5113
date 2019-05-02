@@ -47,7 +47,10 @@ import java.util.List;
 import elements.IElementObservableClock;
 import elements.mobile.AMobile;
 import elements.mobile.human.IATCController;
+import elements.mobile.vehicle.state.CAircraftApproachMoveState;
+import elements.mobile.vehicle.state.CAircraftLandingMoveState;
 import elements.mobile.vehicle.state.CAircraftNothingMoveState;
+import elements.mobile.vehicle.state.CAircraftTakeoffMoveState;
 import elements.mobile.vehicle.state.IVehicleMoveState;
 import elements.network.ALink;
 import elements.network.ANode;
@@ -128,6 +131,7 @@ public abstract class AVehicle extends AMobile implements ITableAble, IDrawingOb
 	
 	protected   Polygon							iSafetyArea = new Polygon(new double[] {-99999999.0,-99999999.0,-99999991.0,-99999991.0});
 	protected 	Polygon							iShapeArea  = new Polygon(new double[] {-99999999.0,-99999999.0,-99999991.0,-99999991.0});
+	protected 	Polygon							iSafetyFrontArea= new Polygon(new double[] {-99999999.0,-99999999.0,-99999991.0,-99999991.0});
 	
 	protected		double					iRandomNumber = Math.random();
 	protected ISimClockOberserver iSimClockObserver;
@@ -216,8 +220,8 @@ public abstract class AVehicle extends AMobile implements ITableAble, IDrawingOb
 		// Calculate distance from current position to the other node (longest length far from here) 
 		double lRemainingDistanceFromHere = 0;
 		// Calculate distance from current position to next node
-		lRemainingDistanceFromHere += Math.sqrt((this.getCurrentPostion().getXCoordination() - this.getRoutingInfo().get(0).getCoordination().getXCoordination()) * (this.getCurrentPostion().getXCoordination() - this.getRoutingInfo().get(0).getCoordination().getXCoordination()) + 
-				(this.getCurrentPostion().getYCoordination() - this.getRoutingInfo().get(0).getCoordination().getYCoordination()) * (this.getCurrentPostion().getYCoordination() - this.getRoutingInfo().get(0).getCoordination().getYCoordination()) );  
+		lRemainingDistanceFromHere += Math.sqrt((this.getCurrentPosition().getXCoordination() - this.getRoutingInfo().get(0).getCoordination().getXCoordination()) * (this.getCurrentPosition().getXCoordination() - this.getRoutingInfo().get(0).getCoordination().getXCoordination()) + 
+				(this.getCurrentPosition().getYCoordination() - this.getRoutingInfo().get(0).getCoordination().getYCoordination()) * (this.getCurrentPosition().getYCoordination() - this.getRoutingInfo().get(0).getCoordination().getYCoordination()) );  
 
 		// calculate distance remaining links
 		int startIndex = 0;
@@ -242,8 +246,8 @@ public abstract class AVehicle extends AMobile implements ITableAble, IDrawingOb
 		// Calculate distance from current position to the other node (longest length far from here) 
 		double lRemainingDistanceFromHere = 0;
 		// Calculate distance from current position to next node
-		lRemainingDistanceFromHere += Math.sqrt((this.getCurrentPostion().getXCoordination() - this.getRoutingInfo().get(0).getCoordination().getXCoordination()) * (this.getCurrentPostion().getXCoordination() - this.getRoutingInfo().get(0).getCoordination().getXCoordination()) + 
-				(this.getCurrentPostion().getYCoordination() - this.getRoutingInfo().get(0).getCoordination().getYCoordination()) * (this.getCurrentPostion().getYCoordination() - this.getRoutingInfo().get(0).getCoordination().getYCoordination()) );  
+		lRemainingDistanceFromHere += Math.sqrt((this.getCurrentPosition().getXCoordination() - this.getRoutingInfo().get(0).getCoordination().getXCoordination()) * (this.getCurrentPosition().getXCoordination() - this.getRoutingInfo().get(0).getCoordination().getXCoordination()) + 
+				(this.getCurrentPosition().getYCoordination() - this.getRoutingInfo().get(0).getCoordination().getYCoordination()) * (this.getCurrentPosition().getYCoordination() - this.getRoutingInfo().get(0).getCoordination().getYCoordination()) );  
 		
 		if(this.getRoutingInfo().get(0).equals(aDestinationNode)) {
 			this.setRoutingRemainingDistance(lRemainingDistanceFromHere);
@@ -327,7 +331,7 @@ public abstract class AVehicle extends AMobile implements ITableAble, IDrawingOb
 	public void setPlanList(List<AVehiclePlan> aPlanList) {
 		iPlanList = aPlanList;
 	}
-	public CCoordination getCurrentPostion() {
+	public CCoordination getCurrentPosition() {
 		return iCurrentPostion;
 	}
 	public void setCurrentPostion(CCoordination aCurrentPostion) {
@@ -394,6 +398,9 @@ public abstract class AVehicle extends AMobile implements ITableAble, IDrawingOb
 	public void doMoveVehicle() {
 		iVehicleMoveState.doMove(CSimClockOberserver.getInstance().getIncrementStepInMiliSec(),iCurrentTimeInMilliSecond, this);
 	}
+	public void doMoveVehicle(long aAddToCurrentTime) {
+		iVehicleMoveState.doMove(CSimClockOberserver.getInstance().getIncrementStepInMiliSec(),iCurrentTimeInMilliSecond+aAddToCurrentTime, this);
+	}
 	public synchronized CAltitude getCurrentAltitude() {
 		return iCurrentAltitude;
 	}
@@ -419,7 +426,10 @@ public abstract class AVehicle extends AMobile implements ITableAble, IDrawingOb
 		// TODO Auto-generated method stub
 		return (aSpeedCurrent*aSpeedCurrent)/(2*aDecelMax/2);
 	}
-	
+	public double calculateStoppingDistance(double aSpeedCurrent,double aSpeedNext, double aDecelMax) {
+		
+		return ((aSpeedCurrent-aSpeedNext)*(aSpeedCurrent+aSpeedNext))/(2*aDecelMax/2);
+	}
 	public synchronized ANode getCurrentNode() {
 		return iCurrentNode;
 	}
@@ -445,7 +455,7 @@ public abstract class AVehicle extends AMobile implements ITableAble, IDrawingOb
 		
 		// Pass When Current Plan is null
 		if(iCurrentPlan == null) return;
-		
+
 		
 		
 		// Get Current Position
@@ -524,44 +534,70 @@ public abstract class AVehicle extends AMobile implements ITableAble, IDrawingOb
 		double lXnew12 = -lLengthAndStoppingDist * cosTheta + lXCurrent;
 		double lYnew12 = -lLengthAndStoppingDist * sinTheta + lYCurrent;
 		
+		// Create Poly when after takeoff
+		if( (this.getMoveState() instanceof CAircraftTakeoffMoveState || this.getMoveState() instanceof CAircraftApproachMoveState || this.getMoveState() instanceof CAircraftLandingMoveState) 
+				&& aIsIncludingSafeArea) {
+			synchronized (iSafetyArea) {
+				iSafetyArea.getPoints().setAll(new Double[]{
+						lXCurrent, lYCurrent,
+						lXCurrent, lYCurrent,
+						lXCurrent, lYCurrent,
+						lXCurrent, lYCurrent,
+						lXCurrent, lYCurrent,
+						lXCurrent, lYCurrent,
+						lXCurrent, lYCurrent,
+						
+				});
+				
+			}
+			return;
+						
+		}
+		
+		
+		
+		
+		
 		// Create Poly
 		if(aIsIncludingSafeArea) {
 			synchronized (iSafetyArea) {
-			
-			iSafetyArea.getPoints().setAll(new Double[]{
-					lXnew1, lYnew1,
-					lXCurrent, lYCurrent,
-					lXnew2, lYnew2,
-					lXnew4, lYnew4,
-					lXnew5, lYnew5,
-					lXnew3, lYnew3,
-					lXnew1, lYnew1,
+				iSafetyArea.getPoints().setAll(new Double[]{
+						lXnew1, lYnew1,
+						lXCurrent, lYCurrent,
+						lXnew2, lYnew2,
+						lXnew4, lYnew4,
+						lXnew5, lYnew5,
+						lXnew3, lYnew3,
+						lXnew1, lYnew1,
 
-			});
-			
-			
-//			System.out.println(iSafetyArea.getLayoutX());
-//			iSafetyArea.set
-//			System.out.println();
-			
+				});
+			}
+			synchronized (iSafetyFrontArea) {
+				iSafetyFrontArea.getPoints().setAll(new Double[]{
+						lXnew4, lYnew4,
+						lXnew5, lYnew5,
+						lXnew3, lYnew3,						
+				});
 			}
 		}else {
 			synchronized (iShapeArea) {
-							
-			iShapeArea.getPoints().setAll(new Double[]{
-					lXnew1, lYnew1,
-					lXnew3, lYnew3,
-					lXnew5, lYnew5,
-					lXnew4, lYnew4,
-					lXnew2, lYnew2,
-					lXnew11, lYnew11,
-					lXnew12, lYnew12,
-					lXnew31, lYnew31,
-					lXnew1, lYnew1,
 
-			});
+				iShapeArea.getPoints().setAll(new Double[]{
+						lXnew1, lYnew1,
+						lXnew3, lYnew3,
+						lXnew5, lYnew5,
+						lXnew4, lYnew4,
+						lXnew2, lYnew2,
+						lXnew11, lYnew11,
+						lXnew12, lYnew12,
+						lXnew31, lYnew31,
+						lXnew1, lYnew1,
+
+				});
 			}
 		}
+
+		
 
 				
 		
@@ -586,6 +622,14 @@ public abstract class AVehicle extends AMobile implements ITableAble, IDrawingOb
 		
 	}
 	
+	@Override
+	public synchronized Polygon getSafetyFrontPolygonInform() {
+//		createSafetyArea(false);	
+		synchronized (iSafetyFrontArea) {
+			return iSafetyFrontArea;
+		}
+		
+	}
 	/*
 	================================================================
 	

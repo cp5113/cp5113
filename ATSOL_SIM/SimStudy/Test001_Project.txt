@@ -8,6 +8,8 @@
 \data\network\AirportRunwayLink.csv
 @Waypoint
 \data\airspace\Waypoint.csv
+@Airspace
+\data\airspace\Airspace.csv
 @Route
 \data\airspace\Route.csv
 @Aircraft

@@ -74,10 +74,10 @@ public class CAircraftLineUpMoveState implements IVehicleMoveState{
 		// Move While until amountTime reach incrementTimeStep
 		while(lAmountTime*1000<aIncrementTimeStep) {
 			// get Current Position
-			double lXCurrent = lAircraft.getCurrentPostion().getXCoordination();
-			double lYCurrent = lAircraft.getCurrentPostion().getYCoordination();
-			double lXOrigin = lAircraft.getCurrentPostion().getXCoordination();
-			double lYOrigin = lAircraft.getCurrentPostion().getYCoordination();
+			double lXCurrent = lAircraft.getCurrentPosition().getXCoordination();
+			double lYCurrent = lAircraft.getCurrentPosition().getYCoordination();
+			double lXOrigin = lAircraft.getCurrentPosition().getXCoordination();
+			double lYOrigin = lAircraft.getCurrentPosition().getYCoordination();
 
 			// Extract Target Position == destination node
 			double lXTarget = lAircraft.getRoutingInfo().get(0).getCoordination().getXCoordination();//lFlightPlan.getNode(0).getCoordination().getXCoordination();
@@ -201,7 +201,7 @@ public class CAircraftLineUpMoveState implements IVehicleMoveState{
 
 
 				lSpeedCurrent 	= Math.sqrt(lSpeedNextX *lSpeedNextX + lSpeedNextY * lSpeedNextY); 
-				lAircraft.getCurrentPostion().setXYCoordination(lXCurrent, lYCurrent);
+				lAircraft.getCurrentPosition().setXYCoordination(lXCurrent, lYCurrent);
 				lAircraft.setCurrentVelocity(lSpeedCurrent);
 
 				//					CAtsolSimGuiControl.getInstance().drawDrawingObjectList();
@@ -223,7 +223,7 @@ public class CAircraftLineUpMoveState implements IVehicleMoveState{
 
 					lXCurrent = lXTarget;
 					lYCurrent = lYTarget;
-					lAircraft.getCurrentPostion().setXYCoordination(lXCurrent, lYCurrent);
+					lAircraft.getCurrentPosition().setXYCoordination(lXCurrent, lYCurrent);
 					lAircraft.setCurrentVelocity(lSpeedCurrent);
 
 					// Restore Delta t to original

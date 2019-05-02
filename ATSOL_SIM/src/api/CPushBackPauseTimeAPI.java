@@ -42,7 +42,7 @@ import elements.mobile.vehicle.CAircraft;
 public class CPushBackPauseTimeAPI implements IPushbackPauseTime{
 
 	@Override
-	public long calculatePushbackPauseTimeInMilliseconds(CAircraft aAircraft) {
+	public long calculatePushbackPauseTimeInMilliseconds(long aCurrentTimeInMilliSeconds,CAircraft aAircraft) {
 		// TODO Auto-generated method stub
 		return -9999999;
 	}

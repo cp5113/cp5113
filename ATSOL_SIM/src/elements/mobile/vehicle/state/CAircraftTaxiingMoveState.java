@@ -100,15 +100,7 @@ public class CAircraftTaxiingMoveState implements IVehicleMoveState {
 		
 		
 		
-		
-		// Find the other Traffic
-//		System.out.println(((CAirport) (lAircraft.getCurrentNode().getOwnerObject())).getLonggestLinkLength());
-//		System.out.println();
-		
-		
-		
-		
-		
+			
 		
 		
 		
@@ -116,10 +108,10 @@ public class CAircraftTaxiingMoveState implements IVehicleMoveState {
 		// Move While until amountTime reach incrementTimeStep
 		while(lAmountTime*1000<aIncrementTimeStep) {
 			// get Current Position
-			double lXCurrent = lAircraft.getCurrentPostion().getXCoordination();
-			double lYCurrent = lAircraft.getCurrentPostion().getYCoordination();
-			double lXOrigin = lAircraft.getCurrentPostion().getXCoordination();
-			double lYOrigin = lAircraft.getCurrentPostion().getYCoordination();
+			double lXCurrent = lAircraft.getCurrentPosition().getXCoordination();
+			double lYCurrent = lAircraft.getCurrentPosition().getYCoordination();
+			double lXOrigin = lAircraft.getCurrentPosition().getXCoordination();
+			double lYOrigin = lAircraft.getCurrentPosition().getYCoordination();
 			
 			// Extract Target Position == destination node
 			double lXTarget = lAircraft.getRoutingInfo().get(0).getCoordination().getXCoordination();//lFlightPlan.getNode(0).getCoordination().getXCoordination();
@@ -338,7 +330,7 @@ public class CAircraftTaxiingMoveState implements IVehicleMoveState {
 
 				
 				lSpeedCurrent 	= Math.sqrt(lSpeedNextX *lSpeedNextX + lSpeedNextY * lSpeedNextY); 
-				lAircraft.getCurrentPostion().setXYCoordination(lXCurrent, lYCurrent);
+				lAircraft.getCurrentPosition().setXYCoordination(lXCurrent, lYCurrent);
 				lAircraft.setCurrentVelocity(lSpeedCurrent);
 				
 //				CAtsolSimGuiControl.getInstance().drawDrawingObjectList();
@@ -360,7 +352,7 @@ public class CAircraftTaxiingMoveState implements IVehicleMoveState {
 					
 					lXCurrent = lXTarget;
 					lYCurrent = lYTarget;
-					lAircraft.getCurrentPostion().setXYCoordination(lXCurrent, lYCurrent);
+					lAircraft.getCurrentPosition().setXYCoordination(lXCurrent, lYCurrent);
 					lAircraft.setCurrentVelocity(lSpeedCurrent);
 					
 					// Restore Delta t to original
@@ -381,21 +373,21 @@ public class CAircraftTaxiingMoveState implements IVehicleMoveState {
 			if(lAircraft.getRoutingInfo().size()>1 && lFlightPlan.getNode(0).getCoordination().getXCoordination() == lXCurrent && lFlightPlan.getNode(0).getCoordination().getYCoordination() == lYCurrent) {
 				// When reach end of taxiway link
 				// Remove this aircraft from taxiway Link shcedule
-//				if(lAircraft.getMovementMode() != EAircraftMovementMode.PUSHBACK) {
-					lTaxiwayLink.removeFromOccupyingSchedule(lAircraft);
-//				}
-				
-			  lAircraft.getCurrentNode().getVehicleWillUseList().remove(lAircraft.getCurrentNode().getVehicleWillUseList().indexOf(lAircraft));
+				//				if(lAircraft.getMovementMode() != EAircraftMovementMode.PUSHBACK) {
+				lTaxiwayLink.removeFromOccupyingSchedule(lAircraft);
+				//				}
+
+				lAircraft.getCurrentNode().getVehicleWillUseList().remove(lAircraft.getCurrentNode().getVehicleWillUseList().indexOf(lAircraft));
 				// When reach end of taxiway link
 				// Remove this node from flight plan
 				lFlightPlan.removePlanItem(lFlightPlan.getNode(0));
 				lAircraft.removeRoutingInfo(0);
-				
+
 				// Update Current Location
 				lAircraft.setCurrentLink(lAircraft.getRoutingLinkInfoUsingNode((ANode) lFlightPlan.getNode(0)));
 				lAircraft.setCurrentNode((ANode) lFlightPlan.getNode(0));
-				
-				
+
+
 				
 			}
 			
@@ -621,30 +613,7 @@ public class CAircraftTaxiingMoveState implements IVehicleMoveState {
 	
 	================================================================
 	 */
-	private boolean validDataInRange(double data, double rangeStart, double rangeEnd) {
-		rangeStart = Math.abs(rangeStart);
-		rangeEnd = Math.abs(rangeEnd);
-		data     = Math.abs(data);
-		
-		double min = 0;
-		double max = 0;
-		if(rangeStart<=rangeEnd) {
-			min = rangeStart;
-			max = rangeEnd;
-		}else {
-			min = rangeEnd;
-			max = rangeStart;
-		}
-		
-		
-		if(min <= data && data <= max) {
-			return true;
-		}else {
-			return false;
-		}
-		
-		
-	}
+	
 	/*
 	================================================================
 	

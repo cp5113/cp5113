@@ -40,10 +40,32 @@ package elements.mobile.human;
  *
  */
 
+import java.awt.Graphics2D;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Random;
 
+import api.CAssignRunwayAPI;
+import api.CAssignSpotAPI;
+import elements.facility.CAirport;
+import elements.facility.CRunway;
+import elements.facility.CSpot;
+import elements.facility.CTaxiwayNode;
 import elements.mobile.vehicle.CAircraft;
+import elements.mobile.vehicle.CFlightPlan;
+import elements.mobile.vehicle.state.CAircraftApproachMoveState;
+import elements.network.ANode;
+import elements.network.INode;
+import elements.property.CAircraftPerformance;
+import elements.property.EMode;
+import elements.util.geo.CAltitude;
+import elements.util.geo.CCoordination;
+import elements.util.geo.EGEOUnit;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import sim.clock.ISimClockOberserver;
+import sim.gui.control.CAtsolSimGuiControl;
+import util.performance.CApproachAircraftPerformance;
 
 /**
  * @author S. J. Yun
@@ -68,18 +90,163 @@ public class CApproachController extends AATCController {
 	 */
 	@Override
 	public synchronized void controlAircraft() {
-		// TODO Auto-generated method stub
-		System.out.println(this.iAircraftList);
-		System.out.println();
+
 	}
 	@Override
 	public void initializeAircraft(CAircraft aAircraft) {
-		// TODO Auto-generated method stub
+
+		// Get Plan and LastNode
+		CFlightPlan lFlightPlan = (CFlightPlan)aAircraft.getCurrentPlan();
+		INode       lLastNode  = lFlightPlan.getNode(lFlightPlan.getNodeList().size()-1);
 		
+		// Verify Arrival or departure	
+		System.out.println();
+		if(lLastNode instanceof CAirport) {
+			// Set Mode
+			aAircraft.setMode(EMode.ARR);
+			
+
+			// Set Current Position
+			ANode lCurrentNode = (ANode) lFlightPlan.getNode(0);			
+			aAircraft.setCurrentNode((ANode) lCurrentNode);
+			aAircraft.getCurrentPosition().setXYCoordination(lCurrentNode.getCoordination().getXCoordination(), lCurrentNode.getCoordination().getYCoordination());
+			
+			// Remove Current Node
+			lFlightPlan.removePlanItem(lFlightPlan.getNode(0));
+			
+			
+		}else {
+			aAircraft.setMode(EMode.ETC);
+			System.err.println("CApproachController : You shall develope Crossing State or other things");
+		}
+		
+		
+	
 	}
 
 
 		
+	public void requestLanding(CAircraft aAircraft) {
+		
+		
+		// Assign Arrival Spot
+		CFlightPlan lFlightPlan = (CFlightPlan) aAircraft.getCurrentPlan();
+		CSpot lCandidateSpot = assignArrivalSpot(aAircraft);
+		lFlightPlan.setArrivalSpot(lCandidateSpot);
+		lCandidateSpot.setIsOccuping(true);
+		
+		
+		
+		// Assign Runway
+		CRunway lRunway = assignArrivalRunway(aAircraft);
+		
+		
+		// Assign Runway
+		if(aAircraft.getArrivalRunway()==null) {
+			lRunway.getArrivalAircraftList().add(aAircraft);
+			aAircraft.setArrivalRunway(lRunway);			
+		}
+		
+		
+		// Add FinalApproachPoint into flight Plan
+		INode lNode = aAircraft.getCurrentFlightPlan().getNode(0);
+		if(!lNode.toString().contains("_FAF")) {
+			addFinalApproachPoint(aAircraft, lRunway);
+		}
+		
+		
+		// Estimate Time
+		long lETA = CApproachAircraftPerformance.estimateApproachLegFlightTime(aAircraft, 0.01, iCurrentTimeInMilliSecond);
+		
+		// Separation Check
+		System.err.println("CApproachController Request Landing : Develope Arrival Separation");
+		
+		
+		// Set Aircraft MoveState
+		aAircraft.setMoveState(new CAircraftApproachMoveState());
+		
+	}
+	
+	
+	public CRunway assignArrivalRunway(CAircraft aAircraft) {
+		CAirport lAirport = (CAirport)aAircraft.getCurrentFlightPlan().getDestinationNode();
+		
+		
+		int lNumOfQ = Integer.MAX_VALUE;
+		CRunway lChoosenRwy = null;
+		for(CRunway loopRwy : lAirport.getRunwayList()) {
+			int lNumOfQtemp = loopRwy.getArrivalAircraftList().size() + loopRwy.getDepartureAircraftList().size(); 
+			if(lNumOfQ>=lNumOfQtemp && loopRwy.isArrival()) {
+				lNumOfQ= lNumOfQtemp;
+				lChoosenRwy = loopRwy;;
+			}
+		}
+		
+		CRunway lAPIRunway = new CAssignRunwayAPI().assignRunway(iCurrentTimeInMilliSecond, aAircraft, aAircraft.getCurrentFlightPlan(), lAirport);
+		if(lAPIRunway !=null) {
+			lChoosenRwy = lAPIRunway;
+		}
+		
+		
+		
+		return lChoosenRwy;
+	}
+	
+	
+	
+	
+	
+	
+	public void addFinalApproachPoint(CAircraft aAircraft, CRunway aRunway) {
+		
+		// Get Flight Plan
+		CFlightPlan lFlightPlan = aAircraft.getCurrentFlightPlan();
+		
+		// Get Threshold info
+		CTaxiwayNode lRunwayThreshold1 = (CTaxiwayNode) aRunway.getTaxiwayNodeList().get(1);
+		CTaxiwayNode lRunwayThreshold2 = (CTaxiwayNode) aRunway.getTaxiwayNodeList().get(0);
+		
+		
+		// Find Cos and Sin
+		double lDist =Math.sqrt((lRunwayThreshold1.getCoordination().getXCoordination() - lRunwayThreshold2.getCoordination().getXCoordination()) * (lRunwayThreshold1.getCoordination().getXCoordination() - lRunwayThreshold2.getCoordination().getXCoordination())
+				      + (lRunwayThreshold1.getCoordination().getYCoordination() - lRunwayThreshold2.getCoordination().getYCoordination()) * (lRunwayThreshold1.getCoordination().getYCoordination() - lRunwayThreshold2.getCoordination().getYCoordination()) );
+		
+		double lCos  = (lRunwayThreshold2.getCoordination().getXCoordination()-lRunwayThreshold1.getCoordination().getXCoordination())/lDist;
+		double lSin  = (lRunwayThreshold2.getCoordination().getYCoordination()-lRunwayThreshold1.getCoordination().getYCoordination())/lDist;
+		
+		// Calculate FAF coordination
+		double lFAFx = (5*1852)*lCos + lRunwayThreshold2.getCoordination().getXCoordination(); // 5nm
+		double lFAFy = (5*1852)*lSin + lRunwayThreshold2.getCoordination().getYCoordination(); // 5nm
+		
+		// Create dummy Node
+		ANode lFAFDummyNode = new ANode() {			
+			@Override
+			public void setATCControllerToChildren(IATCController aController) {
+			}
+		};
+		lFAFDummyNode.setCoordination(new CCoordination(lFAFx, lFAFy, EGEOUnit.METER));
+		lFAFDummyNode.setName(aRunway + "_FAF");
+		
+		
+		
+		GraphicsContext gc = CAtsolSimGuiControl.getInstance().getSimCanvas().getGraphicsContext2D();
+		CCoordination p = CAtsolSimGuiControl.iInstance.changeCoordinatesInCanvas(lFAFx, lFAFy);
+		gc.setStroke(Color.RED);
+		gc.strokeOval(p.getXCoordination()-5, p.getYCoordination()-5, 10, 10);
+		
+		
+		// Add to flight plan
+		Calendar cal1 = Calendar.getInstance();
+		cal1.setTimeInMillis(0);		
+		lFlightPlan.insertPlanItem(0, lRunwayThreshold2, cal1, new CAltitude(0, EGEOUnit.FEET));
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(0);
+		lFlightPlan.insertPlanItem(0,lFAFDummyNode, cal, new CAltitude(0, EGEOUnit.FEET));
+		
+		
+		
+	}
+	
 	
 
 	/*

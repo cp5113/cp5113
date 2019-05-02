@@ -43,20 +43,27 @@ package elements.mobile.human;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
+import elements.COccupyingInform;
+import elements.facility.CAirport;
 import elements.facility.CRunway;
 import elements.facility.CTaxiwayNode;
 import elements.mobile.vehicle.CAircraft;
 import elements.mobile.vehicle.CFlightPlan;
 import elements.mobile.vehicle.state.CAircraftLineUpMoveState;
+import elements.mobile.vehicle.state.CAircraftNothingMoveState;
 import elements.mobile.vehicle.state.CAircraftTakeoffMoveState;
+import elements.mobile.vehicle.state.CAircraftTaxiingMoveState;
 import elements.mobile.vehicle.state.EAircraftMovementMode;
 import elements.mobile.vehicle.state.EAircraftMovementStatus;
 import elements.network.ANode;
+import elements.network.INode;
 import elements.util.geo.CAltitude;
 import elements.util.geo.EGEOUnit;
 import sim.clock.ISimClockOberserver;
+import util.performance.CUnUniformModelPerformance;
 
 /**
  * @author S. J. Yun
@@ -70,7 +77,8 @@ public class CLocalController extends AATCController {
 	
 	================================================================
 	*/
-	
+	long iPreviouseDepartureTimeInMilliseconds;
+	long iPreviouseArrivalTimeInMilliseconds;
 	
 	public CLocalController(String aName, int aAge, int aExperienceDay, ESkill aNSkill, EGender aNGender) {
 		super(aName, aAge, aExperienceDay, aNSkill, aNGender);
@@ -89,11 +97,33 @@ public class CLocalController extends AATCController {
 	 */
 	@Override
 	public synchronized void controlAircraft() {
-		// TODO Auto-generated method stub
-//		System.out.println(this.getName() + this.iAircraftList);
-		
-		
+		for(int loopAC = 0; loopAC < iAircraftList.size(); loopAC++) {
+			CAircraft lAircraft = iAircraftList.get(loopAC);
+			CFlightPlan lFlightPlan = (CFlightPlan) lAircraft.getCurrentPlan();
+
+
+			// Conflict Detection
+			ArrayList<CAircraft> lOtherACList = new ArrayList<CAircraft>();
+			if(!(lAircraft.getMoveState() instanceof CAircraftNothingMoveState) && !(lAircraft.getMoveState() instanceof CAircraftTakeoffMoveState)) {
+
+				//				// Ignore already stopping
+				//				if(lAircraft.getMoveState() instanceof CAircraftGroundConflictStopMoveState) continue;
+
+				// Create Search aircraft List
+				lOtherACList.addAll(iAircraftList);
+				CGroundConflictDetectionAndResolution.groundConflictDetectionAndResolution(lAircraft, lOtherACList);
+			} // if(!(lAircraft.getMoveState() instanceof CAircraftNothingMoveState)) {
+
+
+		}//for(int loopAC = 0; loopAC < iAircraftList.size(); loopAC++) {
 	}
+	
+	
+	
+	
+	
+	
+	
 	@Override
 	public void initializeAircraft(CAircraft aAircraft) {
 		// TODO Auto-generated method stub
@@ -136,7 +166,7 @@ public class CLocalController extends AATCController {
 		
 		
 		// Calculate Instruction Time
-		long instructionTime = calculateLinupInstructionTime();
+		long instructionTime = calculateLinupInstructionTime(aAircraft);
 		aAircraft.setNextEventTime(iCurrentTimeInMilliSecond + instructionTime);
 		this.setNextEventTime(iCurrentTimeInMilliSecond + instructionTime);
 		
@@ -160,14 +190,105 @@ public class CLocalController extends AATCController {
 		
 		
 		// Calculate Instruction Time
-		long instructionTime = calculateTakeOffInstructionTime();
+		long instructionTime = calculateTakeOffInstructionTime(aAircraft);
 		aAircraft.setNextEventTime(iCurrentTimeInMilliSecond + instructionTime);
 		this.setNextEventTime(iCurrentTimeInMilliSecond + instructionTime);
+		iPreviouseDepartureTimeInMilliseconds = iCurrentTimeInMilliSecond + instructionTime;
+		
 		
 		// Issue Takeoff Clearance Clearance
 		aAircraft.setMovementMode(EAircraftMovementMode.TAKEOFF);
 		aAircraft.setMoveState(new CAircraftTakeoffMoveState());
 				
+	}
+	public void requestLanding(CAircraft aAircraft) {
+		long instructionTime = calculateLandingInstructionTime(aAircraft);
+		aAircraft.setNextEventTime(iCurrentTimeInMilliSecond + instructionTime);
+		this.setNextEventTime(iCurrentTimeInMilliSecond + instructionTime);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	public void requestTaxiToSpot(CAircraft aAircraft) {
+		CFlightPlan lFlightPlan = (CFlightPlan) aAircraft.getCurrentPlan();
+		
+		// Find Route
+		List<CTaxiwayNode> lOD = new ArrayList<CTaxiwayNode>();
+		for(INode loopNode : lFlightPlan.getNodeList()) {
+			if(loopNode instanceof CAirport) {
+				break;
+			}
+			lOD.add((CTaxiwayNode) loopNode);
+		}
+		lOD.add(lFlightPlan.getArrivalSpot().getTaxiwayNode());
+		
+		// Find Route
+		LinkedList<CTaxiwayNode> lRouteList =  (LinkedList<CTaxiwayNode>) iRoutingAlgorithm.findShortedPath(lOD);				
+		aAircraft.setRoutingInfo(lRouteList);
+
+		
+		// To Ignore Ground Controller's work
+		LinkedList<CTaxiwayNode> lRouteListOnlyLocalController = new LinkedList<CTaxiwayNode>();
+		for(CTaxiwayNode loopNode : lRouteList) {
+			if(loopNode.getATCController() instanceof CGroundController) {
+				break;
+			}
+			lRouteListOnlyLocalController.add(loopNode);
+		}
+		
+		// Calculate Instruction and Read back Time				
+		long lTaxiInstructionTimeMilliSec = calculateTaxiInstructionTime(lRouteListOnlyLocalController,aAircraft);
+		
+		
+		
+		/*
+		 * verify Opposite direction traffic 
+		 */				
+		// Calculate Estimated Taxiing Time 
+		List<COccupyingInform> lTaxiwayUsageSchedule = CUnUniformModelPerformance.estimateTaxiingTime(aAircraft,0.01,iCurrentTimeInMilliSecond + lTaxiInstructionTimeMilliSec);
+		for(int loopSche = 0; loopSche < lTaxiwayUsageSchedule.size(); loopSche++) {
+			if(lTaxiwayUsageSchedule.get(loopSche).getLink().isOppositDirectionElementInTimeWindow(lTaxiwayUsageSchedule.get(loopSche).getStartTime(), 
+					lTaxiwayUsageSchedule.get(loopSche).getEndTime(), lTaxiwayUsageSchedule.get(loopSche).getDestination())) {
+				System.err.println("In LocalController : You shall make re-routing to avoid opposit direction");
+				break;
+			}
+				
+		}
+		
+		// Set Route to Aircraft		
+		aAircraft.setRoutingInfo(lRouteList);
+		
+		// Notify Taxischedule to taxiway link
+		for(int loopSche = 0; loopSche < lTaxiwayUsageSchedule.size(); loopSche++) {
+			lTaxiwayUsageSchedule.get(loopSche).getLink().addToOccupyingSchedule(lTaxiwayUsageSchedule.get(loopSche));
+		}
+		
+		
+		// Create Plan List			
+		for(int loopPlan = lFlightPlan.getNodeList().size()-1; loopPlan >= 0; loopPlan--) {
+			lFlightPlan.removePlanItem(lFlightPlan.getNodeList().get(loopPlan));
+		}
+		
+		for(int loopR = lRouteList.size()-1; loopR>=0; loopR--) {
+			Calendar cal = Calendar.getInstance();
+			cal.setTimeInMillis(0);
+			lFlightPlan.insertPlanItem(0, lRouteList.get(loopR), cal, new CAltitude(0, EGEOUnit.FEET));
+		}
+		
+		// Reconstruct Flight Plan and Aircraft Status		
+		aAircraft.setCurrentNode((ANode) lFlightPlan.getNode(0));
+		aAircraft.setCurrentLink(aAircraft.getRoutingLinkInfoUsingNode((ANode) lFlightPlan.getNode(0)));
+		
+		
+		// Set Event Time to Aircraft and This(Controller)
+		aAircraft.setNextEventTime(iCurrentTimeInMilliSecond + lTaxiInstructionTimeMilliSec);
+		this.setNextEventTime(iCurrentTimeInMilliSecond + lTaxiInstructionTimeMilliSec);
+		
 	}
 
 

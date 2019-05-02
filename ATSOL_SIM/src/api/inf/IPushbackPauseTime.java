@@ -54,7 +54,7 @@ public interface IPushbackPauseTime {
 	
 	================================================================
 	 */
-	public long calculatePushbackPauseTimeInMilliseconds(CAircraft aAircraft);
+	public long calculatePushbackPauseTimeInMilliseconds(long aCurrentTimeInMilliSeconds, CAircraft aAircraft);
 	/*
 	================================================================
 	

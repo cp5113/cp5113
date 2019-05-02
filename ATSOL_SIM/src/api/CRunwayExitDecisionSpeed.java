@@ -1,4 +1,9 @@
-package sim.gui;
+package api;
+
+import api.inf.IRunwayExitDecisionSpeed;
+import elements.facility.CRunway;
+import elements.mobile.vehicle.CAircraft;
+
 /**
  * 
  * Dtails....
@@ -26,18 +31,22 @@ package sim.gui;
  * </p>
  * 
  * 
- * @date : 2019. 4. 24.
+ * @date : 2019. 5. 1.
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * 2019. 4. 24. : Coded by S. J. Yun.
+ * 2019. 5. 1. : Coded by S. J. Yun.
  *
  *
  */
 
-import javafx.scene.shape.Polygon;
+public class CRunwayExitDecisionSpeed implements IRunwayExitDecisionSpeed {
 
-public interface IDrawingAreaObject {
+	@Override
+	public double calculateRunwayExitDecisionSpeed(CAircraft aAircraft, CRunway aRunway) {
+
+		return -9999;
+	}
 	/*
 	================================================================
 	
@@ -53,9 +62,6 @@ public interface IDrawingAreaObject {
 	
 	================================================================
 	 */
-	public Polygon getSafetyPolygonInform();
-	public Polygon getShapePolygonInform();
-	public Polygon getSafetyFrontPolygonInform(); 
 
 	/*
 	================================================================
@@ -72,7 +78,6 @@ public interface IDrawingAreaObject {
 	
 	================================================================
 	 */
-
 }
 
 

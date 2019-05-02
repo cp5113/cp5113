@@ -1,5 +1,4 @@
 Callsign,AircraftType,Registration,Origin,Destination,CrusingAltitude,ScheduleTimeDeparture,ScheduleTimeArrival,SpotArrival,SpotDeparture,DepartureRunway,ArrivalRunway,Airline,Route
-AAR121,B734,HL7506,RJGG,RKSI,,2014-08-03 08:00:00,,32,,,,AAR,PULUN_RKSI
 AAR122,B734,HL7506,RKSI,RJGG,,2014-08-03 08:50:00,,,32,34,,AAR,RKSI_PULUN
 SJS1234,B737,,RKSI,RKPC,,2014-08-03 08:50:00,,,35,33L,,SJS,RKSI_PULUN
 AAR121,B734,HL7506,RJGG,RKSI,,2014-08-03 13:00:00,2014-08-03 13:40:00,33,,,,AAR,PULUN_RKSI

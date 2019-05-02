@@ -20,6 +20,7 @@ import elements.table.CAirRouteTable;
 import elements.table.CAircraftTable;
 import elements.table.CAircraftTypeTable;
 import elements.table.CAirportTable;
+import elements.table.CAirspaceTable;
 import elements.table.CControllerTable;
 import elements.table.CWaypointTable;
 import elements.table.ITableAble;
@@ -95,6 +96,7 @@ public class CAtsolSimMain {
 	private static CAirRouteTable			iAirRouteTable      = new CAirRouteTable();
 	private static CAircraftTable			iAircraftTable      = new CAircraftTable();
 	private static CControllerTable			iControllerTable	= new CControllerTable();
+	private static CAirspaceTable			iAirspaceTable  	= new CAirspaceTable();
 	private static List<IDrawingObject> iDrawingObjectList = Collections.synchronizedList(new ArrayList<IDrawingObject>());
 	
 	private static String					iProjectFileName   = null;
@@ -150,13 +152,14 @@ public class CAtsolSimMain {
 		iAllTableList.add(iAirportTable);
 		iAllTableList.add(iWaypointTable);
 		iAllTableList.add(iAircraftTable);
-		iAllTableList.add(iControllerTable);	
+		iAllTableList.add(iControllerTable);
+		iAllTableList.add(iAirspaceTable);	
 		iAirRouteTable.clearTalbe();
 		iAircraftTypeTable.clearTalbe();
 		iAirportTable.clearTalbe();
 		iAircraftTable.clearTalbe();
 		iControllerTable.clearTalbe();
-		
+		iAirspaceTable.clearTalbe();
 					 
 		
 	}
@@ -197,9 +200,6 @@ public class CAtsolSimMain {
 		}
 		
 		
-		for(ITableAble loopwpt : iWaypointTable.getElementList()) {
-			iDrawingObjectList.add((IDrawingObject) loopwpt);
-		}
 //		while(iter2.hasNext()) {
 //			CTaxiwayNode lTaxiwaynode= iter2.next();			
 //			iDrawingObjectList.add(lTaxiwaynode);
@@ -218,6 +218,7 @@ public class CAtsolSimMain {
 		ArrayList<File> lAirRouteFileList = new ArrayList<File>();
 		ArrayList<File> lAircraftFilelist = new ArrayList<File>();
 		ArrayList<File> lControllerFileList = new ArrayList<File>();
+		ArrayList<File> lAirspaceFileList = new ArrayList<File>();
 		
 		// Read Project File				
 		try {			
@@ -261,6 +262,16 @@ public class CAtsolSimMain {
 						if(lLine==null || lLine.contains("@") ) {lLinePrev = lLine; break;}
 					}
 					iWaypointTable.createTable(lWaypointFileList);
+					break;
+				case "@Airspace":
+					while(true) {
+						if(lLine.contains("Airspace.csv")) {
+							lAirspaceFileList.add(new File(aProjectFile.getParent().toString()+lLine));
+						}
+						lLine = lBR.readLine();
+						if(lLine==null || lLine.contains("@") ) {lLinePrev = lLine; break;}
+					}
+					iAirspaceTable.createTable(lAirspaceFileList);
 					break;
 				case "@Route":
 					while(true) {
@@ -369,6 +380,10 @@ public class CAtsolSimMain {
 	public String getProjectFileName() {
 		return iProjectFileName;
 	}
+	public static synchronized CAirspaceTable getAirspaceTable() {
+		return iAirspaceTable;
+	}
+	
 	
 	/*
 	================================================================

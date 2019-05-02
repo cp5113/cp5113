@@ -46,6 +46,7 @@ import java.util.List;
 
 import elements.mobile.human.IATCController;
 import elements.mobile.vehicle.CAircraft;
+import elements.mobile.vehicle.IAircraft;
 import elements.network.ALink;
 import elements.network.ANode;
 
@@ -54,34 +55,38 @@ import elements.network.ANode;
  *
  */
 public class CRunway extends ALink{
-	
+
 	private List<CTaxiwayLink> iTaxiwayLink = new ArrayList<CTaxiwayLink>();
 	private List<CTaxiwayNode> iTaxiwayNode = new ArrayList<CTaxiwayNode>();
 	private boolean iIsArrival = false;
 	private boolean iIsDeparture = false;
 	private List<Double> iDistanceList = new ArrayList<Double>();
-	
+
 	private List<CAircraft> iDepartureAircraftList= new ArrayList<CAircraft>();
 	private List<CAircraft> iArrivalAircraftList= new ArrayList<CAircraft>();
+
+	private List<Long> iArrivalAircraftETAList= new ArrayList<Long>();
+	private List<Long> iDepartureAircraftETDList= new ArrayList<Long>();
+
 	List<CAircraft> iRunwayOccupyingList = Collections.synchronizedList(new ArrayList<CAircraft>());
-	
+
 	private double iRunwaySafetyWidth = 100; 
-	
+
 	@Override
 	public void setATCControllerToChildren(IATCController aController) {
-		
+
 		iATCController = aController;
-	
+
 	}
 	/*
 	================================================================
-	
-			           Initializing Section
-	
-	================================================================
-	*/
 
-	
+			           Initializing Section
+
+	================================================================
+	 */
+
+
 
 	/**
 	 * The Constructor
@@ -106,19 +111,19 @@ public class CRunway extends ALink{
 		double y1 = iTaxiwayLink.get(0).getNodeList().get(0).getCoordination().getYCoordination();
 		double x2 = iTaxiwayLink.get(0).getNodeList().get(1).getCoordination().getXCoordination();
 		double y2 = iTaxiwayLink.get(0).getNodeList().get(1).getCoordination().getYCoordination();
-		
+
 		double xe = iTaxiwayLink.get(iTaxiwayLink.size()-1).getNodeList().get(0).getCoordination().getXCoordination();
 		double ye = iTaxiwayLink.get(iTaxiwayLink.size()-1).getNodeList().get(0).getCoordination().getYCoordination();
-		
+
 		double distance1e = (x1-xe)*(x1-xe) + (y1-ye)*(y1-ye);
 		double distance2e = (x2-xe)*(x2-xe) + (y2-ye)*(y2-ye);
-		
+
 		if(distance1e>distance2e) {
 			return iTaxiwayLink.get(0).getNodeList().get(0);
 		}else if(distance1e<distance2e) {
 			return iTaxiwayLink.get(0).getNodeList().get(1);
 		}
-		
+
 		return null;
 	}
 
@@ -173,6 +178,27 @@ public class CRunway extends ALink{
 	public synchronized List<CAircraft> getArrivalAircraftList() {
 		return iArrivalAircraftList;
 	}
+	public synchronized void	removeArrivalAircraftList(CAircraft aAircraft) {
+		int index = iArrivalAircraftList.indexOf(aAircraft);
+		iArrivalAircraftList.remove(index);
+		try {
+			iArrivalAircraftETAList.remove(index);
+		}catch(Exception e) {
+			System.err.println("CRuwnay : iArrivalAircraftETAList.remove(index)");
+		}
+	}
+
+	public synchronized void	removeDepartureAircraftList(CAircraft aAircraft) {
+		int index = iDepartureAircraftList.indexOf(aAircraft);
+		iDepartureAircraftList.remove(index);
+		try {
+			iDepartureAircraftETDList.remove(index);
+		}catch(Exception e) {
+			System.err.println("CRuwnay : iDepartureAircraftETDList.remove(index)");
+		}
+
+	}
+
 
 	public synchronized List<CTaxiwayNode> getTaxiwayNodeList(){
 		return iTaxiwayNode;
@@ -181,11 +207,11 @@ public class CRunway extends ALink{
 
 
 	public double getRunwaySafetyWidth() {
-		
+
 		return iRunwaySafetyWidth;
 	}
 	public void setRunwaySafetyWidth(double aRunwaySafetyWidth) {
-		
+
 		iRunwaySafetyWidth = aRunwaySafetyWidth;
 	}
 
@@ -196,65 +222,71 @@ public class CRunway extends ALink{
 			CTaxiwayNode lNode12 = (CTaxiwayNode) iTaxiwayLink.get(loopLink).getNodeList().get(1);
 			CTaxiwayNode lNode21 = (CTaxiwayNode) iTaxiwayLink.get(loopLink+1).getNodeList().get(0);
 			CTaxiwayNode lNode22 = (CTaxiwayNode) iTaxiwayLink.get(loopLink+1).getNodeList().get(1);
-			
+
 			if(lNode11.equals(lNode21)) {
 				// lNode12 lNode11 Lnode 22
 				if(!tempList.contains(lNode12)) {					
-				tempList.add(lNode12);				
-				tempList.add(lNode11);
+					tempList.add(lNode12);				
+					tempList.add(lNode11);
 				}
 				tempList.add(lNode22);
 			}else if(lNode11.equals(lNode22)) {
 				// lNode12 lNode11 Lnode 21
 				if(!tempList.contains(lNode12)) {
-				tempList.add(lNode12);				
-				tempList.add(lNode11);
+					tempList.add(lNode12);				
+					tempList.add(lNode11);
 				}
 				tempList.add(lNode21);				
 			}else if(lNode12.equals(lNode21)) {
 				// lNode11 lNode12 Lnode 22
 				if(!tempList.contains(lNode11)) {
-				tempList.add(lNode11);				
-				tempList.add(lNode12);
+					tempList.add(lNode11);				
+					tempList.add(lNode12);
 				}
 				tempList.add(lNode22);
 			}else if(lNode12.equals(lNode22)) {
 				// lNode11 lNode12 Lnode 21
 				if(!tempList.contains(lNode11)) {
-				tempList.add(lNode11);
-				tempList.add(lNode12);
+					tempList.add(lNode11);
+					tempList.add(lNode12);
 				}
 				tempList.add(lNode21);
 			}
-			
-			
+
+
 		}
 		
+		
+		iTaxiwayNode.clear();
+		for(CTaxiwayNode loopNode : tempList) {
+			iTaxiwayNode.add(loopNode);
+		}
+
 	}
-	
-	
-	
+
+
+
 	/*
 	================================================================
-	
+
 						Methods Section
-	
+
 	================================================================
 	 */
 
 	/*
 	================================================================
-	
+
 						Listeners Section
-	
+
 	================================================================
 	 */
 
 	/*
 	================================================================
-	
+
 							The Others
-	
+
 	================================================================
 	 */
 }

@@ -37,7 +37,7 @@ package elements.mobile.vehicle.state;
 
 public enum EAircraftMovementMode {
 
-		PUSHBACK,TAXIING,TAKEOFF,LANDING,EXITRUNWAY,LINEUP;
+		PUSHBACK,TAXIING,TAKEOFF,LANDING,EXITRUNWAY,LINEUP, APPROACHING;
 private int value;
 	
 

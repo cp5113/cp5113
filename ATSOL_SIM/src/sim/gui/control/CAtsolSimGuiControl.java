@@ -194,6 +194,8 @@ public class CAtsolSimGuiControl {
 				CDrawingInform lDrawingInform = lAnObject.getDrawingInform();
 				if(!lDrawingInform.isVisible()) continue; 
 				
+				
+				
 				// Drawing			
 				switch(lDrawingInform.getShape()) {
 				case LINE:
@@ -420,7 +422,11 @@ public class CAtsolSimGuiControl {
 					iMousePositionYCurrent = ((MouseEvent) aEvent).getY();
 					//				System.out.println(iMousePositionXCurrent);
 					CCoordination lOriginalCoordination =  changeCoordinatesFromCanvas(iMousePositionXCurrent, iMousePositionYCurrent);
-
+					GraphicsContext gc = SimCanvas.getGraphicsContext2D();
+					gc.setStroke(Color.BLACK);
+					gc.strokeText("(" + (int) lOriginalCoordination.getXCoordination() + ", " + (int) lOriginalCoordination.getYCoordination() + ")", iMousePositionXCurrent+50, iMousePositionYCurrent+3);
+					
+					
 					double lDistance = Double.MAX_VALUE;
 					IDrawingObject lTheObject = null;
 					Iterator<IDrawingObject> iter = CAtsolSimMain.getInstance().getDrawingObjectList().iterator();
@@ -430,30 +436,44 @@ public class CAtsolSimGuiControl {
 						
 						int index = lDrawingInform.getCoordinationList().size();
 						if(!lDrawingInform.isVisible()) continue;
+						
+						double ltempDistance;
 						if(lAnObject instanceof CTaxiwayLink) {
-							continue;
+							ltempDistance = ((lDrawingInform.getCoordinationList().get(index-2).getXCoordination() - lOriginalCoordination.getXCoordination())*(lDrawingInform.getCoordinationList().get(index-2).getXCoordination() - lOriginalCoordination.getXCoordination()) +
+									(lDrawingInform.getCoordinationList().get(index-2).getYCoordination() - lOriginalCoordination.getYCoordination())*(lDrawingInform.getCoordinationList().get(index-2).getYCoordination() - lOriginalCoordination.getYCoordination()));
+						}else {
+							ltempDistance = ((lDrawingInform.getCoordinationList().get(index-1).getXCoordination() - lOriginalCoordination.getXCoordination())*(lDrawingInform.getCoordinationList().get(index-1).getXCoordination() - lOriginalCoordination.getXCoordination()) +
+									(lDrawingInform.getCoordinationList().get(index-1).getYCoordination() - lOriginalCoordination.getYCoordination())*(lDrawingInform.getCoordinationList().get(index-1).getYCoordination() - lOriginalCoordination.getYCoordination()));
 						}
 						
-						double ltempDistance = ((lDrawingInform.getCoordinationList().get(index-1).getXCoordination() - lOriginalCoordination.getXCoordination())*(lDrawingInform.getCoordinationList().get(index-1).getXCoordination() - lOriginalCoordination.getXCoordination()) +
-								(lDrawingInform.getCoordinationList().get(index-1).getYCoordination() - lOriginalCoordination.getYCoordination())*(lDrawingInform.getCoordinationList().get(index-1).getYCoordination() - lOriginalCoordination.getYCoordination()));
 
 						if(ltempDistance<lDistance) {
 							lTheObject = lAnObject;
 							lDistance=ltempDistance;
+							
 						}					
 					}
 
 					int index = lTheObject.getDrawingInform().getCoordinationList().size();
-					double p1X = lTheObject.getDrawingInform().getCoordinationList().get(index-1).getXCoordination();
-					double p1Y = lTheObject.getDrawingInform().getCoordinationList().get(index-1).getYCoordination();
+					
+					double p1X;
+					double p1Y;
+					if(lTheObject instanceof CTaxiwayLink) {
+						p1X = lTheObject.getDrawingInform().getCoordinationList().get(index-2).getXCoordination();
+						p1Y = lTheObject.getDrawingInform().getCoordinationList().get(index-2).getYCoordination();
+					}else {
+						p1X = lTheObject.getDrawingInform().getCoordinationList().get(index-1).getXCoordination();
+						p1Y = lTheObject.getDrawingInform().getCoordinationList().get(index-1).getYCoordination();
+					}
 					CCoordination p1 = changeCoordinatesInCanvas(p1X, p1Y);
 //					System.out.println(lTheObject);
-					GraphicsContext gc = SimCanvas.getGraphicsContext2D();
+					gc = SimCanvas.getGraphicsContext2D();
 					gc.setStroke(Color.BLACK);
 					gc.strokeText(lTheObject.toString(), p1.getXCoordination(), p1.getYCoordination());					
 //					gc.setFill(Color.THISTLE);			
 //					double lRadius =  10*CAtsolSimMain.getInstance().getViewPointR();
 //					gc.fillOval(p1.getXCoordination()-lRadius/2, p1.getYCoordination()-lRadius/2,lRadius, lRadius);
+					
 					
 					
 					
@@ -478,7 +498,9 @@ public class CAtsolSimGuiControl {
 					if(iSecondaryMouseClicked % 2 == 0) {
 						iMousePositionXCurrent = ((MouseEvent) aEvent).getX();
 						iMousePositionYCurrent = ((MouseEvent) aEvent).getY();
-						drawDrawingObjectList();
+						
+//							drawDrawingObjectList();
+						
 					}else {
 						// Initialize Mouse Position for Wheel Dragging
 						iMousePositionXPrev = ((MouseEvent) aEvent).getX();

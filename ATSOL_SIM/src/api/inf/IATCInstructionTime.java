@@ -1,4 +1,11 @@
-package sim.gui;
+package api.inf;
+
+import java.util.List;
+
+import elements.mobile.human.AATCController;
+import elements.mobile.vehicle.CAircraft;
+import elements.network.ANode;
+
 /**
  * 
  * Dtails....
@@ -26,18 +33,16 @@ package sim.gui;
  * </p>
  * 
  * 
- * @date : 2019. 4. 24.
+ * @date : 2019. 4. 29.
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * 2019. 4. 24. : Coded by S. J. Yun.
+ * 2019. 4. 29. : Coded by S. J. Yun.
  *
  *
  */
 
-import javafx.scene.shape.Polygon;
-
-public interface IDrawingAreaObject {
+public interface IATCInstructionTime {
 	/*
 	================================================================
 	
@@ -53,12 +58,13 @@ public interface IDrawingAreaObject {
 	
 	================================================================
 	 */
-	public Polygon getSafetyPolygonInform();
-	public Polygon getShapePolygonInform();
-	public Polygon getSafetyFrontPolygonInform(); 
-
-	/*
-	================================================================
+	public long calculateTakeOffInstructionTime(CAircraft aAircraft, AATCController aController);
+	public long calculateTaxiInstructionTime(List<? extends ANode> aRoute, CAircraft aAircraft, AATCController aController);
+	public long calculatePushbackInstructionTime(CAircraft aAircraft, AATCController aController);
+	public long calculateFrequencyChangeInstructionTime(CAircraft aAircraft, AATCController aController);
+	public long calculateLinupInstructionTime(CAircraft aAircraft, AATCController aController);
+	
+	/*================================================================
 	
 						Listeners Section
 	

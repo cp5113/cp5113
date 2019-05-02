@@ -85,11 +85,18 @@ public class CTaxiwayLink extends ALink implements IDrawingObject{
 	public CDrawingInform getDrawingInform() {
 		
 		List<CCoordination> lCoordinationList = Collections.synchronizedList(new ArrayList<CCoordination>()); 
-		Iterator<ANode> iter = this.getNodeList().iterator();		
-		while(iter.hasNext()) {
-			CTaxiwayNode lTaxiwayNode = (CTaxiwayNode) iter.next();
-			lCoordinationList.add(lTaxiwayNode.getCoordination());
+		
+		ANode node2 = null;
+		for(int loopNode = 0; loopNode < iNodeList.size()-1;loopNode++) {
+			ANode node1 = iNodeList.get(loopNode);
+			node2 = iNodeList.get(loopNode+1);
+			
+			CCoordination center = new CCoordination((node1.getCoordination().getXCoordination()+node2.getCoordination().getXCoordination())/2,(node1.getCoordination().getYCoordination()+node2.getCoordination().getYCoordination())/2);
+			
+			lCoordinationList.add(node1.getCoordination());
+			lCoordinationList.add(center);			
 		}
+		lCoordinationList.add(node2.getCoordination());
 		
 		CDrawingInform  lDrawingInform = new CDrawingInform(lCoordinationList, new CAltitude(0,EGEOUnit.FEET), EShape.LINE, Color.BLACK,true,10.0);
 		return lDrawingInform;			

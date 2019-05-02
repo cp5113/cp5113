@@ -1,6 +1,7 @@
 package api.inf;
 
 import elements.facility.CAirport;
+import elements.facility.CRunway;
 import elements.mobile.vehicle.CAircraft;
 import elements.mobile.vehicle.CFlightPlan;
 import elements.mobile.vehicle.IAircraft;
@@ -57,7 +58,7 @@ public interface IAssignRunway {
 	
 	================================================================
 	 */
-	public void assignRunway(long aCurrentTimeInMilliSeconds, IAircraft aAircraft, CFlightPlan aFlightPlan, CAirport aAirport);
+	public CRunway assignRunway(long aCurrentTimeInMilliSeconds, IAircraft aAircraft, CFlightPlan aFlightPlan, CAirport aAirport);
 	/*
 	================================================================
 	

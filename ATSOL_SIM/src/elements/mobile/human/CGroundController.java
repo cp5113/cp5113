@@ -53,7 +53,9 @@ import java.util.List;
 import java.util.Random;
 
 import api.CAssignRunwayAPI;
+import api.CAssignSpotAPI;
 import elements.COccupyingInform;
+import elements.facility.AFacility;
 import elements.facility.CAirport;
 import elements.facility.CRunway;
 import elements.facility.CSpot;
@@ -128,121 +130,17 @@ public class CGroundController extends AATCController {
 			}
 			
 			
-			// Conflict Detection
-			ArrayList<CAircraft> lOtherACList = new ArrayList<CAircraft>();
+			// Conflict Detection			
 			if(!(lAircraft.getMoveState() instanceof CAircraftNothingMoveState)) {
-				
-//				// Ignore already stopping
-//				if(lAircraft.getMoveState() instanceof CAircraftGroundConflictStopMoveState) continue;
-				
 				// Create Search aircraft List
+				ArrayList<CAircraft> lOtherACList = new ArrayList<CAircraft>();
 				lOtherACList.addAll(iAircraftList);
-				try {
-					lOtherACList.remove(lAircraft);
-				}catch(Exception e) {
-					System.out.println();
-				}
 				
-				// Detect and resolution Conflict
-				for(CAircraft loopOther : lOtherACList) {
-					if((loopOther.getMoveState() instanceof CAircraftNothingMoveState)) continue;
-					Polygon lthisACSafety = lAircraft.getSafetyPolygonInform();
-					Polygon lthisACShape = lAircraft.getShapePolygonInform();
-					Polygon lotherACSafety = loopOther.getSafetyPolygonInform();
-					Polygon lotherACShape = loopOther.getShapePolygonInform();
-//					System.out.println();
-//					System.out.println();
-					
-					// Detect Conflict
-					Shape lConflictSafetyAndSafetyInfo;
-					Shape lConflictSafetyAndShapeInfo;
-					boolean lConflictSafetyAndSafety=false;
-					boolean lConflictSafetyAndShape=false;;
-					synchronized (lthisACSafety) {
-						synchronized (lotherACShape) {
-							synchronized (lthisACShape) {
-								synchronized (lotherACSafety) {
-									lConflictSafetyAndSafetyInfo = Shape.intersect(lthisACSafety, lotherACSafety);
-									lConflictSafetyAndShapeInfo  = Shape.intersect(lthisACSafety, lotherACShape);									
-									lConflictSafetyAndSafety = lConflictSafetyAndSafetyInfo.getBoundsInLocal().isEmpty() == false;
-									lConflictSafetyAndShape  = lConflictSafetyAndShapeInfo.getBoundsInLocal().isEmpty() == false;
-									if(lConflictSafetyAndSafety) {
-										System.out.println("Conflict Detection : " + lAircraft + "-" + loopOther + " (Safety -> Safety)");
-									}
-									if(lConflictSafetyAndShape) {
-										System.out.println("Conflict Detection : " + lAircraft + "-" + loopOther + " (Safety -> Shape)");
-									}
-								}
-							}
-						}
-					}
-
-					
-					
-					/*
-					 * Valid Priority
-					 */ 
-
-					// When Conflict resolved, continue Taxiing
-					if(!lConflictSafetyAndSafety && !lConflictSafetyAndShape) {
-						if(lAircraft.getConflictVehicle()!=null) {
-							lAircraft.setConflictVehicle(null);
-							lAircraft.setMoveState(new CAircraftTaxiingMoveState());	
-							continue;
-						}
-						continue;
-					}
-						
-						
-						
-					// Ignore when other aircraft has this aircraft as conflict vehicle					
-					if(loopOther.getConflictVehicle()!=null&&loopOther.getConflictVehicle().equals(lAircraft)) continue;
-					
-
-					// Ignore if leading Aircraft
-					if(lAircraft.getLeadingVehicle()!=null&&lAircraft.getLeadingVehicle().equals(loopOther)) continue;
-
-					// When the other aircraft's routing has my link
-					// I have a priority
-					if(loopOther.getRoutingInfoLink().contains(lAircraft.getCurrentLink())) continue;
-
-					// Departure Priority
-					// If other aircraft is arrival,
-					// I have a priority
-					if(loopOther.getMode() == EMode.ARR) continue;
-
-					
-					
-					// Low Priority
-					if(lConflictSafetyAndShape) {
-						// set conflict vehicle
-						lAircraft.setConflictVehicle(loopOther);
-
-						// Set Status								
-						lAircraft.setMoveState(new CAircraftGroundConflictStopMoveState());
-					}
-					
-					
-
-					/*
-					 * Set Conflict behavior
-					 */ 
-
-
-
-
-					// Drawing
-					GraphicsContext gc = CAtsolSimGuiControl.iInstance.getSimCanvas().getGraphicsContext2D();
-					double x = lConflictSafetyAndShapeInfo.getBoundsInLocal().getMaxX();
-					double y = lConflictSafetyAndShapeInfo.getBoundsInLocal().getMaxY();					
-					CCoordination p = CAtsolSimGuiControl.iInstance.changeCoordinatesInCanvas(x, y);
-					gc.setStroke(Color.RED);
-					gc.strokeOval(p.getXCoordination()-2, p.getYCoordination()-2, 4, 4);
-					System.err.println("Require : Link Conflict Detection Priority");
-					
-
-				}//for(CAircraft loopOther : lOtherACList) {
+				CGroundConflictDetectionAndResolution.groundConflictDetectionAndResolution(lAircraft, lOtherACList);
+				
 			} // if(!(lAircraft.getMoveState() instanceof CAircraftNothingMoveState)) {
+
+
 		}	// for(int loopAC = 0; loopAC < iAircraftList.size(); loopAC++) {				
 		
 	} // public synchronized void controlAircraft() {
@@ -258,7 +156,9 @@ public class CGroundController extends AATCController {
 			if(!(aAircraft.getMoveState() instanceof CAircraftTaxiingMoveState) && aAircraft.getMode() == EMode.DEP && iCurrentTimeInMilliSecond>lTimeSTDThis && iNextEventTime<0) {
 				
 				// Assign Runway for Departure
-				assignRunwayDeparture(aAircraft, lFlightPlan);
+				CRunway lAssignedRunway = assignRunwayDeparture(aAircraft, lFlightPlan);
+				aAircraft.setDepartureRunway(lAssignedRunway);
+				
 				// Find Runway entring Node
 				ANode lRunwayEnteringNode = aAircraft.getDepartureRunway().findEnteringNodeForDeparture();
 				aAircraft.setRunwayEntryPoint((CTaxiwayNode) lRunwayEnteringNode);
@@ -304,7 +204,7 @@ public class CGroundController extends AATCController {
 				lOD.add(((CSpot) lFlightPlan.getNode(0)).getTaxiwayNode()); // CurrentNode
 				lOD.add(((CAirport)lFlightPlan.getOriginationNode()).getTaxiwayNodeList().get(((CAirport)lFlightPlan.getOriginationNode()).getTaxiwayNodeList().indexOf(lPushbackNode))); // Destination Node				
 				lRouteList =  (LinkedList<CTaxiwayNode>) iRoutingAlgorithm.findShortedPath(lOD);
-				long lPushbackInstructionTimeMilliSec = calculatePushbackInstructionTime();
+				long lPushbackInstructionTimeMilliSec = calculatePushbackInstructionTime(aAircraft);
 				
 				// Set Route to Aircraft
 				lRouteList.remove(0);				
@@ -357,7 +257,7 @@ public class CGroundController extends AATCController {
 		aAircraft.setRoutingInfo(lRouteList);
 
 		// Calculate Instruction and Read back Time				
-		long lTaxiInstructionTimeMilliSec = calculateTaxiInstructionTime(lRouteList);
+		long lTaxiInstructionTimeMilliSec = calculateTaxiInstructionTime(lRouteList,aAircraft);
 		
 		/*
 		 * verify Opposite direction traffic 
@@ -429,7 +329,10 @@ public class CGroundController extends AATCController {
 			if(!(lAircraft.getMoveState() instanceof CAircraftTaxiingMoveState) && lAircraft.getMode() == EMode.DEP && iCurrentTimeInMilliSecond>lTimeSTDThis && iNextEventTime<0) {
 				
 				// Assign Runway for Departure
-				assignRunwayDeparture(lAircraft, lFlightPlan);
+				CRunway lAssignedRunway = assignRunwayDeparture(lAircraft, lFlightPlan);
+				lAircraft.setDepartureRunway(lAssignedRunway);
+				
+				
 				// Find Runway entring Node
 				ANode lRunwayEnteringNode = lAircraft.getDepartureRunway().findEnteringNodeForDeparture();
 				
@@ -473,7 +376,7 @@ public class CGroundController extends AATCController {
 				lOD.add(((CSpot) lFlightPlan.getNode(0)).getTaxiwayNode()); // CurrentNode
 				lOD.add(((CAirport)lFlightPlan.getOriginationNode()).getTaxiwayNodeList().get(((CAirport)lFlightPlan.getOriginationNode()).getTaxiwayNodeList().indexOf(lPushbackNode))); // Destination Node				
 				lRouteList =  (LinkedList<CTaxiwayNode>) iRoutingAlgorithm.findShortedPath(lOD);
-				long lPushbackInstructionTimeMilliSec = calculatePushbackInstructionTime();
+				long lPushbackInstructionTimeMilliSec = calculatePushbackInstructionTime(lAircraft);
 				
 				// Set Route to Aircraft
 				lRouteList.remove(0);				
@@ -539,7 +442,7 @@ public class CGroundController extends AATCController {
 	
 	
 	
-	public synchronized void assignRunwayDeparture(CAircraft aAircraft, CFlightPlan aFlightPlan) {
+	public synchronized CRunway assignRunwayDeparture(CAircraft aAircraft, CFlightPlan aFlightPlan) {
 		
 		// When the aircraft doesn't have departure runway
 		if( aFlightPlan.getDepartureRunway() == null && aAircraft.getCurrentNode().getOwnerObject() instanceof CAirport) {
@@ -557,14 +460,23 @@ public class CGroundController extends AATCController {
 					}
 				}
 			} //for(CRunway loopRunway : lAirport.getRunwayList()) {
-			aAircraft.setDepartureRunway(lCandidateRunway);
+			
 			
 			
 			// Run User API
 			CAssignRunwayAPI lUserAPI = new CAssignRunwayAPI();
-			lUserAPI.assignRunway(iCurrentTimeInMilliSecond, aAircraft, aFlightPlan, lAirport);
+			CRunway lRunwayFromAPI = lUserAPI.assignRunway(iCurrentTimeInMilliSecond, aAircraft, aFlightPlan, lAirport);
+			if(lRunwayFromAPI!=null) {
+				lCandidateRunway = lRunwayFromAPI;
+			}
 			
+			return lCandidateRunway;
+		}else if(aFlightPlan.getDepartureRunway() != null){
+			return aFlightPlan.getDepartureRunway();
+		}else {
+			return null;
 		}
+		
 	}
 	
 	public synchronized void issueTaxiingInstruction(CAircraft aAircraft, CFlightPlan aFlightPlan, ANode aDestinationNode) {
@@ -576,7 +488,7 @@ public class CGroundController extends AATCController {
 		aAircraft.setRoutingInfo(lRouteList);
 
 		// Calculate Instruction and Read back Time				
-		long lTaxiInstructionTimeMilliSec = calculateTaxiInstructionTime(lRouteList);
+		long lTaxiInstructionTimeMilliSec = calculateTaxiInstructionTime(lRouteList,aAircraft);
 		
 		/*
 		 * verify Opposite direction traffic 
@@ -637,12 +549,20 @@ public class CGroundController extends AATCController {
 
 		// Get Plan and Airport
 		CFlightPlan lFlightPlan = (CFlightPlan)aAircraft.getCurrentPlan();
-		CAirport lAirportControl= (CAirport)iOwnedFacilty;
+		
+		CAirport lAirportControl = null;
+		for(AFacility loopFa : iOwnedFacilty) {
+			if(loopFa instanceof CAirport) {
+				lAirportControl= (CAirport)loopFa;
+			}
+		}
+		
 		
 		// Verify Arrival or departure		
 		if(lFlightPlan.getOriginationAirport().equalsIgnoreCase(lAirportControl.getAirportICAO())) { // Departure
 			// Validate Departure Spot
 			CSpot lSpotAssigned = assignSpot(aAircraft, lFlightPlan.getDepartureSpot());
+			lSpotAssigned.setIsOccuping(true);
 			
 			// Set Departure Spot
 			lFlightPlan.insertPlanItem(0, lSpotAssigned, lFlightPlan.getScheduleTimeList().get(0), new CAltitude(0,EGEOUnit.FEET));
@@ -651,7 +571,7 @@ public class CGroundController extends AATCController {
 			lFlightPlan.removePlanItem(lFlightPlan.getNode(1));
 			
 			// Set Aircraft Current Position
-			aAircraft.getCurrentPostion().setXYCoordination(lSpotAssigned.getTaxiwayNode().getCoordination().getXCoordination(), lSpotAssigned.getTaxiwayNode().getCoordination().getYCoordination());
+			aAircraft.getCurrentPosition().setXYCoordination(lSpotAssigned.getTaxiwayNode().getCoordination().getXCoordination(), lSpotAssigned.getTaxiwayNode().getCoordination().getYCoordination());
 			aAircraft.setCurrentNode(lSpotAssigned.getTaxiwayNode());
 			// Set Aircraft Mode
 			aAircraft.setMode(EMode.DEP);
@@ -675,7 +595,12 @@ public class CGroundController extends AATCController {
 		// Set Output
 		CSpot lAssignSpotResult = null;
 		
-		CAirport lAirportControlled= (CAirport)iOwnedFacilty;
+		CAirport lAirportControlled = null;
+		for(AFacility loopFa : iOwnedFacilty) {
+			if(loopFa instanceof CAirport) {
+				lAirportControlled= (CAirport)loopFa;
+			}
+		}
 		CAircraftPerformance lPerformance = (CAircraftPerformance) ((CAircraftType)aAircraft.getVehcleType()).getPerformance();
 		
 		// Validate CSpot is available wingspan and empty
@@ -695,6 +620,10 @@ public class CGroundController extends AATCController {
 				}
 			}
 			
+			CSpot lSpotAPI = new CAssignSpotAPI().assignSpot(aAircraft, (CAirport)iOwnedFacilty);
+			if(lSpotAPI!=null) {
+				lAssignSpotResult = lSpotAPI;
+			}
 		}
 		
 		

@@ -1,6 +1,7 @@
 package elements.mobile.vehicle;
 
 import elements.facility.CRunway;
+import elements.facility.CTaxiwayNode;
 import elements.mobile.vehicle.AAircraft;
 import elements.mobile.vehicle.state.EAircraftMovementMode;
 import elements.mobile.vehicle.state.EAircraftMovementStatus;
@@ -46,13 +47,6 @@ import elements.util.geo.CCoordination;
 
 public class CAircraft extends AAircraft {
 
-	@Override
-	public CCoordination getCurrentPosition() {
-
-		return iCurrentPostion;
-	}
-
-
 
 	@Override
 	public double getCurrentVelocityMps() {
@@ -87,7 +81,7 @@ public class CAircraft extends AAircraft {
 
 	@Override
 	public void setArrivalRunway(CRunway aArrivalRunway) {
-		((CFlightPlan)(iCurrentPlan)).setDepartureRunway(aArrivalRunway);
+		((CFlightPlan)(iCurrentPlan)).setArrivalRunway(aArrivalRunway);
 	}
 
 

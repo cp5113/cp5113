@@ -39,7 +39,7 @@ import elements.property.EWTC;
  *
  */
 
-public class CTakeoffPerformance implements ITakeoffPerformance {
+public class CTakeoffPerformanceAPI implements ITakeoffPerformance {
 
 	
 	/*
@@ -82,9 +82,6 @@ public class CTakeoffPerformance implements ITakeoffPerformance {
 		case M:
 			std = 0.2;
 			
-			if(aCurrentSpeed>=25.24) {
-				System.out.println();
-			}
 				
 			// Formulation1 (Stabilization + Increasing to target N1)
 			f1p1x= 0;
@@ -116,7 +113,7 @@ public class CTakeoffPerformance implements ITakeoffPerformance {
 			}
 			
 			
-			return targetAcceleration;
+			return targetAcceleration;	
 		case H:
 			std = 0.24;
 			// Formulation1 (Stabilization + Increasing to target N1)

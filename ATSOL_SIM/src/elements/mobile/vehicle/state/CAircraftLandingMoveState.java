@@ -7,7 +7,12 @@ import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import com.sun.prism.image.Coords;
+
+import api.CLandingPerformanceAPI;
+import api.CRunwayExitDecisionSpeed;
 import api.CTakeoffPerformanceAPI;
+import api.CTouchdownDistanceAPI;
 import elements.AElement;
 import elements.airspace.CWaypoint;
 import elements.facility.CAirport;
@@ -67,7 +72,7 @@ import sim.gui.control.CAtsolSimGuiControl;
  *
  */
 
-public class CAircraftTakeoffMoveState implements IVehicleMoveState {
+public class CAircraftLandingMoveState implements IVehicleMoveState {
 
 
 	/*
@@ -89,56 +94,66 @@ public class CAircraftTakeoffMoveState implements IVehicleMoveState {
 	@Override
 	public synchronized void doMove(long aIncrementTimeStep, long aCurrentTime, AVehicle aThisVechicle) {
 		
+		
 		// Initial variable
 		double deltaTOrigin = 0.01;
 		double deltaT       = deltaTOrigin;
-		double lAmountTime = 0;
+				
+		long lCurrentTimeFirstTime = (long)((long)(aCurrentTime/aIncrementTimeStep)*aIncrementTimeStep);
+		long lTargetTime   = lCurrentTimeFirstTime+aIncrementTimeStep;
+		long lCurrentTime = aCurrentTime;
+		double lAmountTime = ((double)lCurrentTime-(double)lCurrentTimeFirstTime)/(double)aIncrementTimeStep; 
+		
+		
 		
 		// Get Initial Information
-		CAircraft   	lAircraft   		 = (CAircraft) aThisVechicle;
-		CAircraftPerformance lPerformance    = (CAircraftPerformance) ((CAircraftType)lAircraft.getVehcleType()).getPerformance(); 
-		
-		CFlightPlan 	lFlightPlan 		 = (CFlightPlan) lAircraft.getCurrentPlan();
-		CRunway			lRunway				= lAircraft.getDepartureRunway();
-		CTakeoffPerformanceAPI lTakeoffPerformance = new CTakeoffPerformanceAPI();
-		
-
-		
-//		for(CTaxiwayNode loopNode : ((CAirport)((CTaxiwayNode)lAircraft.getCurrentNode()).getOwnerObject()).getTaxiwayNodeList()) {
-//			if(loopNode.getName().equalsIgnoreCase("N_7_1")) {
-//				System.out.println();
-//			}
-//		}
+		CAircraft   	lAircraft   		= (CAircraft) aThisVechicle;
+		CAircraftPerformance lPerformance   = (CAircraftPerformance) ((CAircraftType)lAircraft.getVehcleType()).getPerformance();		
+		CFlightPlan 	lFlightPlan 		= (CFlightPlan) lAircraft.getCurrentPlan();		
+		CRunway			lRunway				= lAircraft.getArrivalRunway();
+		CCoordination lThresholdCoord 		= lRunway.getTaxiwayNodeList().get(0).getCoordination();
+		CLandingPerformanceAPI lLandingPerformance = new CLandingPerformanceAPI();
+		lAircraft.setMovementStatus(EAircraftMovementStatus.LANDING_DECEL);
 		
 		
-		// Remove Flight Plan
-//		lAircraft.getCurrentNode().getVehicleWillUseList().remove
-		ANode lDestination = lRunway.getTaxiwayNodeList().get(lRunway.getTaxiwayNodeList().size()-1);
-		CCoordination	lDestinationCoord    = lRunway.getTaxiwayNodeList().get(lRunway.getTaxiwayNodeList().size()-1).getCoordination();
-		if(lFlightPlan.getNode(0) instanceof CWaypoint) {
-			lDestination =(ANode) lFlightPlan.getNode(0);
-			lDestinationCoord = lDestination.getCoordination();
-			// Runway Control
-			lRunway.getDepartureAircraftList().remove(lAircraft);
-			lRunway.getRunwayOccupyingList().remove(lAircraft);
+		// Exit Decision Speed
+		double lExitDecisionSpeed = new CRunwayExitDecisionSpeed().calculateRunwayExitDecisionSpeed(lAircraft, lRunway);
+		if(lExitDecisionSpeed<=0) {
+			lExitDecisionSpeed = 20.5778; // m/s == 40kts
 		}
 		
+		
+		// Get Touchdown Distance
+		double lTouchdownDistance = lAircraft.getTouchdownDistance();
+		if (lTouchdownDistance<0) {
+			lTouchdownDistance           = new CTouchdownDistanceAPI().calculateTouchdownDistance(lAircraft, lRunway);
+			if(lTouchdownDistance<0) {
+				// MLAT Analysis
+				// 20170602~20170828
+				// ARR 34,620 aircraft			
+				lTouchdownDistance              = 737.2 + (127.1*lAircraft.getRandomNumber()) - 127.1/2; 
+			}
+			lAircraft.setTouchdownDistance(lTouchdownDistance);
+		}//if (lAircraft.getTouchdownDistance()<0) {
 
 		
 		
+		// Create Flight Plan
+		if(!(lFlightPlan.getNode(0) instanceof CTaxiwayNode)) {
+			for(int loopRunwayNode = lRunway.getTaxiwayNodeList().size()-1 ; loopRunwayNode>=1 ; loopRunwayNode--) {
+				CTaxiwayNode lNode = lRunway.getTaxiwayNodeList().get(loopRunwayNode);
+				lNode.getVehicleWillUseList().add(lAircraft);
+				Calendar cal = Calendar.getInstance();
+				cal.setTimeInMillis(0);
+				lFlightPlan.insertPlanItem(0,lNode, cal, new CAltitude(0, EGEOUnit.FEET));			
+			}
+		}
+		
+		
+	
 		
 		// Move While until amountTime reach incrementTimeStep
 		while(lAmountTime*1000<aIncrementTimeStep) {
-			
-			// Reconstruct Flight Plan
-			double lSpeedTarget = lPerformance.getV2()*0.514444; // kts to m/s			
-			double lSpeedCurrent = lAircraft.getCurrentVelocity().getVelocity();
-
-			if(lSpeedCurrent>=lSpeedTarget*1.3 && lFlightPlan.getNode(0) instanceof CTaxiwayNode) {
-				lDestination       =(ANode) lFlightPlan.getNode(0); 
-				lDestinationCoord  = lDestination.getCoordination();
-				lFlightPlan.removePlanItem(lFlightPlan.getNode(0));
-			}
 			
 			// get Current Position
 			double lXCurrent = lAircraft.getCurrentPosition().getXCoordination();
@@ -147,10 +162,8 @@ public class CAircraftTakeoffMoveState implements IVehicleMoveState {
 			double lYOrigin = lAircraft.getCurrentPosition().getYCoordination();
 			
 			// Extract Target Position == destination node
-			// Re construct destination Node
-			
-			double lXTarget = lDestinationCoord.getXCoordination();//lFlightPlan.getNode(0).getCoordination().getXCoordination();
-			double lYTarget = lDestinationCoord.getYCoordination();//lFlightPlan.getNode(0).getCoordination().getYCoordination();
+			double lXTarget = lFlightPlan.getNode(0).getCoordination().getXCoordination();//lFlightPlan.getNode(0).getCoordination().getXCoordination();
+			double lYTarget = lFlightPlan.getNode(0).getCoordination().getYCoordination();//lFlightPlan.getNode(0).getCoordination().getYCoordination();
 
 			
 			
@@ -162,22 +175,29 @@ public class CAircraftTakeoffMoveState implements IVehicleMoveState {
 			if(Double.isNaN(lCos)) lCos=1;
 			if(Double.isNaN(lSin)) lSin=0;
 		
-			
+			double lSpeedCurrent = lAircraft.getCurrentVelocity().getVelocity();
 
-			
+
 			/*
 			 * Calculate Next Position 
 			 */
 			while(true) {
 				
 
-				// Un-Uniform Model
-				double lAccelCurrent  = lTakeoffPerformance.calculateTargetAcceleration(lPerformance.getWTC(), lSpeedCurrent, lAircraft.getRandomNumber());
+				// Un-Uniform Model after Touch down
+				double lAccelCurrent = 0;
+//				if( lAircraft.calculateDistanceBtwCoordination(lAircraft.getCurrentPosition(), lThresholdCoord) >= lTouchdownDistance) {
+//				System.out.println(((long)(lAmountTime*1000 + lCurrentTimeFirstTime) - (lAircraft.getRunwayEntryTime()))/1000.0);
+//				System.out.println(lAmountTime*1000);
+//				System.out.println(lCurrentTimeFirstTime);
+//				System.out.println(lAircraft.getRunwayEntryTime());
+				lAccelCurrent  = lLandingPerformance.calculateTargetAcceleration(lPerformance.getWTC(), lSpeedCurrent, lAircraft.getRandomNumber(),  ((long)(lAmountTime*1000 + lCurrentTimeFirstTime) - (lAircraft.getRunwayEntryTime()))/1000.0);
+//				}
 
 
 				// Color and Status change
-				if(lAircraft.getMovementMode()!=EAircraftMovementMode.TAKEOFF) {
-						lAircraft.setMovementMode(EAircraftMovementMode.TAKEOFF);						
+				if(lAircraft.getMovementMode()!=EAircraftMovementMode.LANDING) {
+						lAircraft.setMovementMode(EAircraftMovementMode.LANDING);						
 
 				}
 
@@ -210,22 +230,13 @@ public class CAircraftTakeoffMoveState implements IVehicleMoveState {
 				lAircraft.setCurrentVelocity(lSpeedCurrent);
 				
 				
-					
-				
-//				CAtsolSimGuiControl.getInstance().drawDrawingObjectList();
-				
 				// Update Time
 				lAmountTime += deltaT;
-//				System.out.println(lAmountTime);
-//				System.out.println(lXTarget + "," + lYTarget);
-//				System.out.println(lXCurrent + "," + lYCurrent);
-//				System.out.println();
-			
+				
+				
+				
 				// Verify next Point overshoot next node
 				if(!SValidateRangeChecker.validDataInRange(lXNext,lXOrigin,lXTarget) || !SValidateRangeChecker.validDataInRange(lYNext,lYOrigin,lYTarget)) {
-					
-//					System.out.println("Damn it");
-					
 					// Reduce Delta T
 					if(deltaT * 0.1 <=0.00001) {
 						
@@ -254,37 +265,27 @@ public class CAircraftTakeoffMoveState implements IVehicleMoveState {
 				}
 				
 				// Escape when amount T over incrementTimeStep
-				if(lAmountTime*1000 >= aIncrementTimeStep) {
+				if(lAmountTime*1000>=aIncrementTimeStep) {
 					break;
 				}
 				
 			
+				// Escape when decision speed
+				if(lSpeedCurrent <= lExitDecisionSpeed) {					
+					lAircraft.setMoveState(new CAircraftOnRunwayAfterLandingMoveState());
+					lAircraft.doMoveVehicle((long)(lAmountTime*1000));
+					return;
+				}
 				
 			} //while(true) {
 			
 			
 			// Verify Next Node or not
-			if(lFlightPlan.getNode(0).getCoordination().getXCoordination() == lXCurrent && lFlightPlan.getNode(0).getCoordination().getYCoordination() == lYCurrent) {
-
+			if(lFlightPlan.getNode(0).getCoordination().getXCoordination() == lXCurrent && lFlightPlan.getNode(0).getCoordination().getYCoordination() == lYCurrent) {				
 				lAircraft.getCurrentNode().getVehicleWillUseList().remove(lAircraft);
-				// When reach end of taxiway link
-				// Remove this node from flight plan
+				lAircraft.setCurrentNode((CTaxiwayNode)lFlightPlan.getNode(0));
 				lFlightPlan.removePlanItem(lFlightPlan.getNode(0));				
-				try{
-					lAircraft.removeRoutingInfo(0);
-					lAircraft.setCurrentNode((ANode) lFlightPlan.getNode(0));
-				}catch(Exception e) {
-					System.err.println("CAircraftTakeoffMoveState : You must Create Airborne Routing and Move state");
-					lAircraft.setMoveState(new CAircraftTerminationMoveState());
-					return;
-				}
-				
-				// Update Current Location
-//				lAircraft.setCurrentLink(lAircraft.getRoutingLinkInfoUsingNode((ANode) lFlightPlan.getNode(0)));
-				
-				
-				
-				
+			
 			}
 			
 		} //while(lAmountTime<aIncrementTimeStep) {

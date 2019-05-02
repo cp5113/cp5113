@@ -7,11 +7,17 @@ package elements.mobile.vehicle;
 
 import api.CPushBackPauseTimeAPI;
 import elements.airspace.CWaypoint;
+import elements.area.ASector;
 import elements.facility.CAirport;
+import elements.facility.CRunway;
 import elements.facility.CTaxiwayNode;
 import elements.mobile.human.AATCController;
+import elements.mobile.human.CApproachController;
 import elements.mobile.human.CGroundController;
 import elements.mobile.human.CLocalController;
+import elements.mobile.human.IATCController;
+import elements.mobile.vehicle.state.CAircraftApproachMoveState;
+import elements.mobile.vehicle.state.CAircraftLandingMoveState;
 import elements.mobile.vehicle.state.CAircraftLineUpMoveState;
 import elements.mobile.vehicle.state.CAircraftNothingMoveState;
 import elements.mobile.vehicle.state.CAircraftTaxiingMoveState;
@@ -21,8 +27,9 @@ import elements.mobile.vehicle.state.EAircraftMovementStatus;
 import elements.network.ANode;
 import elements.operator.CAirline;
 import elements.property.EMode;
+import elements.table.ITableAble;
 import elements.util.geo.CCoordination;
-import javafx.scene.shape.Polygon;
+import sim.CAtsolSimMain;
 import sim.clock.CSimClockOberserver;
 import sim.clock.ISimClockOberserver;
 
@@ -84,6 +91,16 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 	protected 	CTaxiwayNode					iRunwayEntryPoint;
 	protected 	CTaxiwayNode					iRunwayEntryPointReference;
 	
+	protected	double							iTargetExitSpeed;
+
+	double iTouchdownDistance = -999;
+	long	iRunwayEntryTime = -9L;
+
+	
+	CTaxiwayNode iExitTaxiwayNode = null;
+	
+	
+	
 	
 	
 	@Override
@@ -99,11 +116,66 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 	================================================================
 	 */
 
+	public synchronized CTaxiwayNode getExitTaxiwayNode() {
+		return iExitTaxiwayNode;
+	}
+
+	public synchronized double getTargetExitSpeed() {
+		return iTargetExitSpeed;
+	}
+
+	public synchronized void setTargetExitSpeed(double aTargetExitSpeed) {
+		iTargetExitSpeed = aTargetExitSpeed;
+	}
+
+	public synchronized void setExitTaxiwayNode(CTaxiwayNode aExitTaxiwayNode) {
+		iExitTaxiwayNode = aExitTaxiwayNode;
+	}
+
+	public synchronized long getRunwayEntryTime() {
+		return iRunwayEntryTime;
+	}
+
+	public synchronized void setRunwayEntryTime(long aRunwayEntryTime) {
+		iRunwayEntryTime = aRunwayEntryTime;
+	}
+
+	public synchronized double getTouchdownDistance() {
+		return iTouchdownDistance;
+	}
+
+	public synchronized void setTouchdownDistance(double aTouchdownDistance) {
+		iTouchdownDistance = aTouchdownDistance;
+	}
+
 	public double calculateDistanceBtwNodes(ANode a, ANode b) {
 		double output = 0;
 		output = Math.sqrt((a.getCoordination().getXCoordination() - b.getCoordination().getXCoordination()) *(a.getCoordination().getXCoordination() - b.getCoordination().getXCoordination()) +
 				(a.getCoordination().getYCoordination() - b.getCoordination().getYCoordination()) *(a.getCoordination().getYCoordination() - b.getCoordination().getYCoordination())); 
 		return output;
+	}
+	
+	public double calculateDistanceBtwCoordination(CCoordination a, CCoordination b) {
+		double output = 0;
+		
+		ANode aa = new ANode() {
+			@Override
+			public void setATCControllerToChildren(IATCController aController) {
+			}
+		};
+		
+		
+		ANode bb = new ANode() {
+			public void setATCControllerToChildren(IATCController aController) {
+			}
+		};
+		
+		aa.setCoordination(a);
+		bb.setCoordination(b);
+		
+		output = calculateDistanceBtwNodes(aa, bb);
+		return output;
+		
 	}
 
 	public synchronized String getRegistration() {
@@ -150,7 +222,7 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 
 	public synchronized long getPushbackPauseTimeInMilliSeconds() {
 		CPushBackPauseTimeAPI userAPI = new CPushBackPauseTimeAPI();
-		long userPushback = userAPI.calculatePushbackPauseTimeInMilliseconds((CAircraft)this);
+		long userPushback = userAPI.calculatePushbackPauseTimeInMilliseconds(iCurrentTimeInMilliSecond, (CAircraft)this);
 		if(userPushback>=0) {
 			iPushbackPauseTimeInMilliSeconds = userPushback;
 		}
@@ -224,8 +296,8 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 		
 		// Initialize status of this aircraft
 		CFlightPlan lCurrentPlan = (CFlightPlan) this.iCurrentPlan;
-		this.getCurrentPostion().setXCoordination(lCurrentPlan.getNode(0).getCoordination().getXCoordination());
-		this.getCurrentPostion().setYCoordination(lCurrentPlan.getNode(0).getCoordination().getYCoordination());
+		this.getCurrentPosition().setXCoordination(lCurrentPlan.getNode(0).getCoordination().getXCoordination());
+		this.getCurrentPosition().setYCoordination(lCurrentPlan.getNode(0).getCoordination().getYCoordination());
 		
 		
 		/*
@@ -248,7 +320,16 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 		// if departure from waypoint
 		// add airspace Controller
 		if(lCurrentPlan.getOriginationNode().getClass().getSimpleName().equalsIgnoreCase("CWaypoint")) {
-			iATCController = ((CWaypoint) lCurrentPlan.getOriginationNode()).getATCController();
+			CWaypoint lWaypoint = (CWaypoint) lCurrentPlan.getOriginationNode();
+			AATCController lCandidate = null;
+			for(ITableAble loopAirspace : CAtsolSimMain.getInstance().getAirspaceTable().getElementList()) {
+				boolean isInside = ((ASector)loopAirspace).isInside(lWaypoint.getCoordination());
+				if(isInside) {
+					lCandidate =  ((ASector)loopAirspace).getControllerList().get(0);
+					break;
+				}
+			}
+			iATCController = lCandidate;
 		}
 		
 		/*
@@ -334,6 +415,7 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 				   this.getMovementMode() == EAircraftMovementMode.PUSHBACK	&&this.getMode() == EMode.DEP &&
 				    this.getPushbackPausedTimeInMilliSeconds()>=this.getPushbackPauseTimeInMilliSeconds()) {
 					((CGroundController)iATCController).requestTaxiToRunway((CAircraft) this);
+					
 				}
 				
 				// Request Lineup Clearance
@@ -352,9 +434,12 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 					((CLocalController)iATCController).requestTakeoff((CAircraft) this);
 				}
 				
+				
+				// Terminate Aircraft After Takeoff
 				if(this.getMoveState() instanceof CAircraftTerminationMoveState) {
-					this.getCurrentPostion().setXYCoordination(-99999999999.0, -999999999.0);
+					this.getCurrentPosition().setXYCoordination(-99999999999.0, -999999999.0);
 					this.setCurrentVelocity(0);
+					this.iATCController.handOffAircraft(null, (CAircraft)this);
 					this.iATCController = null;
 					this.iConflictVehicle = null;
 					this.iLeadingVehicle  = null;
@@ -362,6 +447,47 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 					notifyToClockImDone();					
 					break;
 				}
+				
+				
+				
+				// Request Landing to Approach 
+				if(!(this.getMoveState() instanceof CAircraftLandingMoveState) &&
+				   !(this.getMoveState() instanceof CAircraftApproachMoveState) &&
+						this.getMode() == EMode.ARR &&
+						iATCController instanceof CApproachController) {	
+					this.setMovementStatus(EAircraftMovementStatus.APPROACHING);
+					this.setMovementMode(EAircraftMovementMode.APPROACHING);
+					((CApproachController)iATCController).requestLanding((CAircraft) this);					
+				}
+				
+				
+				
+				// Handoff to Local controller Request Landing to LocalController
+				if(this.getMovementMode()== EAircraftMovementMode.APPROACHING &&
+				   !(this.iATCController instanceof CLocalController)) {
+					
+					double lRemainingDistance = this.calculateDistanceBtwCoordination(this.getCurrentPosition(), this.getCurrentFlightPlan().getNode(0).getCoordination());
+					if(lRemainingDistance< 8*1852) {					
+						CRunway a = this.getArrivalRunway();
+						this.iATCController.handOffAircraft(this.getArrivalRunway().getATCController(), (CAircraft)this);
+						((CLocalController)iATCController).requestLanding((CAircraft) this);			
+					}
+				}
+				
+				
+				
+				// Request Taxi to Spot
+				if(this.getMovementMode()==EAircraftMovementMode.LANDING &&
+						this.getMovementStatus() == EAircraftMovementStatus.LANDING_DECEL&&
+						this.getExitTaxiwayNode()!=null &&
+						this.getCurrentFlightPlan().getNode(this.getCurrentFlightPlan().getNodeList().size()-1) instanceof CAirport) {
+					((CLocalController)iATCController).requestTaxiToSpot((CAircraft) this);
+				}
+				
+				
+				
+				
+				
 				
 				
 				// Move This Aircraft

@@ -2,6 +2,7 @@ package api;
 
 import api.inf.IAssignRunway;
 import elements.facility.CAirport;
+import elements.facility.CRunway;
 import elements.mobile.vehicle.CFlightPlan;
 import elements.mobile.vehicle.IAircraft;
 
@@ -44,8 +45,11 @@ import elements.mobile.vehicle.IAircraft;
 public class CAssignRunwayAPI implements IAssignRunway {
 
 	@Override
-	public void assignRunway(long aCurrentTimeInMilliSeconds, IAircraft aAircraft, CFlightPlan aFlightPlan,
+	public CRunway assignRunway(long aCurrentTimeInMilliSeconds, IAircraft aAircraft, CFlightPlan aFlightPlan,
 			CAirport aAirport) {
+		
+		
+				return null;
 	}
 
 }
