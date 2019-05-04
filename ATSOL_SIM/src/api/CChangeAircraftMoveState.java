@@ -1,11 +1,7 @@
 package api;
 
-import java.util.List;
-
-import api.inf.IATCInstructionTime;
-import elements.mobile.human.AATCController;
+import api.inf.IAddAircraftMoveState;
 import elements.mobile.vehicle.CAircraft;
-import elements.network.ANode;
 
 /**
  * 
@@ -34,46 +30,21 @@ import elements.network.ANode;
  * </p>
  * 
  * 
- * @date : 2019. 4. 29.
+ * @date : 2019. 5. 4.
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * 2019. 4. 29. : Coded by S. J. Yun.
+ * 2019. 5. 4. : Coded by S. J. Yun.
  *
  *
  */
 
-public class CATCInstructionTime implements IATCInstructionTime {
+public class CChangeAircraftMoveState implements IAddAircraftMoveState {
 
 	@Override
-	public long calculateTakeOffInstructionTime(CAircraft aAircraft, AATCController aController) {
+	public boolean changeAircraftMoveStatebyAPI(CAircraft aAircraft) {
 		// TODO Auto-generated method stub
-		return -9999999;
-	}
-
-	@Override
-	public long calculateTaxiInstructionTime(List<? extends ANode> aRoute, CAircraft aAircraft,
-			AATCController aController) {
-		// TODO Auto-generated method stub
-		return -9999999;
-	}
-
-	@Override
-	public long calculatePushbackInstructionTime(CAircraft aAircraft, AATCController aController) {
-		// TODO Auto-generated method stub
-		return -9999999;
-	}
-
-	@Override
-	public long calculateFrequencyChangeInstructionTime(CAircraft aAircraft, AATCController aController) {
-		// TODO Auto-generated method stub
-		return -9999999;
-	}
-
-	@Override
-	public long calculateLinupInstructionTime(CAircraft aAircraft, AATCController aController) {
-		// TODO Auto-generated method stub
-		return -9999999;
+		return false;
 	}
 	/*
 	================================================================
@@ -82,11 +53,6 @@ public class CATCInstructionTime implements IATCInstructionTime {
 	
 	================================================================
 	*/
-
-	public long calculateLandingInstructionTime(CAircraft aAircraft, AATCController aAatcController) {
-		// TODO Auto-generated method stub
-		return -9999999;
-	}
 
 	/*
 	================================================================

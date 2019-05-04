@@ -47,6 +47,8 @@ import java.util.Random;
 
 import api.CAssignRunwayAPI;
 import api.CAssignSpotAPI;
+import api.CRunwaySeparationAPI;
+import api.CRunwaySequenceAPI;
 import elements.facility.CAirport;
 import elements.facility.CRunway;
 import elements.facility.CSpot;
@@ -54,6 +56,7 @@ import elements.facility.CTaxiwayNode;
 import elements.mobile.vehicle.CAircraft;
 import elements.mobile.vehicle.CFlightPlan;
 import elements.mobile.vehicle.state.CAircraftApproachMoveState;
+import elements.mobile.vehicle.state.EAircraftMovementMode;
 import elements.network.ANode;
 import elements.network.INode;
 import elements.property.CAircraftPerformance;
@@ -99,8 +102,7 @@ public class CApproachController extends AATCController {
 		CFlightPlan lFlightPlan = (CFlightPlan)aAircraft.getCurrentPlan();
 		INode       lLastNode  = lFlightPlan.getNode(lFlightPlan.getNodeList().size()-1);
 		
-		// Verify Arrival or departure	
-		System.out.println();
+		// Verify Arrival or departure
 		if(lLastNode instanceof CAirport) {
 			// Set Mode
 			aAircraft.setMode(EMode.ARR);
@@ -116,7 +118,7 @@ public class CApproachController extends AATCController {
 			
 			
 		}else {
-			aAircraft.setMode(EMode.ETC);
+//			aAircraft.setMode(EMode.ETC);
 			System.err.println("CApproachController : You shall develope Crossing State or other things");
 		}
 		
@@ -131,10 +133,7 @@ public class CApproachController extends AATCController {
 		
 		// Assign Arrival Spot
 		CFlightPlan lFlightPlan = (CFlightPlan) aAircraft.getCurrentPlan();
-		CSpot lCandidateSpot = assignArrivalSpot(aAircraft);
-		lFlightPlan.setArrivalSpot(lCandidateSpot);
-		lCandidateSpot.setIsOccuping(true);
-		
+
 		
 		
 		// Assign Runway
@@ -142,9 +141,11 @@ public class CApproachController extends AATCController {
 		
 		
 		// Assign Runway
-		if(aAircraft.getArrivalRunway()==null) {
-			lRunway.getArrivalAircraftList().add(aAircraft);
+		if(aAircraft.getArrivalRunway()==null) {			
 			aAircraft.setArrivalRunway(lRunway);			
+		}
+		if(!lRunway.getArrivalAircraftList().contains(aAircraft)) {
+			lRunway.getArrivalAircraftList().add(aAircraft);
 		}
 		
 		
@@ -158,11 +159,35 @@ public class CApproachController extends AATCController {
 		// Estimate Time
 		long lETA = CApproachAircraftPerformance.estimateApproachLegFlightTime(aAircraft, 0.01, iCurrentTimeInMilliSecond);
 		
+		
+		// Run Resequence Algorithm API
+		new CRunwaySequenceAPI().resequenceArrival(lRunway.getArrivalAircraftList());
+		
+		
 		// Separation Check
-		System.err.println("CApproachController Request Landing : Develope Arrival Separation");
+		int lSequenceNumber = lRunway.getArrivalAircraftList().indexOf(aAircraft);
+		if(lSequenceNumber>0) {
+			CAircraft 	lPreviousAircraft 		= lRunway.getArrivalAircraftList().get(lSequenceNumber-1);
+			if(lPreviousAircraft.getMovementMode() != EAircraftMovementMode.LANDING) {
+				long		lPreviousAircraftETA	= CApproachAircraftPerformance.estimateApproachLegFlightTime(lPreviousAircraft, 0.01, iCurrentTimeInMilliSecond);
+			
+				long 		lETAGap					=  lETA-lPreviousAircraftETA;
+				double      lETAGapDistance			= aAircraft.getCurrentVelocity().getVelocity() * ((double)lETAGap / 1000.0);
+			
+				
+				if(lETAGap<0 || lETAGapDistance < new CRunwaySeparationAPI ().assignArrivalSparationInMeter(lPreviousAircraft, aAircraft)) {
+					
+					// Do not  Approach
+					return;
+				}
+			}
+		}
 		
 		
 		// Set Aircraft MoveState
+		CSpot lCandidateSpot 	= assignArrivalSpot(aAircraft);
+		lFlightPlan.setArrivalSpot(lCandidateSpot);
+		lCandidateSpot.getVehicleWillUseList().add(aAircraft);
 		aAircraft.setMoveState(new CAircraftApproachMoveState());
 		
 	}
@@ -171,6 +196,9 @@ public class CApproachController extends AATCController {
 	public CRunway assignArrivalRunway(CAircraft aAircraft) {
 		CAirport lAirport = (CAirport)aAircraft.getCurrentFlightPlan().getDestinationNode();
 		
+		if(aAircraft.getCurrentFlightPlan().getArrivalRunway() != null) {
+			return  aAircraft.getCurrentFlightPlan().getArrivalRunway();
+		}
 		
 		int lNumOfQ = Integer.MAX_VALUE;
 		CRunway lChoosenRwy = null;

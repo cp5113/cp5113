@@ -1,7 +1,8 @@
 package api;
 
-import api.inf.IRunwayExitDecisionSpeed;
+import api.inf.ICaptureDistance;
 import elements.facility.CRunway;
+import elements.mobile.human.IATCController;
 import elements.mobile.vehicle.CAircraft;
 
 /**
@@ -31,21 +32,20 @@ import elements.mobile.vehicle.CAircraft;
  * </p>
  * 
  * 
- * @date : 2019. 5. 1.
+ * @date : 2019. 5. 3.
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * 2019. 5. 1. : Coded by S. J. Yun.
+ * 2019. 5. 3. : Coded by S. J. Yun.
  *
  *
  */
 
-public class CRunwayExitDecisionSpeed implements IRunwayExitDecisionSpeed {
+public class CCaptureDistanceAPI implements ICaptureDistance {
 
 	@Override
-	public double calculateRunwayExitDecisionSpeed(CAircraft aAircraft, CRunway aRunway) {
-
-		return -9999;
+	public double assignCaptureDistanceToLineup(CRunway aRunway, IATCController aController, CAircraft aFollowingAircraft) {
+		return 3*1852;
 	}
 	/*
 	================================================================

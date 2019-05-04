@@ -136,15 +136,15 @@ public class CApproachAircraftPerformance {
 				
 				
 				// Verify next Point overshoot next node
-				if(!SValidateRangeChecker.validDataInRange(lXNext,lXOrigin,lXTarget) || !SValidateRangeChecker.validDataInRange(lYNext,lYOrigin,lYTarget)) {					
-					// Reduce Delta T
-					if(deltaT * 0.1 <=0.00001) {
-						
-					}else {
-						deltaT *=0.1;
-						continue;
-					}
-				}
+//				if(!SValidateRangeChecker.validDataInRange(lXNext,lXOrigin,lXTarget) || !SValidateRangeChecker.validDataInRange(lYNext,lYOrigin,lYTarget)) {					
+//					// Reduce Delta T
+//					if(deltaT * 0.1 <=0.00001) {
+//						
+//					}else {
+//						deltaT *=0.1;
+//						continue;
+//					}
+//				}
 				
 				
 				// Calculate Distance
@@ -162,7 +162,7 @@ public class CApproachAircraftPerformance {
 				// When deltaT is less than 0.001sec == 1milliseconds
 				// The Corner Point
 				// Make Resolution 1m
-				if(Math.abs(lXTarget-lXNext) < 1 && Math.abs(lYTarget-lYNext)< 1) {
+				if(Math.abs(lXTarget-lXNext) < 10 && Math.abs(lYTarget-lYNext)< 10) {
 					
 					
 					lXCurrent = lXTarget;

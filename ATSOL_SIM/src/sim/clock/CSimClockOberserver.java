@@ -73,6 +73,7 @@ public class CSimClockOberserver implements ISimClockObserverable, ISimClockOber
 	private boolean iRunning;
 	
 	private int iCountPublicationIsDone = 0;
+	private boolean iPause = false; 
 	
 	private CSimClockOberserver() {
 		
@@ -184,7 +185,7 @@ public class CSimClockOberserver implements ISimClockObserverable, ISimClockOber
 		
 		// Run Clock
  		iCountPublicationIsDone= 0;
-		while(iCurrentTIme.getTimeInMillis() <= iEndTIme.getTimeInMillis() && iRunning) {			
+		while(iCurrentTIme.getTimeInMillis() <= iEndTIme.getTimeInMillis() && iRunning ) {			
 			
 			// Wait until Observable Element is done (e.g., Aircraft, Controller...)
 			while(iCountPublicationIsDone < iObserverableList.size() && iRunning) {		
@@ -198,7 +199,23 @@ public class CSimClockOberserver implements ISimClockObserverable, ISimClockOber
 			iCountPublicationIsDone = 0;			
 			
 
-			// Add Current Time and Observable Element will running
+			// Pause
+			if(iPause) {
+				while(true) {
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					if(!iPause) {
+						iPause = true;
+						break;
+					}
+				}
+			}
+			
+			// Add Current Time and Observable Element will running			
 			iCurrentTIme.add(Calendar.MILLISECOND, iIncrementStepInMiliSec);
 			// Display Current Time
 			System.out.println("Current Time : " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(iCurrentTIme.getTimeInMillis())));
@@ -215,16 +232,18 @@ public class CSimClockOberserver implements ISimClockObserverable, ISimClockOber
 			CAtsolSimGuiControl.getInstance().drawDrawingObjectList();
 
 //			
-			try {
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-//			
+//			try {
+//				Thread.sleep(10);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+////			
 
 		}
-		iRunning = false;
+		if(!iPause) {
+			iRunning = false;
+		}
 		
 	}
 	
@@ -482,6 +501,19 @@ public class CSimClockOberserver implements ISimClockObserverable, ISimClockOber
 	
 	================================================================
 	 */
+
+	public void stepFoward() {
+		iPause = false;
+	}
+
+	public synchronized void setPause(boolean aB) {
+		if(iPause == true) {
+			iPause=false;
+		}else {
+			iPause=true;
+		}
+//		iPause = aB;
+	}
 }
 
 

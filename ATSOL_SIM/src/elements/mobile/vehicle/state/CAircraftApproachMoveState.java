@@ -58,11 +58,8 @@ public class CAircraftApproachMoveState implements IVehicleMoveState {
 		CAircraftType lACType = (CAircraftType)lAircraft.getVehcleType();
 		CFlightPlan   lFlightPlan = lAircraft.getCurrentFlightPlan();
 		
-		double  lNormSpeed    	= ((CAircraftPerformance)lACType.getPerformance()).getVat();
-		double lSTD = 5.14444; // 10 kts
-		lNormSpeed = lNormSpeed + (lSTD*lAircraft.getRandomNumber() - lSTD/2);		
-		double  lSpeedCurrent 		= lNormSpeed;
-		lAircraft.setCurrentVelocity(lSpeedCurrent);
+			
+		double  lSpeedCurrent 		= lAircraft.getCurrentVelocity().getVelocity();
 		
 
 		

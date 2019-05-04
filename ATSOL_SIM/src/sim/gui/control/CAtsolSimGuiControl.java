@@ -57,6 +57,7 @@ import javafx.fxml.FXML;
 import javafx.scene.CacheHint;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -91,6 +92,12 @@ public class CAtsolSimGuiControl {
 	private MenuItem MenuSaveProject;
 	@FXML
 	private MenuItem MenuClose;
+	
+	@FXML
+	private Button	ButtonPause;
+	@FXML
+	private Button	ButtonStep;
+	
 	private double viewPointX=-99999999;
 	private double viewPointY=-99999999;
 	private double viewPointR = -9999999; 
@@ -178,6 +185,14 @@ public class CAtsolSimGuiControl {
 			CAtsolSimMain.getInstance().getSimClock().stopClock();
 		}
 			
+	}
+	
+	
+	public void ButtonPauseAction() {
+		CAtsolSimMain.getInstance().getSimClock().setPause(true);
+	}
+	public void ButtonStepAction() {
+		CAtsolSimMain.getInstance().getSimClock().stepFoward();
 	}
 	
 	public synchronized void drawDrawingObjectList()  {	

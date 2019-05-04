@@ -10,7 +10,7 @@ import java.util.Iterator;
 import com.sun.prism.image.Coords;
 
 import api.CLandingPerformanceAPI;
-import api.CRunwayExitDecisionSpeed;
+import api.CRunwayExitDecisionSpeedAPI;
 import api.CTakeoffPerformanceAPI;
 import api.CTouchdownDistanceAPI;
 import elements.AElement;
@@ -105,7 +105,6 @@ public class CAircraftLandingMoveState implements IVehicleMoveState {
 		double lAmountTime = ((double)lCurrentTime-(double)lCurrentTimeFirstTime)/(double)aIncrementTimeStep; 
 		
 		
-		
 		// Get Initial Information
 		CAircraft   	lAircraft   		= (CAircraft) aThisVechicle;
 		CAircraftPerformance lPerformance   = (CAircraftPerformance) ((CAircraftType)lAircraft.getVehcleType()).getPerformance();		
@@ -115,9 +114,15 @@ public class CAircraftLandingMoveState implements IVehicleMoveState {
 		CLandingPerformanceAPI lLandingPerformance = new CLandingPerformanceAPI();
 		lAircraft.setMovementStatus(EAircraftMovementStatus.LANDING_DECEL);
 		
+
+		// runway Control
+		if(!lRunway.getRunwayOccupyingList().contains(lAircraft)) {
+			lRunway.getRunwayOccupyingList().add(lAircraft);
+		}
+		
 		
 		// Exit Decision Speed
-		double lExitDecisionSpeed = new CRunwayExitDecisionSpeed().calculateRunwayExitDecisionSpeed(lAircraft, lRunway);
+		double lExitDecisionSpeed = new CRunwayExitDecisionSpeedAPI().calculateRunwayExitDecisionSpeed(lAircraft, lRunway);
 		if(lExitDecisionSpeed<=0) {
 			lExitDecisionSpeed = 20.5778; // m/s == 40kts
 		}

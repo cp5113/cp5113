@@ -136,6 +136,7 @@ public class CGroundController extends AATCController {
 				ArrayList<CAircraft> lOtherACList = new ArrayList<CAircraft>();
 				lOtherACList.addAll(iAircraftList);
 				
+				
 				CGroundConflictDetectionAndResolution.groundConflictDetectionAndResolution(lAircraft, lOtherACList);
 				
 			} // if(!(lAircraft.getMoveState() instanceof CAircraftNothingMoveState)) {
@@ -561,8 +562,8 @@ public class CGroundController extends AATCController {
 		// Verify Arrival or departure		
 		if(lFlightPlan.getOriginationAirport().equalsIgnoreCase(lAirportControl.getAirportICAO())) { // Departure
 			// Validate Departure Spot
-			CSpot lSpotAssigned = assignSpot(aAircraft, lFlightPlan.getDepartureSpot());
-			lSpotAssigned.setIsOccuping(true);
+			CSpot lSpotAssigned = assignSpot(aAircraft, lFlightPlan.getDepartureSpot());			
+			lSpotAssigned.getVehicleWillUseList().add(aAircraft);
 			
 			// Set Departure Spot
 			lFlightPlan.insertPlanItem(0, lSpotAssigned, lFlightPlan.getScheduleTimeList().get(0), new CAltitude(0,EGEOUnit.FEET));
@@ -577,10 +578,26 @@ public class CGroundController extends AATCController {
 			aAircraft.setMode(EMode.DEP);
 			
 			
-		}else { // Arrival
-			// Set Aircraft Mode
-			aAircraft.setMode(EMode.ARR);
+		}else if(aAircraft.getMode() == EMode.ARR) { // Arrival
 			
+			// When Local controller toss this aircraft (Arrival)
+			// Taxi instruction from current node to spot
+			long instructionTime = calculateTaxiInstructionTime(aAircraft.getRoutingInfo(), aAircraft);
+			
+			// Set Communication
+			if(aAircraft.getNextEventTime()<=0) {
+				aAircraft.setNextEventTime(iCurrentTimeInMilliSecond + instructionTime);	
+			}else {
+				aAircraft.setNextEventTime(aAircraft.getNextEventTime() + instructionTime);
+			}
+			if(this.getNextEventTime()<=0) {
+				this.setNextEventTime(iCurrentTimeInMilliSecond + instructionTime);	
+			}else {
+				this.setNextEventTime(this.getNextEventTime() + instructionTime);
+			}
+			
+			
+		}else {
 			System.err.println("Ground Controller : Hand on and Assign Spot and reconstruct Flight Plan is not developed");
 		}
 		
@@ -604,7 +621,7 @@ public class CGroundController extends AATCController {
 		CAircraftPerformance lPerformance = (CAircraftPerformance) ((CAircraftType)aAircraft.getVehcleType()).getPerformance();
 		
 		// Validate CSpot is available wingspan and empty
-		if(aOriginSpot.getACTypeADG().get(lPerformance.getADG().toString()) && !aOriginSpot.isIsOccuping()) {
+		if(aOriginSpot.getACTypeADG().get(lPerformance.getADG().toString()) && aOriginSpot.getVehicleWillUseList().size()==0) {
 			lAssignSpotResult = aOriginSpot; // 
 		}else { // if not
 			
@@ -614,7 +631,7 @@ public class CGroundController extends AATCController {
 			Iterator<CSpot> iter = lAirportControlled.getSpotList().iterator();
 			while(iter.hasNext()) {
 				CSpot lSpotCheck = iter.next();
-				if(lSpotCheck.getACTypeADG().get(lPerformance.getADG().toString()) && !lSpotCheck.isIsOccuping()) {						
+				if(lSpotCheck.getACTypeADG().get(lPerformance.getADG().toString()) && aOriginSpot.getVehicleWillUseList().size()==0) {						
 					lAssignSpotResult = lSpotCheck;
 					break;
 				}

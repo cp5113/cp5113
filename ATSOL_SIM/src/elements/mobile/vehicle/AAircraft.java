@@ -5,6 +5,8 @@
  */
 package elements.mobile.vehicle;
 
+import api.CAircraftMoveStateAPI;
+import api.CChangeAircraftMoveState;
 import api.CPushBackPauseTimeAPI;
 import elements.airspace.CWaypoint;
 import elements.area.ASector;
@@ -26,10 +28,13 @@ import elements.mobile.vehicle.state.EAircraftMovementMode;
 import elements.mobile.vehicle.state.EAircraftMovementStatus;
 import elements.network.ANode;
 import elements.operator.CAirline;
+import elements.property.CAircraftPerformance;
+import elements.property.CAircraftType;
 import elements.property.EMode;
 import elements.table.ITableAble;
 import elements.util.geo.CCoordination;
 import sim.CAtsolSimMain;
+import sim.clock.CDispatchAircraftThreadByTime;
 import sim.clock.CSimClockOberserver;
 import sim.clock.ISimClockOberserver;
 
@@ -300,6 +305,9 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 		this.getCurrentPosition().setYCoordination(lCurrentPlan.getNode(0).getCoordination().getYCoordination());
 		
 		
+		// Set API Aircraft State Change
+		CChangeAircraftMoveState lAircraftMoveStateChangable = new CChangeAircraftMoveState();
+		
 		/*
 		 * Find ATC Controller
 		 */
@@ -350,7 +358,7 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 				e.printStackTrace();
 			}
 			}
-			System.out.println(((CFlightPlan)iCurrentPlan).getCallsign() + " is initialized by controller");
+			System.out.println(((CFlightPlan)iCurrentPlan).getCallsign() + " is initialized by controller(" + iATCController + ")");
 		}
 		
 		
@@ -402,6 +410,11 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 			// Do Move Aircraft
 			if(iNextEventTime<0 || iNextEventTime<=iCurrentTimeInMilliSecond) {
 				iNextEventTime = -9999;
+				
+				// Aircraft State API
+				if(lAircraftMoveStateChangable.changeAircraftMoveStatebyAPI((CAircraft) this)) {
+					this.setMoveState(new CAircraftMoveStateAPI());
+				}
 				
 				
 				// Request Pushback
@@ -457,6 +470,14 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 						iATCController instanceof CApproachController) {	
 					this.setMovementStatus(EAircraftMovementStatus.APPROACHING);
 					this.setMovementMode(EAircraftMovementMode.APPROACHING);
+					
+					CAircraftType		lACType		=	(CAircraftType) this.getVehcleType();
+					double  			lNormSpeed	= ((CAircraftPerformance)lACType.getPerformance()).getVat();
+					double 				lSTD 		= 5.14444; // 10 kts
+					lNormSpeed 						= lNormSpeed + (lSTD*this.getRandomNumber() - lSTD/2);
+					this.setCurrentVelocity(lNormSpeed);
+					
+					
 					((CApproachController)iATCController).requestLanding((CAircraft) this);					
 				}
 				
@@ -476,7 +497,7 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 				
 				
 				
-				// Request Taxi to Spot
+				// Request Taxi to Spot to LocalController
 				if(this.getMovementMode()==EAircraftMovementMode.LANDING &&
 						this.getMovementStatus() == EAircraftMovementStatus.LANDING_DECEL&&
 						this.getExitTaxiwayNode()!=null &&
@@ -486,6 +507,39 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 				
 				
 				
+				// Hand off Local to Ground
+				if(this.getMovementMode()==EAircraftMovementMode.TAXIING &&
+						this.getCurrentLink().getATCController() != null &&
+						!this.getATCController().equals(this.getCurrentLink().getATCController())){
+					
+					// Add Taxiing Instruction
+					iATCController.handOffAircraft(this.getCurrentLink().getATCController(), (CAircraft) this);
+					
+					
+				}
+				
+				
+				// After Arrival at Gate
+				if(this.getMode() == EMode.ARR && 
+					this.getMovementMode() == EAircraftMovementMode.TAXIING &&
+					this.getRoutingInfo().size()==1 &&
+					this.calculateDistanceBtwCoordination(this.getCurrentPosition(), this.getCurrentFlightPlan().getArrivalSpot().getTaxiwayNode().getCoordination()) == 0){
+					
+					// Handoff from Controller
+					((AATCController)iATCController).getAircraftList().remove(this);
+					
+					// Change State
+					this.setMoveState(new CAircraftNothingMoveState());
+					this.setMode(EMode.ETC);
+					this.setMovementMode(EAircraftMovementMode.NOTHING);
+					this.setMovementStatus(EAircraftMovementStatus.NOTHING);
+					
+					
+					CDispatchAircraftThreadByTime lDispatchAircraftThreadByTime = CDispatchAircraftThreadByTime.getInstance();
+					System.out.println();
+				}
+				
+						
 				
 				
 				

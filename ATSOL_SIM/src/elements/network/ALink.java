@@ -78,6 +78,7 @@ public abstract class ALink extends AFacility {
 	protected	ArrayList<AElement>		iOccupyingList			= new ArrayList<AElement>();	
 	protected	ArrayList<COccupyingInform>		iOccupyingSchedule	    = new ArrayList<COccupyingInform>();
 	
+	protected	boolean					iIsRunway = false;
 	
 	protected double					iSpeedLimitKts          = 15;
 	
@@ -213,7 +214,13 @@ public abstract class ALink extends AFacility {
 	public synchronized	double getSpeedLimitMps() {
 		return iSpeedLimitKts * 0.514444444;
 	}
-
+	public boolean isRunnway() {
+		// TODO Auto-generated method stub
+		return iIsRunway;
+	}
+	public void setIsRunway(boolean aBoolean) {
+		iIsRunway = aBoolean;
+	}
 	
 	
 	/*

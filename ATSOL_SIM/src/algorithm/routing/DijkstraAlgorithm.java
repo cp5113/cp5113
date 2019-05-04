@@ -177,6 +177,16 @@ public class DijkstraAlgorithm implements IRoutingAlgorithm{
 				l_AdjacentNode = loopLink.getOrigin();				
 			}	
 
+			
+			
+			// RunwayLink?
+			if(loopLink.isRunnway()) {
+				l_AdjacentCost = l_AdjacentCost * 1.5;
+			}
+			
+			
+			
+			
 		
 			
 			// Calculate Cost from Start Node and Insert into Queue and Distance Map	

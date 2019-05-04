@@ -126,6 +126,13 @@ public class CAircraft extends AAircraft {
 		iMovementMode = aMovementMode;
 	}
 
+	public long calculateELDT(long aCurrentTimeInMilliSeconds,CRunway aRunway) {
+		double lDistanceToThreshold = this.calculateDistanceBtwCoordination(this.getCurrentPosition(), aRunway.getTaxiwayNodeList().get(0).getCoordination());
+		
+		long   lELDT				= iCurrentTimeInMilliSecond + (long)(lDistanceToThreshold/this.getCurrentVelocity().getVelocity() * 1000);
+		return lELDT;
+	}
+
 
 
 	/*

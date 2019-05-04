@@ -150,7 +150,7 @@ public class CAirportTable extends ATable {
 				for(CTaxiwayLink loopTwyLink : lTargetAirport.getTaxiwayLinkList()) {				
 					if(loopTwyLink.getName().equalsIgnoreCase(lLinkList[loopLink])) {
 						lRunway.getTaxiwayLink().add(loopTwyLink);			
-						
+						loopTwyLink.setIsRunway(true);
 						for(ANode loopNode : loopTwyLink.getNodeList()) {
 							lRunway.getTaxiwayNodeList().add((CTaxiwayNode) loopNode);
 						}

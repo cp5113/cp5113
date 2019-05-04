@@ -153,6 +153,7 @@ public class CAircraftTaxiingMoveState implements IVehicleMoveState {
 				// Calculate remaining Distance to Destination Node
 				double lRemainingDistance = lAircraft.calculateRemainingRouteDistance();
 				if(lAircraft.getMode()==EMode.DEP && lAircraft.getMovementMode()==EAircraftMovementMode.TAXIING) {
+					lRemainingDistance = lAircraft.calculateRemainingRouteDistance(lAircraft.getRunwayEntryPoint());
 					lRemainingDistance = lRemainingDistance - lFlightPlan.getDepartureRunway().getRunwaySafetyWidth();
 				}
 				double lStoppingDistanceCurrentSpeed = lAircraft.calculateStoppingDistance(lSpeedCurrent,lDecelMax);
@@ -266,9 +267,9 @@ public class CAircraftTaxiingMoveState implements IVehicleMoveState {
 						}
 					}else {
 						if(lFollowingMode) {
-							lAircraft.setMovementStatus(EAircraftMovementStatus.TAXIING_DECEL);
-						}else {
 							lAircraft.setMovementStatus(EAircraftMovementStatus.TAXIING_DECEL_FOLLOWING);
+						}else {
+							lAircraft.setMovementStatus(EAircraftMovementStatus.TAXIING_DECEL);
 						}
 						lAircraft.getDrawingInform().setColor(Color.RED);
 					}
@@ -371,6 +372,8 @@ public class CAircraftTaxiingMoveState implements IVehicleMoveState {
 			
 			// Verify Next Node or not
 			if(lAircraft.getRoutingInfo().size()>1 && lFlightPlan.getNode(0).getCoordination().getXCoordination() == lXCurrent && lFlightPlan.getNode(0).getCoordination().getYCoordination() == lYCurrent) {
+			
+				
 				// When reach end of taxiway link
 				// Remove this aircraft from taxiway Link shcedule
 				//				if(lAircraft.getMovementMode() != EAircraftMovementMode.PUSHBACK) {
@@ -387,8 +390,7 @@ public class CAircraftTaxiingMoveState implements IVehicleMoveState {
 				lAircraft.setCurrentLink(lAircraft.getRoutingLinkInfoUsingNode((ANode) lFlightPlan.getNode(0)));
 				lAircraft.setCurrentNode((ANode) lFlightPlan.getNode(0));
 
-
-				
+			
 			}
 			
 		} //while(lAmountTime<aIncrementTimeStep) {
@@ -443,6 +445,11 @@ public class CAircraftTaxiingMoveState implements IVehicleMoveState {
 				// Ignore already have
 				if(lSameNodeACListV.contains(loopV)) continue;
 				
+				
+				// Ignore Landing and Takeoff
+				if(((CAircraft)loopV).getMovementMode() == EAircraftMovementMode.APPROACHING || ((CAircraft)loopV).getMovementMode() == EAircraftMovementMode.LANDING || ((CAircraft)loopV).getMovementMode() == EAircraftMovementMode.TAKEOFF) {
+					continue;
+				}
 				
 				// The AC
 				// Remaining distance is less than this aircraft

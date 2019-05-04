@@ -40,12 +40,19 @@ package elements.mobile.human;
  *
  */
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.sun.glass.ui.Pixels.Format;
+
+import api.CCaptureDistanceAPI;
+import api.CRunwaySeparationAPI;
+import elements.AElement;
 import elements.COccupyingInform;
 import elements.facility.CAirport;
 import elements.facility.CRunway;
@@ -60,9 +67,11 @@ import elements.mobile.vehicle.state.EAircraftMovementMode;
 import elements.mobile.vehicle.state.EAircraftMovementStatus;
 import elements.network.ANode;
 import elements.network.INode;
+import elements.property.EMode;
 import elements.util.geo.CAltitude;
 import elements.util.geo.EGEOUnit;
 import sim.clock.ISimClockOberserver;
+import util.performance.CLineupPerformance;
 import util.performance.CUnUniformModelPerformance;
 
 /**
@@ -78,11 +87,30 @@ public class CLocalController extends AATCController {
 	================================================================
 	*/
 	long iPreviouseDepartureTimeInMilliseconds;
+	CAircraft iPreviousDepartureAircraft;
 	long iPreviouseArrivalTimeInMilliseconds;
+	CAircraft iPreviousArrivalAircraft;
 	
 	public CLocalController(String aName, int aAge, int aExperienceDay, ESkill aNSkill, EGender aNGender) {
 		super(aName, aAge, aExperienceDay, aNSkill, aNGender);
-		// TODO Auto-generated constructor stub
+		// First Come First Serve
+		for(int loopAC = 0; loopAC < iAircraftList.size(); loopAC++) {
+			CAircraft lAircraft = iAircraftList.get(loopAC);
+			CFlightPlan lFlightPlan = (CFlightPlan) lAircraft.getCurrentPlan();
+			
+			// Conflict Detection			
+			if(!(lAircraft.getMoveState() instanceof CAircraftNothingMoveState)) {
+				// Create Search aircraft List
+				ArrayList<CAircraft> lOtherACList = new ArrayList<CAircraft>();
+				lOtherACList.addAll(iAircraftList);
+				
+				CGroundConflictDetectionAndResolution.groundConflictDetectionAndResolution(lAircraft, lOtherACList);
+				
+			} // if(!(lAircraft.getMoveState() instanceof CAircraftNothingMoveState)) {
+
+
+		}	// for(int loopAC = 0; loopAC < iAircraftList.size(); loopAC++) {				
+		
 	}
 
 	/*
@@ -133,37 +161,95 @@ public class CLocalController extends AATCController {
 
 	public void requestLineUp(CAircraft aAircraft) {
 		
-				
+		
 		// Find Runway
-		CRunway lRunway = aAircraft.getDepartureRunway();
-		CFlightPlan lFlightPlan = aAircraft.getCurrentFlightPlan();
-		CTaxiwayNode lRunwayEntry = aAircraft.getRunwayEntryPoint();
+		CRunway lRunway 			= aAircraft.getDepartureRunway();
+		CFlightPlan lFlightPlan 	= aAircraft.getCurrentFlightPlan();
+		CTaxiwayNode lRunwayEntry 	= aAircraft.getRunwayEntryPoint();
+		
+		
+		// Create Routing
+		if(aAircraft.getRunwayEntryPointReference() == null) {
+				CTaxiwayNode lRunwayEntrySecond = lRunway.getTaxiwayNodeList().get(lRunway.getTaxiwayNodeList().indexOf(lRunwayEntry)+1);
+				aAircraft.setRunwayEntryPointReference(lRunwayEntrySecond);
+				List<ANode>  lOriginalRoute     = aAircraft.getRoutingInfo(); 
+				int 		 lInsertIndex       = aAircraft.getRoutingInfo().indexOf(lRunwayEntry)+1;
+				lOriginalRoute.add(lInsertIndex,lRunwayEntrySecond);
+				aAircraft.setRoutingInfo(lOriginalRoute);
+				
+				// Create Flight Plan
+				Calendar cal = Calendar.getInstance();
+				cal.setTimeInMillis(0);
+				lFlightPlan.insertPlanItem(lInsertIndex, lOriginalRoute.get(lInsertIndex),cal,new CAltitude(0,EGEOUnit.FEET));
+		}
+		
+		
+		
+		
 		// Verification
 		if(!iFacilityControlledList.contains(lRunway)) {
 			System.err.println("Error in Request Line up in LocalController : Runway is not same");
 		}
 		
-		
+		/**
+		 * Do not Lineup
+		 */
+
 		// Runway Safety Control
-		if(lRunway.getDepartureAircraftList().size()>0) {
-			return;
+		
+		// When runway has Aircraft
+		if(lRunway.getRunwayOccupyingList().size()>0) {
+			for(CAircraft loopAC : lRunway.getRunwayOccupyingList()) {
+				double lDistanceToOppositeThreshold = loopAC.calculateDistanceBtwCoordination(loopAC.getCurrentPosition(), lRunway.getTaxiwayNodeList().get(lRunway.getTaxiwayNodeList().size()-1).getCoordination());
+				if (lDistanceToOppositeThreshold<lRunway.getDistance()/3 * 2) {					
+					// when the other aircraft가 활주로 중간을 넘었을때					
+					System.out.println();
+					break;
+				}else {
+					System.out.println("Linup Ignore : Runway is occupiyed at " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(iCurrentTimeInMilliSecond)));
+					return;
+				}
+			}			
 		}
 
+		// Departure - Departure Separation
+
+		// Capture Distance(Arrival) on Same runway
+		long lReadyForTakeOffTime 				= new CLineupPerformance().estimateLineUpTime(aAircraft, 0.01, iCurrentTimeInMilliSecond) + calculateLinupInstructionTime(aAircraft);
+//		long lDepartureSeparationInMilliSeconds = new CRunwaySeparation().assignDepartureSparationTimeInMilliSeconds(iPreviousDepartureAircraft, aAircraft);
+		CCaptureDistanceAPI lcaptureDistanceAPI = new CCaptureDistanceAPI();
+		for(CAircraft loopAC : lRunway.getArrivalAircraftList()) {
+			// Ignore after Landing
+			if(loopAC.getMovementMode() != EAircraftMovementMode.APPROACHING) {
+				continue;
+			}
+			
+			long 	lELDT 									= loopAC.calculateELDT(iCurrentTimeInMilliSecond, lRunway);		
+			double 	lDistanceToThreshold 					= loopAC.calculateDistanceBtwCoordination(loopAC.getCurrentPosition(), lRunway.getTaxiwayNodeList().get(0).getCoordination());
+//			double  lTimeRemainsToThresHold 				= lDistanceToThreshold/loopAC.getCurrentVelocity().getVelocity();
+//			double  lTimeRemainsToThresholdInMilliSeconds 	= (long) (lTimeRemainsToThresHold*1000) + iCurrentTimeInMilliSecond;
+			
+			double 	lCaptureDistanceInTime 					= lcaptureDistanceAPI.assignCaptureDistanceToLineup(lRunway, this, loopAC)/loopAC.getCurrentVelocity().getVelocity();
+			double  lCaptureDistanceInTimeInMilliSeconds 	= (long)(lCaptureDistanceInTime*1000);
+			
+			// Arrival Aircraft capture the runway, do not line up
+			if(lReadyForTakeOffTime+lCaptureDistanceInTimeInMilliSeconds > lELDT) {				
+				System.out.println("Linup Ignore : Landing Aircraft Capture the runway. Landing will be at " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(lELDT)));
+				return;
+			}
+			
 		
-		// Create Routing
-		CTaxiwayNode lRunwayEntrySecond = lRunway.getTaxiwayNodeList().get(lRunway.getTaxiwayNodeList().indexOf(lRunwayEntry)+1);
-		aAircraft.setRunwayEntryPointReference(lRunwayEntrySecond);
-		List<ANode>  lOriginalRoute     = aAircraft.getRoutingInfo(); 
-		int 		 lInsertIndex       = aAircraft.getRoutingInfo().indexOf(lRunwayEntry)+1;
-		lOriginalRoute.add(lInsertIndex,lRunwayEntrySecond);
-		aAircraft.setRoutingInfo(lOriginalRoute);
-		
-		// Create Flight Plan
-		Calendar cal = Calendar.getInstance();
-		cal.setTimeInMillis(0);
-		lFlightPlan.insertPlanItem(lInsertIndex, lOriginalRoute.get(lInsertIndex),cal,new CAltitude(0,EGEOUnit.FEET));
+		}
 		
 		
+		 
+		
+		
+		
+		
+		/**
+		 *  Do Lineup
+		 */
 		
 		// Calculate Instruction Time
 		long instructionTime = calculateLinupInstructionTime(aAircraft);
@@ -184,8 +270,15 @@ public class CLocalController extends AATCController {
 
 		// Verify Runway is Cleared
 		CRunway lRunway = aAircraft.getDepartureRunway();
-		if(lRunway.getOccupyingList().size()-1 >= 1) {
+		if(lRunway.getRunwayOccupyingList().size()-1 >= 1) {
 			return; // the other aircraft occupy this runway
+		}
+		
+		
+		// Departure Separation
+		long lDepartureSeparation = new CRunwaySeparationAPI().assignDepartureSparationTimeInMilliSeconds(iPreviousDepartureAircraft, aAircraft);
+		if(iPreviouseDepartureTimeInMilliseconds + lDepartureSeparation > iCurrentTimeInMilliSecond) {
+			return; //Departure Separation
 		}
 		
 		
@@ -193,14 +286,19 @@ public class CLocalController extends AATCController {
 		long instructionTime = calculateTakeOffInstructionTime(aAircraft);
 		aAircraft.setNextEventTime(iCurrentTimeInMilliSecond + instructionTime);
 		this.setNextEventTime(iCurrentTimeInMilliSecond + instructionTime);
-		iPreviouseDepartureTimeInMilliseconds = iCurrentTimeInMilliSecond + instructionTime;
-		
+		iPreviouseDepartureTimeInMilliseconds 	= iCurrentTimeInMilliSecond + instructionTime;
+		iPreviousDepartureAircraft 				= aAircraft;
 		
 		// Issue Takeoff Clearance Clearance
 		aAircraft.setMovementMode(EAircraftMovementMode.TAKEOFF);
 		aAircraft.setMoveState(new CAircraftTakeoffMoveState());
 				
 	}
+	
+	
+	
+	
+	
 	public void requestLanding(CAircraft aAircraft) {
 		long instructionTime = calculateLandingInstructionTime(aAircraft);
 		aAircraft.setNextEventTime(iCurrentTimeInMilliSecond + instructionTime);

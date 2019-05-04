@@ -267,19 +267,45 @@ public class CAircraftOnRunwayAfterLandingMoveState implements IVehicleMoveState
 			
 			// Verify Next Node or not
 			if(lFlightPlan.getNode(0).getCoordination().getXCoordination() == lXCurrent && lFlightPlan.getNode(0).getCoordination().getYCoordination() == lYCurrent) {
-				// When reach end of a Node
-				// Remove this node from flight plan				
-				lAircraft.setCurrentNode((ANode) lFlightPlan.getNode(0));
-				lFlightPlan.removePlanItem(lFlightPlan.getNode(0));
+				
 				if(lFlightPlan.getNode(0).equals(lAircraft.getExitTaxiwayNode())) {
+					// When reach end of taxiway link
+					// Remove this aircraft from taxiway Link shcedule
+					lAircraft.getCurrentNode().getVehicleWillUseList().remove(lAircraft.getCurrentNode().getVehicleWillUseList().indexOf(lAircraft));
+				
+					lFlightPlan.removePlanItem(lFlightPlan.getNode(0));
+					lAircraft.removeRoutingInfo(0);
+
+					// Update Current Location
+					lAircraft.setCurrentLink(lAircraft.getRoutingLinkInfoUsingNode((ANode) lFlightPlan.getNode(0)));
+					lAircraft.setCurrentNode((ANode) lFlightPlan.getNode(0));
 					
+					
+					// Exit Runway control				
+					lRunway.getArrivalAircraftList().remove(lAircraft);
+					lRunway.getRunwayOccupyingList().remove(lAircraft);
+					
+					
+					// Change to Taxiing
 					lAircraft.setMoveState(new CAircraftTaxiingMoveState());
 					lAircraft.setMovementMode(EAircraftMovementMode.TAXIING);
 					lAircraft.setMovementStatus(EAircraftMovementStatus.TAXIING_CONST);
 					lAircraft.doMoveVehicle((long) (lAmountTime * 1000));
 					return;
 				}
+				
+				// When reach end of taxiway link
+				// Remove this aircraft from taxiway Link shcedule
+				lAircraft.getCurrentNode().getVehicleWillUseList().remove(lAircraft.getCurrentNode().getVehicleWillUseList().indexOf(lAircraft));
+			
+				lFlightPlan.removePlanItem(lFlightPlan.getNode(0));
+				lAircraft.removeRoutingInfo(0);
 
+				// Update Current Location
+				lAircraft.setCurrentLink(lAircraft.getRoutingLinkInfoUsingNode((ANode) lFlightPlan.getNode(0)));
+				lAircraft.setCurrentNode((ANode) lFlightPlan.getNode(0));
+				
+				
 				
 			}
 			

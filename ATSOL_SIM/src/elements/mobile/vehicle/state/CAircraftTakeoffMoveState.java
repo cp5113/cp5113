@@ -112,15 +112,11 @@ public class CAircraftTakeoffMoveState implements IVehicleMoveState {
 		
 		
 		// Remove Flight Plan
-//		lAircraft.getCurrentNode().getVehicleWillUseList().remove
 		ANode lDestination = lRunway.getTaxiwayNodeList().get(lRunway.getTaxiwayNodeList().size()-1);
 		CCoordination	lDestinationCoord    = lRunway.getTaxiwayNodeList().get(lRunway.getTaxiwayNodeList().size()-1).getCoordination();
 		if(lFlightPlan.getNode(0) instanceof CWaypoint) {
 			lDestination =(ANode) lFlightPlan.getNode(0);
-			lDestinationCoord = lDestination.getCoordination();
-			// Runway Control
-			lRunway.getDepartureAircraftList().remove(lAircraft);
-			lRunway.getRunwayOccupyingList().remove(lAircraft);
+			lDestinationCoord = lDestination.getCoordination();			
 		}
 		
 
@@ -266,6 +262,14 @@ public class CAircraftTakeoffMoveState implements IVehicleMoveState {
 			// Verify Next Node or not
 			if(lFlightPlan.getNode(0).getCoordination().getXCoordination() == lXCurrent && lFlightPlan.getNode(0).getCoordination().getYCoordination() == lYCurrent) {
 
+				// Runway control
+				if(lFlightPlan.getNode(0).equals(lRunway.getTaxiwayNodeList().get(lRunway.getTaxiwayNodeList().size()-1))) {
+					// Runway Control
+					lRunway.getDepartureAircraftList().remove(lAircraft);
+					lRunway.getRunwayOccupyingList().remove(lAircraft);
+				}
+				
+				
 				lAircraft.getCurrentNode().getVehicleWillUseList().remove(lAircraft);
 				// When reach end of taxiway link
 				// Remove this node from flight plan
@@ -281,7 +285,6 @@ public class CAircraftTakeoffMoveState implements IVehicleMoveState {
 				
 				// Update Current Location
 //				lAircraft.setCurrentLink(lAircraft.getRoutingLinkInfoUsingNode((ANode) lFlightPlan.getNode(0)));
-				
 				
 				
 				

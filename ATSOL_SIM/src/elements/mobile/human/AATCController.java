@@ -46,7 +46,7 @@ import java.util.List;
 import java.util.Random;
 
 import algorithm.routing.IRoutingAlgorithm;
-import api.CATCInstructionTime;
+import api.CATCInstructionTimeAPI;
 import api.CAssignSpotAPI;
 import elements.IElementControlledByClock;
 import elements.IElementObservableClock;
@@ -135,7 +135,7 @@ public abstract class AATCController extends AHuman implements IATCController, I
 		}
 		
 		 
-		long api = new CATCInstructionTime().calculateTaxiInstructionTime(aRoute, aAircraft, this);
+		long api = new CATCInstructionTimeAPI().calculateTaxiInstructionTime(aRoute, aAircraft, this);
 		if(api>=0) {
 			instructionTimeMilliSeconds = api;
 		}
@@ -155,7 +155,7 @@ public abstract class AATCController extends AHuman implements IATCController, I
 		instructionTimeMilliSeconds = (24/150 * 60 + 3)*1000;
 		
 		
-		long api = new CATCInstructionTime().calculatePushbackInstructionTime(aAircraft, this);
+		long api = new CATCInstructionTimeAPI().calculatePushbackInstructionTime(aAircraft, this);
 		if(api>=0) {
 			instructionTimeMilliSeconds = api;
 		}
@@ -173,7 +173,7 @@ public abstract class AATCController extends AHuman implements IATCController, I
 		// 150 words per minute (Medium speed ICAO 2006b 2-1)		
 		instructionTimeMilliSeconds = (21/150 * 60 + 3)*1000;
 		
-		long api = new CATCInstructionTime().calculateFrequencyChangeInstructionTime(aAircraft, this);
+		long api = new CATCInstructionTimeAPI().calculateFrequencyChangeInstructionTime(aAircraft, this);
 		if(api>=0) {
 			instructionTimeMilliSeconds = api;
 		}		
@@ -190,7 +190,7 @@ public abstract class AATCController extends AHuman implements IATCController, I
 		// 150 words per minute (Medium speed ICAO 2006b 2-1)		
 		instructionTimeMilliSeconds = (16/150 * 60 + 3)*1000;
 		
-		long api = new CATCInstructionTime().calculateLinupInstructionTime(aAircraft, this);
+		long api = new CATCInstructionTimeAPI().calculateLinupInstructionTime(aAircraft, this);
 		if(api>=0) {
 			instructionTimeMilliSeconds = api;
 		}
@@ -206,7 +206,7 @@ public abstract class AATCController extends AHuman implements IATCController, I
 		// 150 words per minute (Medium speed ICAO 2006b 2-1)		
 		instructionTimeMilliSeconds = (22/150 * 60 + 3)*1000;
 		
-		long api = new CATCInstructionTime().calculateTakeOffInstructionTime(aAircraft, this);
+		long api = new CATCInstructionTimeAPI().calculateTakeOffInstructionTime(aAircraft, this);
 		if(api>=0) {
 			instructionTimeMilliSeconds = api;
 		}
@@ -222,7 +222,7 @@ public abstract class AATCController extends AHuman implements IATCController, I
 		// 150 words per minute (Medium speed ICAO 2006b 2-1)		
 		instructionTimeMilliSeconds = (22/150 * 60 + 3)*1000;
 		
-		long api = new CATCInstructionTime().calculateLandingInstructionTime(aAircraft, this);
+		long api = new CATCInstructionTimeAPI().calculateLandingInstructionTime(aAircraft, this);
 		if(api>=0) {
 			instructionTimeMilliSeconds = api;
 		}
@@ -289,15 +289,15 @@ public abstract class AATCController extends AHuman implements IATCController, I
 		// Hand off
 		aAircraft.setATCController(aToController);
 		
-		// Add to the other controller
-		if(aToController != null) {
-			aToController.handOnAircraft(this, aAircraft);
-		}
 		
 		// Communication
 		aAircraft.setNextEventTime(iCurrentTimeInMilliSecond + calculateFrequencyChangeInstructionTime(aAircraft));
 		this.setNextEventTime(iCurrentTimeInMilliSecond + calculateFrequencyChangeInstructionTime(aAircraft));
 		
+		// Add to the other controller
+		if(aToController != null) {
+			aToController.handOnAircraft(this, aAircraft);
+		}
 		
 		// Thread
 		
@@ -434,7 +434,7 @@ public abstract class AATCController extends AHuman implements IATCController, I
 	protected CSpot assignArrivalSpot(CAircraft aAircraft) {
 		// Assign Arrival Spot
 		CFlightPlan lFlightPlan = (CFlightPlan)aAircraft.getCurrentPlan();
-		CSpot lCandidateSpot  = lFlightPlan.getArrivalSpot() ;
+		CSpot lCandidateSpot    = lFlightPlan.getArrivalSpot() ;
 		
 		
 		// Find Next flight Spot	
@@ -446,7 +446,7 @@ public abstract class AATCController extends AHuman implements IATCController, I
 			}
 		}		
 		if(!lCandidateSpot.getACTypeADG().get(((CAircraftPerformance) (aAircraft.getPerformance())).getADG().toString())
-				|| lCandidateSpot.isIsOccuping()) {
+				|| (!lCandidateSpot.getVehicleWillUseList().contains(aAircraft) && lCandidateSpot.getVehicleWillUseList().size()>0) ) {
 			lCandidateSpot = null;
 		}
 		
@@ -459,14 +459,17 @@ public abstract class AATCController extends AHuman implements IATCController, I
 			Collections.shuffle(lAirport.getSpotList(),new Random(92545153));
 			
 			for(CSpot loopSpot : lAirport.getSpotList()) {
-				if(!loopSpot.isIsOccuping() && loopSpot.getACTypeADG().get(((CAircraftPerformance) (aAircraft.getPerformance())).getADG().toString())) {
+				if(loopSpot.getVehicleWillUseList().size()==0 && loopSpot.getACTypeADG().get(((CAircraftPerformance) (aAircraft.getPerformance())).getADG().toString())) {
 					lCandidateSpot = loopSpot;
 					break;
 				}
-				System.err.println("AATCController assignArrivalSpot : No Spot");
+				
 			}			
 			
-		
+			if(lCandidateSpot == null) {
+				System.err.println("AATCController assignArrivalSpot : No Spot");
+				System.err.println("AATCController assignArrivalSpot : No Spot");
+			}
 		}
 		
 		

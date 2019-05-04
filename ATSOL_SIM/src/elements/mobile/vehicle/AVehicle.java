@@ -183,7 +183,7 @@ public abstract class AVehicle extends AMobile implements ITableAble, IDrawingOb
 		// clear Node
 		if(iRoutingInfo !=null) {
 			for(ANode loopRoutingNode : iRoutingInfo) {
-				loopRoutingNode.getVehicleWillUseList().remove(this);
+				loopRoutingNode.getVehicleWillUseList().remove(this);				
 			}
 		}
 		
