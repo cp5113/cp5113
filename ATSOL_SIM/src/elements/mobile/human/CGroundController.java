@@ -54,6 +54,9 @@ import java.util.Random;
 
 import api.CAssignRunwayAPI;
 import api.CAssignSpotAPI;
+import api.CPushbackDirectionAPI;
+import api.CPushbackInstructionIssueAPI;
+import api.CTurnaroundTime;
 import elements.COccupyingInform;
 import elements.facility.AFacility;
 import elements.facility.CAirport;
@@ -152,7 +155,7 @@ public class CGroundController extends AATCController {
 			CFlightPlan lFlightPlan = (CFlightPlan) aAircraft.getCurrentPlan();
 			long lTimeSTDThis = lFlightPlan.getScheduleTimeList().get(0).getTimeInMillis();
 			
-			
+			System.out.println(aAircraft);
 			// Pushback
 			if(!(aAircraft.getMoveState() instanceof CAircraftTaxiingMoveState) && aAircraft.getMode() == EMode.DEP && iCurrentTimeInMilliSecond>lTimeSTDThis && iNextEventTime<0) {
 				
@@ -199,6 +202,18 @@ public class CGroundController extends AATCController {
 					}
 				}
 				
+				// API : Pushback Direction
+				CTaxiwayNode lPushbackDirectionAPI = new CPushbackDirectionAPI().assingPushbackDirection(aAircraft, iCurrentTimeInMilliSecond);
+				if(lPushbackDirectionAPI != null) {
+					lPushbackNode = lPushbackDirectionAPI;
+				}
+				
+				// API : Pushback Issue
+				if(!new CPushbackInstructionIssueAPI().issuePushbackInstruction(aAircraft, iCurrentTimeInMilliSecond)) {
+					return;
+				}
+				
+				
 				
 				// Set Route from SPOT to Pushback Node
 				lOD.clear();
@@ -229,7 +244,7 @@ public class CGroundController extends AATCController {
 				lFlightPlan.removePlanItem(lFlightPlan.getNode(0)); // Remove Spot
 				aAircraft.setCurrentNode((ANode) lFlightPlan.getNode(0));
 				aAircraft.setCurrentLink(aAircraft.getRoutingLinkInfoUsingNode((ANode) lFlightPlan.getNode(0)));
-
+				System.out.println("Pushback Route : " + lFlightPlan.getNodeList());
 				
 				// Set Aircraft Status
 				aAircraft.setMovementMode(EAircraftMovementMode.PUSHBACK);
@@ -577,6 +592,8 @@ public class CGroundController extends AATCController {
 			// Set Aircraft Mode
 			aAircraft.setMode(EMode.DEP);
 			
+			// Set Departure Turnaround Time
+			aAircraft.setNextEventTime(iCurrentTimeInMilliSecond + new CTurnaroundTime().getBeforeDepartureTurnaroundTimeInSeconds(aAircraft, lAirportControl)*1000); 
 			
 		}else if(aAircraft.getMode() == EMode.ARR) { // Arrival
 			

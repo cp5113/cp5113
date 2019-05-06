@@ -184,8 +184,8 @@ public class CAircraftGroundConflictStopMoveState implements IVehicleMoveState {
 					}else if(lAccelCurrent<0.01 && lAccelCurrent>-0.01) {
 						lAircraft.getDrawingInform().setColor(Color.GREEN);
 						if(lSpeedCurrent<0.01 && lSpeedCurrent>-0.01) {
-							lAircraft.setMovementStatus(EAircraftMovementStatus.PUSHBACK_HOLD);
-							lAircraft.addPushbackPausedTimeInMilliSeconds((long)(deltaT*1000));							
+//							lAircraft.setMovementStatus(EAircraftMovementStatus.PUSHBACK_HOLD);
+//							lAircraft.addPushbackPausedTimeInMilliSeconds((long)(deltaT*1000));							
 						}else {
 							lAircraft.setMovementStatus(EAircraftMovementStatus.PUSHBACK);
 						}

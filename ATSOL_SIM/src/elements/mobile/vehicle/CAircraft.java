@@ -123,6 +123,7 @@ public class CAircraft extends AAircraft {
 
 	@Override
 	public void setMovementMode(EAircraftMovementMode aMovementMode) {
+	
 		iMovementMode = aMovementMode;
 	}
 

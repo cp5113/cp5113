@@ -46,6 +46,7 @@ import elements.facility.CAirport;
 import elements.facility.CTaxiwayLink;
 import elements.facility.CTaxiwayNode;
 import elements.mobile.vehicle.CAircraft;
+import elements.network.ANode;
 import elements.util.geo.CAltitude;
 import elements.util.geo.CCoordination;
 import elements.util.geo.EGEOUnit;
@@ -209,8 +210,7 @@ public class CAtsolSimGuiControl {
 				CDrawingInform lDrawingInform = lAnObject.getDrawingInform();
 				if(!lDrawingInform.isVisible()) continue; 
 				
-				
-				
+							
 				// Drawing			
 				switch(lDrawingInform.getShape()) {
 				case LINE:
@@ -484,7 +484,26 @@ public class CAtsolSimGuiControl {
 //					System.out.println(lTheObject);
 					gc = SimCanvas.getGraphicsContext2D();
 					gc.setStroke(Color.BLACK);
-					gc.strokeText(lTheObject.toString(), p1.getXCoordination(), p1.getYCoordination());					
+					if(lTheObject instanceof ANode) {
+						if(lTheObject instanceof CTaxiwayNode) {
+							if( ((CTaxiwayNode)lTheObject).getSpot() != null) {
+								gc.strokeText(lTheObject.toString() + "\n Node : "+((ANode)lTheObject).getVehicleWillUseList() + "\n Spot : " + ((CTaxiwayNode)lTheObject).getSpot().getVehicleWillUseList(), p1.getXCoordination(), p1.getYCoordination());
+							}
+						}else {
+							gc.strokeText(lTheObject.toString() + "\n"+((ANode)lTheObject).getVehicleWillUseList(), p1.getXCoordination(), p1.getYCoordination());
+						}
+					}else if(lTheObject instanceof CAircraft){
+						CAircraft lAircraft = (CAircraft) lTheObject;
+						if(lAircraft.getLeadingVehicle() != null) {
+							gc.strokeText(lTheObject.toString() + " : " + lAircraft.getMoveState().getClass().getSimpleName() + " ->"+ lAircraft.getLeadingVehicle(), p1.getXCoordination(), p1.getYCoordination());
+						}else {
+							gc.strokeText(lTheObject.toString() + " : " + lAircraft.getMoveState().getClass().getSimpleName(), p1.getXCoordination(), p1.getYCoordination());
+						}
+						
+					}else {
+						gc.strokeText(lTheObject.toString(), p1.getXCoordination(), p1.getYCoordination());
+					}
+										
 //					gc.setFill(Color.THISTLE);			
 //					double lRadius =  10*CAtsolSimMain.getInstance().getViewPointR();
 //					gc.fillOval(p1.getXCoordination()-lRadius/2, p1.getYCoordination()-lRadius/2,lRadius, lRadius);

@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import api.CTurnaroundTime;
 import elements.IElementControlledByClock;
 import elements.airspace.CWaypoint;
 import elements.facility.CAirport;
@@ -91,16 +92,20 @@ public class CDispatchAircraftThreadByTime implements IElementControlledByClock{
 		iIsPrepared = false;
 		
 		int lSearchIndex = 0;
-		while(iVehicleAndPlanAndTimes.size()>0) {
+		while(iVehicleAndPlanAndTimes.size()>0 && lSearchIndex<iVehicleAndPlanAndTimes.size()) {
 			
 			CAircraft lAircraft = (CAircraft) iVehicleAndPlanAndTimes.get(lSearchIndex).getVehicle();
 			CFlightPlan lFlightPlan = (CFlightPlan) iVehicleAndPlanAndTimes.get(lSearchIndex).getVechiPlan();
 			
 			// verify this aircraft is operating now
 			if(CAtsolSimMain.getInstance().getSimClock().haseObject(lAircraft)) {
-				if(lSearchIndex== iVehicleAndPlanAndTimes.size()-1) {
-					break;
-				}
+//				if(lSearchIndex== iVehicleAndPlanAndTimes.size()-1) {
+//					
+////					System.out.println(lAircraft.getMovementMode());
+////					System.out.println(lAircraft.getMovementStatus());
+////					System.out.println(lAircraft.getMoveState());
+//					break;
+//				}
 				lSearchIndex++;
 				continue;
 			}
@@ -122,8 +127,8 @@ public class CDispatchAircraftThreadByTime implements IElementControlledByClock{
 			// Check Time
 			long lSTD = lFlightPlan.getScheduleTimeList().get(0).getTimeInMillis();
 			
-			// If Start point is Airport
-			if(lSTD <= aCurrentTIme.getTimeInMillis()+1800000 && lAirportOrWaypoint.equalsIgnoreCase("Airport")) {
+			// If Start point is Airport			
+			if(lAirportOrWaypoint.equalsIgnoreCase("Airport") && lSTD <= aCurrentTIme.getTimeInMillis()+new CTurnaroundTime().getBeforeDepartureTurnaroundTimeInSeconds(lAircraft, (CAirport) lFlightPlan.getNode(0))*1000) {
 				// set a Flight plan to currentFlightPlan
 				lAircraft.setCurrentPlan(lFlightPlan);
 				// and remove this Plan from list

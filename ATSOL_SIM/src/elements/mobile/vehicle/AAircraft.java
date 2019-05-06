@@ -8,6 +8,7 @@ package elements.mobile.vehicle;
 import api.CAircraftMoveStateAPI;
 import api.CChangeAircraftMoveState;
 import api.CPushBackPauseTimeAPI;
+import api.CTurnaroundTime;
 import elements.airspace.CWaypoint;
 import elements.area.ASector;
 import elements.facility.CAirport;
@@ -97,10 +98,13 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 	protected 	CTaxiwayNode					iRunwayEntryPointReference;
 	
 	protected	double							iTargetExitSpeed;
+	
+	
 
 	double iTouchdownDistance = -999;
 	long	iRunwayEntryTime = -9L;
-
+	
+	long 	iETA             = -9L;
 	
 	CTaxiwayNode iExitTaxiwayNode = null;
 	
@@ -123,6 +127,14 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 
 	public synchronized CTaxiwayNode getExitTaxiwayNode() {
 		return iExitTaxiwayNode;
+	}
+
+	public synchronized long getETA() {
+		return iETA;
+	}
+
+	public synchronized void setETA(long aETA) {
+		iETA = aETA;
 	}
 
 	public synchronized double getTargetExitSpeed() {
@@ -280,7 +292,7 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 	public void notifyToClockImDone() {
 		// TODO Auto-generated method stub
 		iSimClockObserver.pubSaidImDone(((CFlightPlan)this.getCurrentPlan()).getCallsign().toString() );
-		
+		iImDone = 1;
 	}
 
 
@@ -298,11 +310,12 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 
 	@Override
 	public void run() {
+		iImDone = 0;
 		
 		// Initialize status of this aircraft
 		CFlightPlan lCurrentPlan = (CFlightPlan) this.iCurrentPlan;
-		this.getCurrentPosition().setXCoordination(lCurrentPlan.getNode(0).getCoordination().getXCoordination());
-		this.getCurrentPosition().setYCoordination(lCurrentPlan.getNode(0).getCoordination().getYCoordination());
+//		this.getCurrentPosition().setXCoordination(lCurrentPlan.getNode(0).getCoordination().getXCoordination());
+//		this.getCurrentPosition().setYCoordination(lCurrentPlan.getNode(0).getCoordination().getYCoordination());
 		
 		
 		// Set API Aircraft State Change
@@ -375,7 +388,7 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 
 
 			
-			// Wait until Time is change
+			// Wait until Time is change			
 			iCurrentTimeInMilliSecond = ((CSimClockOberserver) iSimClockObserver).getCurrentTIme().getTimeInMillis();
 			while(iPreviousTimeInMilliSecond == iCurrentTimeInMilliSecond && ((CSimClockOberserver) iSimClockObserver).isRunning()) {
 				iCurrentTimeInMilliSecond = ((CSimClockOberserver) iSimClockObserver).getCurrentTIme().getTimeInMillis();
@@ -385,7 +398,7 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 
 				}
 			}
-			
+			iImDone = 0;
 		
 			
 	
@@ -427,6 +440,7 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 				if((this.getMoveState() instanceof CAircraftTaxiingMoveState) && 
 				   this.getMovementMode() == EAircraftMovementMode.PUSHBACK	&&this.getMode() == EMode.DEP &&
 				    this.getPushbackPausedTimeInMilliSeconds()>=this.getPushbackPauseTimeInMilliSeconds()) {
+					System.out.println(this + " : Request Taxi after pushback");
 					((CGroundController)iATCController).requestTaxiToRunway((CAircraft) this);
 					
 				}
@@ -441,9 +455,7 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 				
 				// Request Takeoff Clearance
 				if(this.getMoveState() instanceof CAircraftLineUpMoveState &&
-				   this.getCurrentVelocity().getVelocity()<2) {
-					this.setMovementMode(EAircraftMovementMode.TAKEOFF);
-					this.setMovementStatus(EAircraftMovementStatus.TAKEOFF);
+				   this.getCurrentVelocity().getVelocity()<2) {					
 					((CLocalController)iATCController).requestTakeoff((CAircraft) this);
 				}
 				
@@ -457,7 +469,8 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 					this.iConflictVehicle = null;
 					this.iLeadingVehicle  = null;
 					iSimClockObserver.deleteFromClock(this);
-					notifyToClockImDone();					
+					notifyToClockImDone();		
+					// Escape thread
 					break;
 				}
 				
@@ -527,6 +540,7 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 					
 					// Handoff from Controller
 					((AATCController)iATCController).getAircraftList().remove(this);
+					iATCController = null;
 					
 					// Change State
 					this.setMoveState(new CAircraftNothingMoveState());
@@ -534,22 +548,40 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 					this.setMovementMode(EAircraftMovementMode.NOTHING);
 					this.setMovementStatus(EAircraftMovementStatus.NOTHING);
 					
+					// Set Turnaround Time
+					iNextEventTime = iCurrentTimeInMilliSecond + new CTurnaroundTime().getAfterArrivalTurnaroundTimeInSeconds((CAircraft) this, (CAirport)this.getCurrentNode().getOwnerObject()) * 1000;
 					
-					CDispatchAircraftThreadByTime lDispatchAircraftThreadByTime = CDispatchAircraftThreadByTime.getInstance();
-					System.out.println();
+
 				}
 				
 						
-				
-				
+				// Escape or Connect next Flight
+				if(iATCController == null &&
+						this.getMode() == EMode.ETC && 
+						this.getMovementMode() == EAircraftMovementMode.NOTHING &&
+						this.getMovementStatus() == EAircraftMovementStatus.NOTHING&&
+						this.getMoveState() instanceof CAircraftNothingMoveState &&
+						iNextEventTime<=iCurrentTimeInMilliSecond){
+					
+					// Clear Spot and Node
+					this.getCurrentNode().setIsOccuping(false);
+					this.getCurrentNode().getVehicleWillUseList().remove(this);					
+					((CTaxiwayNode)this.getCurrentNode()).getSpot().setIsOccuping(false);
+					((CTaxiwayNode)this.getCurrentNode()).getSpot().getVehicleWillUseList().remove(this);
+					
+					// Escape Thread
+					// Notify to Clock
+					notifyToClockImDone();
+					((CSimClockOberserver) iSimClockObserver).deleteFromClock(this);
+					iPreviousTimeInMilliSecond = iCurrentTimeInMilliSecond;
+					break;
+				}
 				
 				
 				// Move This Aircraft
 				doMoveVehicle();
 				
-			};
-			
-			
+			};//if(iNextEventTime<0 || iNextEventTime<=iCurrentTimeInMilliSecond) {
 			
 			
 			
@@ -569,7 +601,7 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 			}
 			
 			
-			
+			// Notify to Clock
 			notifyToClockImDone();
 			iPreviousTimeInMilliSecond = iCurrentTimeInMilliSecond;
 		}

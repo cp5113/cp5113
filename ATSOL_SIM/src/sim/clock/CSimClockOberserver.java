@@ -65,7 +65,8 @@ public class CSimClockOberserver implements ISimClockObserverable, ISimClockOber
 	private Calendar iStartTIme = Calendar.getInstance();
 	private Calendar iEndTIme = Calendar.getInstance();
 	private int iIncrementStepInMiliSec = 1000;
-	private ArrayList<IElementObservableClock> iObserverableList = new ArrayList<IElementObservableClock>();    // for SJ (Aircraft move independent on time)
+	private ArrayList<IElementObservableClock> 	iObserverableList 		= new ArrayList<IElementObservableClock>();    // for SJ (Aircraft move independent on time)
+	private ArrayList<Integer>					iObserverableDoneList 	= new ArrayList<Integer>();	
 	private ArrayList<IElementControlledByClock> iObserverList   = new ArrayList<IElementControlledByClock>();  // for API user
 	
 	private ArrayList<Thread>					iThreadList      = new ArrayList<Thread>();
@@ -125,10 +126,11 @@ public class CSimClockOberserver implements ISimClockObserverable, ISimClockOber
 		iThreadList.clear();
 		
 		for(int loopList = 0; loopList<iObserverableList.size();loopList++) {
-			iObserverableList.get(loopList).removeClock();
+			iObserverableList.get(loopList).removeClock();			
 		}
 		iObserverableList.clear();
 		iObserverList.clear();
+		iObserverableDoneList.clear();
 		iCountPublicationIsDone = 0;
 	}
 	
@@ -199,11 +201,12 @@ public class CSimClockOberserver implements ISimClockObserverable, ISimClockOber
 			iCountPublicationIsDone = 0;			
 			
 
+
 			// Pause
 			if(iPause) {
-				while(true) {
+				while(iRunning) {
 					try {
-						Thread.sleep(1000);
+						Thread.sleep(10);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -255,17 +258,21 @@ public class CSimClockOberserver implements ISimClockObserverable, ISimClockOber
 	public void addInClock(IElementObservableClock aElementObservableClock) {
 		// TODO Auto-generated method stub
 		iObserverableList.add(aElementObservableClock);
+		iObserverableDoneList.add(0);
 	}
 
 	@Override
 	public synchronized void deleteFromClock(int aIndex) {
 		// TODO Auto-generated method stub
 		iObserverableList.remove(aIndex);
+		iObserverableDoneList.remove(aIndex);
 	}
 	@Override
 	public synchronized void deleteFromClock(IElementObservableClock aElementObservableClock) {
 		// TODO Auto-generated method stub
+		int index =  iObserverableList.indexOf(aElementObservableClock);
 		iObserverableList.remove(aElementObservableClock);
+		iObserverableDoneList.add(index);
 	}
 		
 

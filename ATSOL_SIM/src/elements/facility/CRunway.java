@@ -170,7 +170,10 @@ public class CRunway extends ALink{
 
 
 	public synchronized List<CAircraft> getRunwayOccupyingList() {
-		return iRunwayOccupyingList;
+		
+		synchronized (iRunwayOccupyingList) {
+			return iRunwayOccupyingList;
+		}
 	}
 
 

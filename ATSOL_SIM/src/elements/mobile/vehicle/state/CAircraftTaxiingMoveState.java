@@ -93,6 +93,18 @@ public class CAircraftTaxiingMoveState implements IVehicleMoveState {
 		double			lAccelMax			 = lPerformance.getAccelerationOnGroundMax();
 		double			lDecelMax			 = lPerformance.getDecelerationOnGroundMax();
 		CCoordination	lDestinationCoord    = lAircraft.getRoutingInfo().get(lAircraft.getRoutingInfo().size()-1).getCoordination();
+		
+		
+//		if(lAircraft.toString().equalsIgnoreCase("HL7506")) {
+//			if(lAircraft.getMovementMode()==EAircraftMovementMode.PUSHBACK &&
+//					lAircraft.getRoutingInfo().size()>4) {
+//				if(lAircraft.getRoutingInfo().size()>4) {
+//			System.out.println(lAircraft.getRoutingInfo());
+//			System.out.println(lFlightPlan.getNodeList());
+//			System.out.println();
+//			}
+//		}
+		
 		// ignore when no flight Plan ( == AC is at Arrival Spot)
 		if(lFlightPlan.getNodeList().size()==0) {
 			return;
@@ -193,7 +205,7 @@ public class CAircraftTaxiingMoveState implements IVehicleMoveState {
 				// Hybrid Car-following Model
 				if(!Double.isNaN(lDistanceFromLeadingAC) && lDistanceFromLeadingAC<=1000) {   //lStoppingDistanceMaximumSpeed*2
 					// Calculate Target Speed
-					double lHeadwayJam = lAircraft.getVehcleType().getSafetyDistanceLength();					
+					double lHeadwayJam = lAircraft.getVehcleType().getSafetyDistanceLength()*2;					
 					double lCarFollowingVTarget =  Math.max(0, lSpeedTarget * (1- lHeadwayJam/lDistanceFromLeadingAC));
 					if(lCarFollowingVTarget<0.001) {
 						lSpeedTarget         = 0;
@@ -279,9 +291,7 @@ public class CAircraftTaxiingMoveState implements IVehicleMoveState {
 						lAircraft.setMovementStatus(EAircraftMovementStatus.PUSHBACK);
 					}else if(lAccelCurrent<0.01 && lAccelCurrent>-0.01) {
 						lAircraft.getDrawingInform().setColor(Color.GREEN);
-						if(lSpeedCurrent<0.01 && lSpeedCurrent>-0.01) {
-							lAircraft.setMovementStatus(EAircraftMovementStatus.PUSHBACK_HOLD);
-							lAircraft.addPushbackPausedTimeInMilliSeconds((long)(deltaT*1000));							
+						if(lSpeedCurrent<0.01 && lSpeedCurrent>-0.01) {							
 						}else {
 							lAircraft.setMovementStatus(EAircraftMovementStatus.PUSHBACK);
 						}
@@ -291,7 +301,13 @@ public class CAircraftTaxiingMoveState implements IVehicleMoveState {
 					}
 				}
 
-
+				
+				// Pushback Puase
+				if(lAircraft.getMovementMode() == EAircraftMovementMode.PUSHBACK &&						
+						lRemainingDistance < 1) {
+					lAircraft.setMovementStatus(EAircraftMovementStatus.PUSHBACK_HOLD);
+					lAircraft.addPushbackPausedTimeInMilliSeconds((long)(deltaT*1000));					
+				}
 
 				
 				
@@ -414,8 +430,11 @@ public class CAircraftTaxiingMoveState implements IVehicleMoveState {
 		ArrayList<AVehicle>      lSameNodeACListV = new ArrayList<AVehicle>();
 		double lRemainingDistance = 999999999999.0;
 		
-		
+//		if(aAircraft.toString().equalsIgnoreCase("HL9606")) {
+//			System.out.println();
+//		}
 		// Search next nodes
+		
 		for(int loopNodeIndex = 0; loopNodeIndex < aAircraft.getRoutingInfo().size(); loopNodeIndex++) {
 			
 			ANode loopNode = aAircraft.getRoutingInfo().get(loopNodeIndex);
@@ -483,6 +502,7 @@ public class CAircraftTaxiingMoveState implements IVehicleMoveState {
 			}
 		}
 		if(lSameNodeACList.size()==0) {
+			aAircraft.setLeadingVehicle(null);
 			return lRemainingDistance;
 		}
 		Collections.sort(lSameNodeACList);
@@ -561,6 +581,8 @@ public class CAircraftTaxiingMoveState implements IVehicleMoveState {
 				// Leading/Following 2-2(Chasing)
 				if(aAircraft.getRoutingInfoLink().contains(loopSameNodeAC.iAircraft.getCurrentLink())) {
 					loopSameNodeAC.iDistanceBtwAircraft = aAircraft.calculateRemainingRouteDistance(loopSameNodeAC.iNode)-loopSameNodeAC.iAircraft.calculateRemainingRouteDistance(loopSameNodeAC.iNode);
+//					System.out.println(loopSameNodeAC.iDistanceBtwAircraft);
+//					System.out.println(aAircraft.getVehcleType().getSafetyDistanceLength() + lMaximumStoppingDistanceThisAC*2 + lMaximumStoppingDistanceThisAC*0.1);
 					if(loopSameNodeAC.iDistanceBtwAircraft <=  aAircraft.getVehcleType().getSafetyDistanceLength() + lMaximumStoppingDistanceThisAC*2 + lMaximumStoppingDistanceThisAC*0.1) {
 
 						if(loopSameNodeAC.iAircraft.getLeadingVehicle()==null || !loopSameNodeAC.iAircraft.getLeadingVehicle().equals(aAircraft)) {	

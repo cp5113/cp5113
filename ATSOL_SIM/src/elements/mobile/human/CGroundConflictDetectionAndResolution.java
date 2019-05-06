@@ -6,6 +6,7 @@ import elements.mobile.vehicle.CAircraft;
 import elements.mobile.vehicle.state.CAircraftGroundConflictStopMoveState;
 import elements.mobile.vehicle.state.CAircraftNothingMoveState;
 import elements.mobile.vehicle.state.CAircraftTaxiingMoveState;
+import elements.mobile.vehicle.state.EAircraftMovementMode;
 import elements.property.EMode;
 import elements.util.geo.CCoordination;
 import javafx.scene.canvas.GraphicsContext;
@@ -122,6 +123,12 @@ public class CGroundConflictDetectionAndResolution {
 				}
 
 				
+//				if(lAircraft.getCurrentFlightPlan().toString().equalsIgnoreCase("AAR124")) {
+//					System.out.println(lAircraft.getRoutingInfo());
+//					System.out.println(lAircraft.getCurrentFlightPlan().getNodeList());
+//					System.out.println();
+//				}
+				
 				
 				/*
 				 * Valid Priority
@@ -129,9 +136,16 @@ public class CGroundConflictDetectionAndResolution {
 
 				// When Conflict resolved, continue Taxiing
 				if(!lConflictSafetyAndSafety && !lConflictSafetyAndShape) {
-					if(lAircraft.getConflictVehicle()!=null) {
+					if(lAircraft.getConflictVehicle()!=null && lAircraft.getConflictVehicle().equals(loopOther)) {
 						lAircraft.setConflictVehicle(null);
-						lAircraft.setMoveState(new CAircraftTaxiingMoveState());	
+						
+//						if(lAircraft.getMovementMode() == EAircraftMovementMode.PUSHBACK) {
+//							lAircraft.setMoveState(new CAircraft());
+//						}else if(lAircraft.getMovementMode() == EAircraftMovementMode.TAXIING) {
+						lAircraft.setMoveState(new CAircraftTaxiingMoveState());
+//						}
+						
+							
 						continue;
 					}
 					continue;
@@ -148,7 +162,7 @@ public class CGroundConflictDetectionAndResolution {
 
 				// When the other aircraft's routing has my link
 				// I have a priority
-				if(loopOther.getRoutingInfoLink().contains(lAircraft.getCurrentLink())) continue;
+				if(loopOther.getRoutingInfoLink().contains(lAircraft.getCurrentLink()) && loopOther.getMovementMode() != EAircraftMovementMode.PUSHBACK) continue;
 
 				// Departure Priority
 				// If other aircraft is arrival,
@@ -156,14 +170,22 @@ public class CGroundConflictDetectionAndResolution {
 				if(loopOther.getMode() == EMode.ARR) continue;
 
 				
+				// ignore already Stopping
+				if(lAircraft.getMoveState() instanceof CAircraftGroundConflictStopMoveState) {
+					continue;
+				}
+				
 				
 				// Low Priority (Safety to Shape)
 				if(lConflictSafetyAndShape) {
 					// set conflict vehicle
 					lAircraft.setConflictVehicle(loopOther);
 
-					// Set Status								
+					// Set Status							
+					
 					lAircraft.setMoveState(new CAircraftGroundConflictStopMoveState());
+					
+					continue;
 				}
 				
 				//Low Priority (Safety to Shape)
@@ -173,6 +195,8 @@ public class CGroundConflictDetectionAndResolution {
 
 					// Set Status								
 					lAircraft.setMoveState(new CAircraftGroundConflictStopMoveState());
+					
+					continue;
 				}
 				
 
@@ -190,7 +214,7 @@ public class CGroundConflictDetectionAndResolution {
 				CCoordination p = CAtsolSimGuiControl.iInstance.changeCoordinatesInCanvas(x, y);
 				gc.setStroke(Color.RED);
 				gc.strokeOval(p.getXCoordination()-2, p.getYCoordination()-2, 4, 4);
-				System.err.println("Require : Link Conflict Detection Priority");
+//				System.err.println("Require : Link Conflict Detection Priority");
 				
 
 			}//for(CAircraft loopOther : lOtherACList) {

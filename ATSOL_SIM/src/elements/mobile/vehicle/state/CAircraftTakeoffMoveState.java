@@ -130,10 +130,15 @@ public class CAircraftTakeoffMoveState implements IVehicleMoveState {
 			double lSpeedTarget = lPerformance.getV2()*0.514444; // kts to m/s			
 			double lSpeedCurrent = lAircraft.getCurrentVelocity().getVelocity();
 
+			
+			// After Takeoff
 			if(lSpeedCurrent>=lSpeedTarget*1.3 && lFlightPlan.getNode(0) instanceof CTaxiwayNode) {
-				lDestination       =(ANode) lFlightPlan.getNode(0); 
+				lDestination       =(ANode) lFlightPlan.getNode(0);				
 				lDestinationCoord  = lDestination.getCoordination();
 				lFlightPlan.removePlanItem(lFlightPlan.getNode(0));
+				lRunway.removeDepartureAircraftList(lAircraft);
+				lRunway.removeFromOccupyingSchedule(lAircraft);;
+				lRunway.getRunwayOccupyingList().remove(lAircraft);
 			}
 			
 			// get Current Position

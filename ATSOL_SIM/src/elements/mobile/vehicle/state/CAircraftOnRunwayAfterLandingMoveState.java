@@ -281,9 +281,7 @@ public class CAircraftOnRunwayAfterLandingMoveState implements IVehicleMoveState
 					lAircraft.setCurrentNode((ANode) lFlightPlan.getNode(0));
 					
 					
-					// Exit Runway control				
-					lRunway.getArrivalAircraftList().remove(lAircraft);
-					lRunway.getRunwayOccupyingList().remove(lAircraft);
+
 					
 					
 					// Change to Taxiing

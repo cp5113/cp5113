@@ -14,6 +14,7 @@ import elements.network.ANode;
 import elements.network.INode;
 import elements.property.CAircraftPerformance;
 import elements.property.CAircraftType;
+import elements.util.geo.CCoordination;
 
 /**
  * 
@@ -80,118 +81,40 @@ public class CApproachAircraftPerformance {
 		CAircraftType lACType = (CAircraftType)aAircraft.getVehcleType();
 		CFlightPlan   lFlightPlan = aAircraft.getCurrentFlightPlan();
 		
-		double  lNormSpeed    	= ((CAircraftPerformance)lACType.getPerformance()).getVat();
-		double lSTD = 5.14444; // 10 kts
-		lNormSpeed = lNormSpeed + (lSTD*aAircraft.getRandomNumber() - lSTD/2);		
-		double  lSpeedCurrent 		= lNormSpeed;
+		
+		double  lSpeedCurrent 	= aAircraft.getCurrentVelocity().getVelocity();
+		
+		double lTotalDistance   = 0.0;
 		
 
-		// Initialize
-		double  lTimeDuration = 0;
-		double lTotalDistance = 0;		
-		double lXCurrent = aAircraft.getCurrentPosition().getXCoordination();
-		double lYCurrent = aAircraft.getCurrentPosition().getYCoordination();
-		double lXOrigin  = aAircraft.getCurrentPosition().getXCoordination();
-		double lYOrigin  = aAircraft.getCurrentPosition().getYCoordination();
-		
-		
-		
-		// Calculate		
-		int count = 0;
+		// Calculate Remaining Distance
+		CCoordination lCurrentPos = aAircraft.getCurrentPosition();
 		for(INode loopNode : lFlightPlan.getNodeList()) {
-			if(loopNode instanceof CAirport) {
+			CCoordination lTargetPos = loopNode.getCoordination();
+			
+			// Calculate
+			double tempDist  = aAircraft.calculateDistanceBtwCoordination(lCurrentPos, lTargetPos);
+			lTotalDistance += tempDist;
+			
+			// update
+			lCurrentPos = lTargetPos;
+			
+			if(loopNode.equals(lFlightPlan.getArrivalRunway().getTaxiwayNodeList().get(0))){
 				break;
 			}
-			
-
-
-			while(true) {
-				
-				
-				// Extract Target Position == destination node
-				double lXTarget = loopNode.getCoordination().getXCoordination();//lFlightPlan.getNode(0).getCoordination().getXCoordination();
-				double lYTarget = loopNode.getCoordination().getYCoordination();//lFlightPlan.getNode(0).getCoordination().getYCoordination();
-
-				
-				// Calculate cos and sin 
-				double lCos   =  (lXTarget-lXCurrent)  /  Math.sqrt((lXTarget-lXCurrent)*(lXTarget-lXCurrent) + (lYTarget-lYCurrent) * (lYTarget-lYCurrent));
-				double lSin   =  (lYTarget-lYCurrent)  /  Math.sqrt((lXTarget-lXCurrent)*(lXTarget-lXCurrent) + (lYTarget-lYCurrent) * (lYTarget-lYCurrent));
-				if(Double.isNaN(lCos)) lCos=1;
-				if(Double.isNaN(lSin)) lSin=0;
-				
-				
-				// Divide Speed and Acceleration
-				double lSpeedCurrentX = lSpeedCurrent * lCos;
-				double lSpeedCurrentY = lSpeedCurrent * lSin;
-				double lAccelCurrentX = 0;
-				double lAccelCurrentY = 0;
-				
-				// Calcualte Vx, Vy = V0 + at
-				double lSpeedNextX	  = lSpeedCurrentX + lAccelCurrentX * deltaT;
-				double lSpeedNextY	  = lSpeedCurrentY + lAccelCurrentY * deltaT;
-				
-				// Calculate Next Position = S0 + v0t + 1/2at^2
-				double lXNext		  = lXCurrent + lSpeedCurrentX * deltaT + 1/2 * lAccelCurrentX * deltaT * deltaT;
-				double lYNext		  = lYCurrent + lSpeedCurrentY * deltaT + 1/2 * lAccelCurrentY * deltaT * deltaT;
-				
-				
-				// Verify next Point overshoot next node
-//				if(!SValidateRangeChecker.validDataInRange(lXNext,lXOrigin,lXTarget) || !SValidateRangeChecker.validDataInRange(lYNext,lYOrigin,lYTarget)) {					
-//					// Reduce Delta T
-//					if(deltaT * 0.1 <=0.00001) {
-//						
-//					}else {
-//						deltaT *=0.1;
-//						continue;
-//					}
-//				}
-				
-				
-				// Calculate Distance
-				lTotalDistance += Math.sqrt((lXCurrent - lXNext) * (lXCurrent - lXNext) + (lYCurrent - lYNext) * (lYCurrent - lYNext)); 
-				
-				// Update Current X, Y
-				lXCurrent = lXNext;
-				lYCurrent = lYNext;
-				
-				
-				// update duration
-				lTimeDuration += deltaT;
-				
-				
-				// When deltaT is less than 0.001sec == 1milliseconds
-				// The Corner Point
-				// Make Resolution 1m
-				if(Math.abs(lXTarget-lXNext) < 10 && Math.abs(lYTarget-lYNext)< 10) {
-					
-					
-					lXCurrent = lXTarget;
-					lYCurrent = lYTarget;
-					
-					// Restore Delta t to original
-					deltaT = deltaTOrigin;
-					
-					// Escape Loop
-					break;
-				}
-				
-			}	//while(true) {	
-			
-		
-			
-			
-			// Update Origin
-			lXOrigin = loopNode.getCoordination().getXCoordination();
-			lYOrigin = loopNode.getCoordination().getYCoordination();
-			
-			
 		}
 		
-	
 		
 		
 		
-		return (long)(lTimeDuration*1000) + eventStartT;
+		// Calculate Time with Constant Speed
+		double lFlightTimeInSecond = lTotalDistance/lSpeedCurrent;
+		long   lFlightTimeInMilliSecond = (long)(lFlightTimeInSecond * 1000);
+		
+		
+		
+		
+		return lFlightTimeInMilliSecond + eventStartT;//(long)(lTimeDuration*1000) + eventStartT;
 	}
 	
 	
@@ -214,8 +137,109 @@ public class CApproachAircraftPerformance {
 }
 
 
+// Simulation
+//// Initialize
+//double  lTimeDuration = 0;
+//double lTotalDistance = 0;		
+//double lXCurrent = aAircraft.getCurrentPosition().getXCoordination();
+//double lYCurrent = aAircraft.getCurrentPosition().getYCoordination();
+//double lXOrigin  = aAircraft.getCurrentPosition().getXCoordination();
+//double lYOrigin  = aAircraft.getCurrentPosition().getYCoordination();
+//
+//
 
-
-
+// Calculate		
+//int count = 0;
+//for(INode loopNode : lFlightPlan.getNodeList()) {
+//	if(loopNode instanceof CAirport) {
+//		break;
+//	}
+//	
+//
+//
+//	while(true) {
+//		
+//		
+//		// Extract Target Position == destination node
+//		double lXTarget = loopNode.getCoordination().getXCoordination();//lFlightPlan.getNode(0).getCoordination().getXCoordination();
+//		double lYTarget = loopNode.getCoordination().getYCoordination();//lFlightPlan.getNode(0).getCoordination().getYCoordination();
+//
+//		
+//		// Calculate cos and sin 
+//		double lCos   =  (lXTarget-lXCurrent)  /  Math.sqrt((lXTarget-lXCurrent)*(lXTarget-lXCurrent) + (lYTarget-lYCurrent) * (lYTarget-lYCurrent));
+//		double lSin   =  (lYTarget-lYCurrent)  /  Math.sqrt((lXTarget-lXCurrent)*(lXTarget-lXCurrent) + (lYTarget-lYCurrent) * (lYTarget-lYCurrent));
+//		if(Double.isNaN(lCos)) lCos=1;
+//		if(Double.isNaN(lSin)) lSin=0;
+//		
+//		
+//		// Divide Speed and Acceleration
+//		double lSpeedCurrentX = lSpeedCurrent * lCos;
+//		double lSpeedCurrentY = lSpeedCurrent * lSin;
+//		double lAccelCurrentX = 0;
+//		double lAccelCurrentY = 0;
+//		
+//		// Calcualte Vx, Vy = V0 + at
+//		double lSpeedNextX	  = lSpeedCurrentX + lAccelCurrentX * deltaT;
+//		double lSpeedNextY	  = lSpeedCurrentY + lAccelCurrentY * deltaT;
+//		
+//		// Calculate Next Position = S0 + v0t + 1/2at^2
+//		double lXNext		  = lXCurrent + lSpeedCurrentX * deltaT + 1/2 * lAccelCurrentX * deltaT * deltaT;
+//		double lYNext		  = lYCurrent + lSpeedCurrentY * deltaT + 1/2 * lAccelCurrentY * deltaT * deltaT;
+//		
+//		
+//		// Verify next Point overshoot next node
+////		if(!SValidateRangeChecker.validDataInRange(lXNext,lXOrigin,lXTarget) || !SValidateRangeChecker.validDataInRange(lYNext,lYOrigin,lYTarget)) {					
+////			// Reduce Delta T
+////			if(deltaT * 0.1 <=0.00001) {
+////				
+////			}else {
+////				deltaT *=0.1;
+////				continue;
+////			}
+////		}
+//		
+//		
+//		// Calculate Distance
+//		lTotalDistance += Math.sqrt((lXCurrent - lXNext) * (lXCurrent - lXNext) + (lYCurrent - lYNext) * (lYCurrent - lYNext)); 
+//		
+//		// Update Current X, Y
+//		lXCurrent = lXNext;
+//		lYCurrent = lYNext;
+//		
+//		
+//		// update duration
+//		lTimeDuration += deltaT;
+//		
+//		
+//		// When deltaT is less than 0.001sec == 1milliseconds
+//		// The Corner Point
+//		// Make Resolution 1m
+//		if(Math.abs(lXTarget-lXNext) < 10 && Math.abs(lYTarget-lYNext)< 10) {
+//			
+//			
+//			lXCurrent = lXTarget;
+//			lYCurrent = lYTarget;
+//			
+//			// Restore Delta t to original
+//			deltaT = deltaTOrigin;
+//			
+//			// Escape Loop
+//			break;
+//		}
+//		
+//	}	//while(true) {	
+//	
+//
+//	
+//	
+//	// Update Origin
+//	lXOrigin = loopNode.getCoordination().getXCoordination();
+//	lYOrigin = loopNode.getCoordination().getYCoordination();
+//	
+//	
+//}
+//
+//
+//
 
 

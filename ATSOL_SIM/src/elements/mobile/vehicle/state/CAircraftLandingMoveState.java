@@ -1,9 +1,11 @@
 package elements.mobile.vehicle.state;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.ConcurrentModificationException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -105,6 +107,7 @@ public class CAircraftLandingMoveState implements IVehicleMoveState {
 		double lAmountTime = ((double)lCurrentTime-(double)lCurrentTimeFirstTime)/(double)aIncrementTimeStep; 
 		
 		
+		
 		// Get Initial Information
 		CAircraft   	lAircraft   		= (CAircraft) aThisVechicle;
 		CAircraftPerformance lPerformance   = (CAircraftPerformance) ((CAircraftType)lAircraft.getVehcleType()).getPerformance();		
@@ -115,6 +118,10 @@ public class CAircraftLandingMoveState implements IVehicleMoveState {
 		lAircraft.setMovementStatus(EAircraftMovementStatus.LANDING_DECEL);
 		
 
+//		System.out.println("Land Time : " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(aCurrentTime)));
+//		System.out.println("ETA       : " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(lAircraft.getETA())));
+		
+		
 		// runway Control
 		if(!lRunway.getRunwayOccupyingList().contains(lAircraft)) {
 			lRunway.getRunwayOccupyingList().add(lAircraft);

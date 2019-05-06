@@ -153,13 +153,13 @@ public class CLocalController extends AATCController {
 	
 	
 	@Override
-	public void initializeAircraft(CAircraft aAircraft) {
+	public synchronized void initializeAircraft(CAircraft aAircraft) {
 		// TODO Auto-generated method stub
 		System.err.println("You must create initializeAircraft Method of LocalController");
 		
 	}
 
-	public void requestLineUp(CAircraft aAircraft) {
+	public synchronized void requestLineUp(CAircraft aAircraft) {
 		
 		
 		// Find Runway
@@ -198,12 +198,25 @@ public class CLocalController extends AATCController {
 		// Runway Safety Control
 		
 		// When runway has Aircraft
+//		if(lRunway.getRunwayOccupyingList().size()>0) {
+//			for(CAircraft loopAC : lRunway.getRunwayOccupyingList()) {
+//				double lDistanceToOppositeThreshold = loopAC.calculateDistanceBtwCoordination(loopAC.getCurrentPosition(), lRunway.getTaxiwayNodeList().get(lRunway.getTaxiwayNodeList().size()-1).getCoordination());
+//				if (lDistanceToOppositeThreshold<lRunway.getDistance()/3 * 2 && aAircraft.getLeadingVehicle().equals(loopAC)) {					
+//					// when the other aircraft가 활주로 중간을 넘었을때
+//					break;
+//				}else {
+//					System.out.println("Linup Ignore : Runway is occupiyed at " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(iCurrentTimeInMilliSecond)));
+//					return;
+//				}
+//			}			
+//		}
+		
 		if(lRunway.getRunwayOccupyingList().size()>0) {
-			for(CAircraft loopAC : lRunway.getRunwayOccupyingList()) {
-				double lDistanceToOppositeThreshold = loopAC.calculateDistanceBtwCoordination(loopAC.getCurrentPosition(), lRunway.getTaxiwayNodeList().get(lRunway.getTaxiwayNodeList().size()-1).getCoordination());
+			for(int loopAC = lRunway.getRunwayOccupyingList().size()-1; loopAC >=0 ; loopAC--) {
+				CAircraft prevAircraft = lRunway.getRunwayOccupyingList().get(loopAC);
+				double lDistanceToOppositeThreshold = prevAircraft.calculateDistanceBtwCoordination(prevAircraft.getCurrentPosition(), lRunway.getTaxiwayNodeList().get(lRunway.getTaxiwayNodeList().size()-1).getCoordination());
 				if (lDistanceToOppositeThreshold<lRunway.getDistance()/3 * 2) {					
-					// when the other aircraft가 활주로 중간을 넘었을때					
-					System.out.println();
+					// when the other aircraft가 활주로 중간을 넘었을때
 					break;
 				}else {
 					System.out.println("Linup Ignore : Runway is occupiyed at " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(iCurrentTimeInMilliSecond)));
@@ -211,6 +224,7 @@ public class CLocalController extends AATCController {
 				}
 			}			
 		}
+		
 
 		// Departure - Departure Separation
 
@@ -234,7 +248,7 @@ public class CLocalController extends AATCController {
 			
 			// Arrival Aircraft capture the runway, do not line up
 			if(lReadyForTakeOffTime+lCaptureDistanceInTimeInMilliSeconds > lELDT) {				
-				System.out.println("Linup Ignore : Landing Aircraft Capture the runway. Landing will be at " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(lELDT)));
+//				System.out.println("Linup Ignore : Landing Aircraft Capture the runway. Landing will be at " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(lELDT)));
 				return;
 			}
 			
@@ -266,7 +280,7 @@ public class CLocalController extends AATCController {
 		
 	}
 
-	public void requestTakeoff(CAircraft aAircraft) {
+	public synchronized void requestTakeoff(CAircraft aAircraft) {
 
 		// Verify Runway is Cleared
 		CRunway lRunway = aAircraft.getDepartureRunway();
@@ -290,7 +304,9 @@ public class CLocalController extends AATCController {
 		iPreviousDepartureAircraft 				= aAircraft;
 		
 		// Issue Takeoff Clearance Clearance
+		((CTaxiwayNode)(aAircraft.getCurrentFlightPlan().getNode(0))).getVehicleWillUseList().remove(aAircraft);
 		aAircraft.setMovementMode(EAircraftMovementMode.TAKEOFF);
+		aAircraft.setMovementStatus(EAircraftMovementStatus.TAKEOFF);
 		aAircraft.setMoveState(new CAircraftTakeoffMoveState());
 				
 	}
@@ -299,7 +315,7 @@ public class CLocalController extends AATCController {
 	
 	
 	
-	public void requestLanding(CAircraft aAircraft) {
+	public synchronized void requestLanding(CAircraft aAircraft) {
 		long instructionTime = calculateLandingInstructionTime(aAircraft);
 		aAircraft.setNextEventTime(iCurrentTimeInMilliSecond + instructionTime);
 		this.setNextEventTime(iCurrentTimeInMilliSecond + instructionTime);
@@ -312,7 +328,7 @@ public class CLocalController extends AATCController {
 	
 	
 	
-	public void requestTaxiToSpot(CAircraft aAircraft) {
+	public synchronized void requestTaxiToSpot(CAircraft aAircraft) {
 		CFlightPlan lFlightPlan = (CFlightPlan) aAircraft.getCurrentPlan();
 		
 		// Find Route

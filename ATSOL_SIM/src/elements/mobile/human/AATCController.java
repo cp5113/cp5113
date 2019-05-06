@@ -391,9 +391,9 @@ public abstract class AATCController extends AHuman implements IATCController, I
 			
 			
 			// Do Control Aircraft when controller is not speaking to Aircraft
+			controlAircraft();
 			if(iNextEventTime<0 || iNextEventTime<=iCurrentTimeInMilliSecond) {
-				iNextEventTime = -9999;
-				controlAircraft();
+				iNextEventTime = -9999;				
 			}
 			
 			

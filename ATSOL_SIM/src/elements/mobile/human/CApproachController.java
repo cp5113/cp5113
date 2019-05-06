@@ -157,8 +157,8 @@ public class CApproachController extends AATCController {
 		
 		
 		// Estimate Time
-		long lETA = CApproachAircraftPerformance.estimateApproachLegFlightTime(aAircraft, 0.01, iCurrentTimeInMilliSecond);
-		
+		long lETA = CApproachAircraftPerformance.estimateApproachLegFlightTime(aAircraft, 0.01, iCurrentTimeInMilliSecond)+3000; // add 3 seconds
+		aAircraft.setETA(lETA);
 		
 		// Run Resequence Algorithm API
 		new CRunwaySequenceAPI().resequenceArrival(lRunway.getArrivalAircraftList());
@@ -169,7 +169,8 @@ public class CApproachController extends AATCController {
 		if(lSequenceNumber>0) {
 			CAircraft 	lPreviousAircraft 		= lRunway.getArrivalAircraftList().get(lSequenceNumber-1);
 			if(lPreviousAircraft.getMovementMode() != EAircraftMovementMode.LANDING) {
-				long		lPreviousAircraftETA	= CApproachAircraftPerformance.estimateApproachLegFlightTime(lPreviousAircraft, 0.01, iCurrentTimeInMilliSecond);
+				lPreviousAircraft.setETA(CApproachAircraftPerformance.estimateApproachLegFlightTime(lPreviousAircraft, 0.01, iCurrentTimeInMilliSecond)+3000);; // Add 3 seconds
+				long		lPreviousAircraftETA	= lPreviousAircraft.getETA();
 			
 				long 		lETAGap					=  lETA-lPreviousAircraftETA;
 				double      lETAGapDistance			= aAircraft.getCurrentVelocity().getVelocity() * ((double)lETAGap / 1000.0);

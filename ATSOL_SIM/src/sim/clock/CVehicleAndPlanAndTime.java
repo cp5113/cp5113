@@ -35,6 +35,9 @@ package sim.clock;
  *
  */
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import elements.mobile.vehicle.AVehicle;
 import elements.mobile.vehicle.AVehiclePlan;
 
@@ -105,6 +108,10 @@ public class CVehicleAndPlanAndTime implements Comparable<CVehicleAndPlanAndTime
 		iSTD = aSTD;
 	}
 	
+	@Override
+	public String toString() {
+		return iVechiPlan + " : " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(iSTD));
+	}
 	
 
 	/*

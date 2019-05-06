@@ -128,6 +128,7 @@ public abstract class AVehicle extends AMobile implements ITableAble, IDrawingOb
 	
 	protected		double					iCurrentSpeedStoppingDistanceM=0;
 	
+	protected		int						iImDone = 0;;
 	
 	protected   Polygon							iSafetyArea = new Polygon(new double[] {-99999999.0,-99999999.0,-99999991.0,-99999991.0});
 	protected 	Polygon							iShapeArea  = new Polygon(new double[] {-99999999.0,-99999999.0,-99999991.0,-99999991.0});
@@ -278,7 +279,9 @@ public abstract class AVehicle extends AMobile implements ITableAble, IDrawingOb
 	}
 	
 	public synchronized void removeRoutingInfo(int aNodeIndex) {
-
+		if(iRoutingInfo.size()==0) {
+			return;
+		}
 		// Let node knows this vehicle departed from this node in route
 		iRoutingInfo.get(aNodeIndex).getVehicleWillUseList().remove(this);	
 		
