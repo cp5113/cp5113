@@ -346,6 +346,10 @@ public class CLocalController extends AATCController {
 		aAircraft.setRoutingInfo(lRouteList);
 
 		
+	
+		
+		
+		
 		// To Ignore Ground Controller's work
 		LinkedList<CTaxiwayNode> lRouteListOnlyLocalController = new LinkedList<CTaxiwayNode>();
 		for(CTaxiwayNode loopNode : lRouteList) {
@@ -377,6 +381,17 @@ public class CLocalController extends AATCController {
 		// Set Route to Aircraft		
 		aAircraft.setRoutingInfo(lRouteList);
 		
+		// Check Crossing Runway 
+		aAircraft.getCrossingRunwayList().clear();
+		aAircraft.getCrossingRunwayNodeList().clear();
+		for(CTaxiwayNode loopR : lRouteList) {
+			if(loopR.getRunway() !=null && !loopR.getRunway().equals(lFlightPlan.getArrivalRunway())){
+				aAircraft.getCrossingRunwayList().add(loopR.getRunway());
+				aAircraft.getCrossingRunwayNodeList().add(loopR);
+			}
+		}
+		
+		
 		// Notify Taxischedule to taxiway link
 		for(int loopSche = 0; loopSche < lTaxiwayUsageSchedule.size(); loopSche++) {
 			lTaxiwayUsageSchedule.get(loopSche).getLink().addToOccupyingSchedule(lTaxiwayUsageSchedule.get(loopSche));
@@ -402,6 +417,11 @@ public class CLocalController extends AATCController {
 		// Set Event Time to Aircraft and This(Controller)
 		aAircraft.setNextEventTime(iCurrentTimeInMilliSecond + lTaxiInstructionTimeMilliSec);
 		this.setNextEventTime(iCurrentTimeInMilliSecond + lTaxiInstructionTimeMilliSec);
+		
+	}
+
+	public void requestCrossingRunway(CAircraft aCAircraft) {
+		System.out.println();
 		
 	}
 

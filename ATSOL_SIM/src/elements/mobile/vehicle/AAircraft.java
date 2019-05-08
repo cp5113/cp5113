@@ -5,6 +5,8 @@
  */
 package elements.mobile.vehicle;
 
+import java.util.ArrayList;
+
 import api.CAircraftMoveStateAPI;
 import api.CChangeAircraftMoveState;
 import api.CPushBackPauseTimeAPI;
@@ -87,6 +89,10 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 	
 	================================================================
 	*/
+	
+	private ArrayList<CTaxiwayNode> iCrossingRunwayNodeList = new ArrayList<CTaxiwayNode>();
+	private ArrayList<CRunway> 		iCrossingRunwayList 	= new ArrayList<CRunway>();
+	
 	private		String							iRegistration;	
 	private 	CAirline						iAirline;
 	protected		EAircraftMovementStatus			iMovementStatus;
@@ -127,6 +133,14 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 
 	public synchronized CTaxiwayNode getExitTaxiwayNode() {
 		return iExitTaxiwayNode;
+	}
+
+	public synchronized ArrayList<CTaxiwayNode> getCrossingRunwayNodeList() {
+		return iCrossingRunwayNodeList;
+	}
+
+	public synchronized ArrayList<CRunway> getCrossingRunwayList() {
+		return iCrossingRunwayList;
 	}
 
 	public synchronized long getETA() {
@@ -447,6 +461,7 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 				
 				// Request Re Route
 				if(this.getMovementMode() == EAircraftMovementMode.TAXIING &&
+						this.iLeadingVehicle != null &&
 						((CAircraft)this.iLeadingVehicle).getMovementMode() == EAircraftMovementMode.PUSHBACK &&
 						iATCController instanceof CGroundController) {
 					((CGroundController)iATCController).requestRecheckTaxiToRunway((CAircraft) this);
@@ -528,6 +543,18 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 				}
 				
 				
+				// Crossing Runway
+				if(this.getMode() == EMode.ARR && 
+					this.getMovementMode() == EAircraftMovementMode.TAXIING &&
+					this.getCrossingRunwayList().size()>0 &&
+					iATCController instanceof CLocalController && 
+					this.calculateRemainingRouteDistance(this.getCrossingRunwayNodeList().get(0)) <= this.getCrossingRunwayList().get(0).getRunwaySafetyWidth()+50) {
+					((CLocalController)iATCController).requestCrossingRunway((CAircraft) this);					
+					
+					
+				}
+					
+				
 				
 				// Hand off Local to Ground
 				if(this.getMovementMode()==EAircraftMovementMode.TAXIING &&
@@ -563,6 +590,9 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 
 				}
 				
+				
+				
+
 						
 				// Escape or Connect next Flight
 				if(iATCController == null &&

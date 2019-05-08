@@ -153,6 +153,7 @@ public class CAirportTable extends ATable {
 						loopTwyLink.setIsRunway(true);
 						for(ANode loopNode : loopTwyLink.getNodeList()) {
 							lRunway.getTaxiwayNodeList().add((CTaxiwayNode) loopNode);
+							((CTaxiwayNode)loopNode).setRunway(lRunway);
 						}
 						
 					}

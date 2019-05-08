@@ -168,6 +168,11 @@ public class CAircraftTaxiingMoveState implements IVehicleMoveState {
 					lRemainingDistance = lAircraft.calculateRemainingRouteDistance(lAircraft.getRunwayEntryPoint());
 					lRemainingDistance = lRemainingDistance - lFlightPlan.getDepartureRunway().getRunwaySafetyWidth();
 				}
+				if(lAircraft.getCrossingRunwayList().size()>0) {					
+					lRemainingDistance = lAircraft.calculateRemainingRouteDistance(lAircraft.getCrossingRunwayNodeList().get(0));
+					lRemainingDistance = lRemainingDistance - lAircraft.getCrossingRunwayList().get(0).getRunwaySafetyWidth();
+				}
+				
 				double lStoppingDistanceCurrentSpeed = lAircraft.calculateStoppingDistance(lSpeedCurrent,lDecelMax);
 				double lStoppingDistanceMaximumSpeed = lAircraft.calculateStoppingDistance(lSpeedTarget,lDecelMax);
 				

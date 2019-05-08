@@ -236,7 +236,7 @@ public class CSimClockOberserver implements ISimClockObserverable, ISimClockOber
 
 //			
 //			try {
-//				Thread.sleep(100);
+//				Thread.sleep(10);
 //			} catch (InterruptedException e) {
 //				// TODO Auto-generated catch block
 //				e.printStackTrace();

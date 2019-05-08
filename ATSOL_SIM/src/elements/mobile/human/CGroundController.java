@@ -62,6 +62,7 @@ import elements.facility.AFacility;
 import elements.facility.CAirport;
 import elements.facility.CRunway;
 import elements.facility.CSpot;
+import elements.facility.CTaxiwayLink;
 import elements.facility.CTaxiwayNode;
 import elements.mobile.vehicle.AVehicle;
 import elements.mobile.vehicle.CAircraft;
@@ -757,7 +758,104 @@ public class CGroundController extends AATCController {
 	public List<CAircraft> getPushbackAircraftList(){
 		return iPushbackAircraftList;
 	}
-	public void requestRecheckTaxiToRunway(CAircraft aCAircraft) {
+	
+	
+	
+	
+	
+	
+	
+	
+	public void requestRecheckTaxiToRunway(CAircraft aAircraft) {
+
+		CFlightPlan lFlightPlan = (CFlightPlan) aAircraft.getCurrentPlan();
+
+		// Avoid the other Aircraft node
+		CTaxiwayNode lOtherACNode = (CTaxiwayNode) aAircraft.getLeadingVehicle().getCurrentNode();
+		List<ALink>  lOtherACRoute = aAircraft.getLeadingVehicle().getRoutingInfoLink();
+		
+		// Find Route
+		List<CTaxiwayNode> lOD = new ArrayList<CTaxiwayNode>();
+		lOD.add(((CTaxiwayNode) lFlightPlan.getNode(0))); // CurrentNode
+		lOD.add((CTaxiwayNode) aAircraft.getRunwayEntryPoint()); // Destination Node		
+		LinkedList<CTaxiwayNode> lRouteList =  (LinkedList<CTaxiwayNode>) iRoutingAlgorithm.findShortedPathIgnoreNodeList(lOD,lOtherACRoute);	
+		
+		
+		// Calculate Distance
+		double lNewDistance = 0;
+		for(int loopNode = 0 ; loopNode < lRouteList.size()-1; loopNode++) {
+			lNewDistance += aAircraft.calculateDistanceBtwNodes(lRouteList.get(loopNode), lRouteList.get(loopNode+1));
+		}
+		double lOriginalDistance = aAircraft.calculateRemainingRouteDistance();
+		
+		// Ignore Re Taxipath
+		if(lNewDistance >= lOriginalDistance*1.5 ) {
+			return;
+		}
+		
+		
+		
+		
+		
+		// New Routing!
+		
+		
+		
+		
+		// Remove Previous Schedule
+		for(ALink loopLink : aAircraft.getRoutingInfoLink()) {
+			loopLink.removeFromOccupyingSchedule(aAircraft);
+		}
+		
+		
+		
+		
+		
+		
+		// Re Scheduling
+		aAircraft.setRoutingInfo(lRouteList);
+
+		// Calculate Instruction and Read back Time				
+		long lTaxiInstructionTimeMilliSec = calculateTaxiInstructionTime(lRouteList,aAircraft);
+
+		/*
+		 * verify Opposite direction traffic 
+		 */				
+		// Calculate Estimated Taxiing Time 
+		List<COccupyingInform> lTaxiwayUsageSchedule = CUnUniformModelPerformance.estimateTaxiingTime(aAircraft,0.01,iCurrentTimeInMilliSecond + lTaxiInstructionTimeMilliSec);
+		for(int loopSche = 0; loopSche < lTaxiwayUsageSchedule.size(); loopSche++) {
+			if(lTaxiwayUsageSchedule.get(loopSche).getLink().isOppositDirectionElementInTimeWindow(lTaxiwayUsageSchedule.get(loopSche).getStartTime(), 
+					lTaxiwayUsageSchedule.get(loopSche).getEndTime(), lTaxiwayUsageSchedule.get(loopSche).getDestination())) {
+				System.err.println("In CGroundController : You shall make re-routing to avoid opposit direction");
+				break;
+			}
+
+		}
+
+
+		// Notify Taxischedule to taxiway link
+		for(int loopSche = 0; loopSche < lTaxiwayUsageSchedule.size(); loopSche++) {
+			lTaxiwayUsageSchedule.get(loopSche).getLink().addToOccupyingSchedule(lTaxiwayUsageSchedule.get(loopSche));
+		}
+
+		
+		
+		
+		// Cleaning Plan
+		for(int loopPlan = lFlightPlan.getNodeList().size()-2; loopPlan >= 0; loopPlan--) {
+			lFlightPlan.removePlanItem(lFlightPlan.getNode(loopPlan));	
+		}
+		
+
+		// Create Plan List				
+		for(int loopR = lRouteList.size()-1; loopR>=0; loopR--) {
+			Calendar cal = Calendar.getInstance();
+			cal.setTimeInMillis(0);
+			lFlightPlan.insertPlanItem(0, lRouteList.get(loopR), cal, new CAltitude(0, EGEOUnit.FEET));
+		}
+
+
+		
 
 
 	}
