@@ -63,6 +63,7 @@ import elements.facility.CAirport;
 import elements.facility.CRunway;
 import elements.facility.CSpot;
 import elements.facility.CTaxiwayNode;
+import elements.mobile.vehicle.AVehicle;
 import elements.mobile.vehicle.CAircraft;
 import elements.mobile.vehicle.CFlightPlan;
 import elements.mobile.vehicle.state.CAircraftGroundConflictStopMoveState;
@@ -95,11 +96,16 @@ public class CGroundController extends AATCController {
 
 	/*
 	================================================================
-	
+
 			           Initializing Section
-	
+
 	================================================================
-	*/
+	 */
+
+
+	protected List<CAircraft> iPushbackAircraftList = Collections.synchronizedList(new ArrayList<CAircraft>());
+
+
 
 	public CGroundController(String aName, int aAge, int aExperienceDay, ESkill aNSkill, EGender aNGender) {
 		super(aName, aAge, aExperienceDay, aNSkill, aNGender);
@@ -115,64 +121,68 @@ public class CGroundController extends AATCController {
 			CAircraft lAircraft = iAircraftList.get(loopAC);
 			CFlightPlan lFlightPlan = (CFlightPlan) lAircraft.getCurrentPlan();
 			long lTimeSTDThis = lFlightPlan.getScheduleTimeList().get(0).getTimeInMillis();
-			
-			
+
+
 			// Handoff to Local Controller
 			if(lAircraft.getDepartureRunway()!=null
-			   && lAircraft.getMovementMode() == EAircraftMovementMode.TAXIING
-			   && lAircraft.calculateRemainingRouteDistance(lAircraft.getRunwayEntryPoint())<300) {
+					&& lAircraft.getMovementMode() == EAircraftMovementMode.TAXIING
+					&& lAircraft.calculateRemainingRouteDistance(lAircraft.getRunwayEntryPoint())<300) {
 				handOffAircraft(lAircraft.getDepartureRunway().getATCController(), lAircraft);				
 			}
 			if((CAircraft)lAircraft.getLeadingVehicle() !=null 
-				&& ((CAircraft)lAircraft.getLeadingVehicle()).getATCController() instanceof CLocalController) {
+					&& ((CAircraft)lAircraft.getLeadingVehicle()).getATCController() instanceof CLocalController) {
 				handOffAircraft(lAircraft.getDepartureRunway().getATCController(), lAircraft);					
 			}
-			
+
 			if(iCurrentTimeInMilliSecond >= 1407023571000L) {
-//				System.out.println();
+				//				System.out.println();
 			}
-			
-			
+
+
 			// Conflict Detection			
 			if(!(lAircraft.getMoveState() instanceof CAircraftNothingMoveState)) {
 				// Create Search aircraft List
 				ArrayList<CAircraft> lOtherACList = new ArrayList<CAircraft>();
 				lOtherACList.addAll(iAircraftList);
-				
-				
+
+
 				CGroundConflictDetectionAndResolution.groundConflictDetectionAndResolution(lAircraft, lOtherACList);
-				
+
 			} // if(!(lAircraft.getMoveState() instanceof CAircraftNothingMoveState)) {
 
 
 		}	// for(int loopAC = 0; loopAC < iAircraftList.size(); loopAC++) {				
-		
+
 	} // public synchronized void controlAircraft() {
-	
-	
+
+
 	public synchronized void requestPushBack(CAircraft aAircraft) {
 		if (iNextEventTime<0) { // Block aircraft during ATC to the other aircraft
 			CFlightPlan lFlightPlan = (CFlightPlan) aAircraft.getCurrentPlan();
 			long lTimeSTDThis = lFlightPlan.getScheduleTimeList().get(0).getTimeInMillis();
-			
-			System.out.println(aAircraft);
+
+
+
+
 			// Pushback
 			if(!(aAircraft.getMoveState() instanceof CAircraftTaxiingMoveState) && aAircraft.getMode() == EMode.DEP && iCurrentTimeInMilliSecond>lTimeSTDThis && iNextEventTime<0) {
-				
+
 				// Assign Runway for Departure
 				CRunway lAssignedRunway = assignRunwayDeparture(aAircraft, lFlightPlan);
 				aAircraft.setDepartureRunway(lAssignedRunway);
-				
+
 				// Find Runway entring Node
 				ANode lRunwayEnteringNode = aAircraft.getDepartureRunway().findEnteringNodeForDeparture();
 				aAircraft.setRunwayEntryPoint((CTaxiwayNode) lRunwayEnteringNode);
-				
+
 				// Calculate pre-Routing to decide pushback direction
 				List<CTaxiwayNode> lOD = new ArrayList<CTaxiwayNode>();
 				lOD.add(((CSpot) lFlightPlan.getNode(0)).getTaxiwayNode()); // CurrentNode
 				lOD.add((CTaxiwayNode) lRunwayEnteringNode); // Destination Node				
 				LinkedList<CTaxiwayNode> lRouteList =  (LinkedList<CTaxiwayNode>) iRoutingAlgorithm.findShortedPath(lOD);
-				
+				aAircraft.setPreDefinedTaxiRoute(lRouteList);
+
+
 				// Decide Pushback Direction
 				ANode lPushbackNode = null;
 				ALink lPushbackLink = null;
@@ -195,75 +205,149 @@ public class CGroundController extends AATCController {
 								break;
 							}
 						}
-						
+
 					}
 					if(lPushbackLink!=null) {
 						break;
 					}
 				}
-				
+
 				// API : Pushback Direction
 				CTaxiwayNode lPushbackDirectionAPI = new CPushbackDirectionAPI().assingPushbackDirection(aAircraft, iCurrentTimeInMilliSecond);
 				if(lPushbackDirectionAPI != null) {
 					lPushbackNode = lPushbackDirectionAPI;
 				}
-				
+
+
+				// Pushback Priority Check
+				for(CAircraft loopPushbackAC : iPushbackAircraftList) {
+					double lDist = aAircraft.calculateDistanceBtwCoordination(aAircraft.getCurrentPosition(), loopPushbackAC.getCurrentPosition());
+
+					LinkedList<CTaxiwayNode> lotherACPreRoute = loopPushbackAC.getPreDefinedTaxiRoute();
+
+					// Search and Decision
+					double lTempDistance = 0;
+					for(int i = 0; i<lotherACPreRoute.size()-1;i++) {
+
+						// Skip Spot
+						if(loopPushbackAC.getCurrentFlightPlan().getDepartureSpot().getTaxiwayNode().equals(lotherACPreRoute.get(i+1))){
+							lTempDistance += loopPushbackAC.calculateDistanceBtwNodes(lotherACPreRoute.get(i),lotherACPreRoute.get(i+2));
+							i++;
+							continue;
+						}
+						//						System.out.println(lotherACPreRoute.get(i));
+						lTempDistance += loopPushbackAC.calculateDistanceBtwNodes(lotherACPreRoute.get(i),lotherACPreRoute.get(i+1));
+						if(lTempDistance>350) {
+							break;
+						}
+
+						// when my pushback point is in the other aircraft's path
+						if(lotherACPreRoute.get(i).equals(lPushbackNode) || lotherACPreRoute.get(i+1).equals(lPushbackNode)) {
+							// No pushback
+							//							System.out.println(aAircraft + "Ignored Pushback Request by " + loopPushbackAC);
+							return;
+						}
+
+						// when my pushback point is in the other aircraft's path
+						double lTempDistanceThisAC = 0;
+						for(int j = 0; j<aAircraft.getPreDefinedTaxiRoute().size()-1; j++) {
+							lTempDistanceThisAC += aAircraft.calculateDistanceBtwNodes(aAircraft.getPreDefinedTaxiRoute().get(j),aAircraft.getPreDefinedTaxiRoute().get(j+1));
+							if(lTempDistanceThisAC>350) {
+								break;
+							}
+							//							System.out.println(aAircraft.getPreDefinedTaxiRoute().get(j) + " with  " + lotherACPreRoute.get(i) + " or " + lotherACPreRoute.get(i+1));
+							if(aAircraft.getPreDefinedTaxiRoute().get(j).equals(lotherACPreRoute.get(i)) || aAircraft.getPreDefinedTaxiRoute().get(j).equals(lotherACPreRoute.get(i+1))) {
+								// No pushback
+								//								System.out.println(aAircraft + "Ignored Pushback Request by " + loopPushbackAC);
+								return;
+							}
+						}
+
+					}
+
+				}
+
+				// Pushback Priority Check version 2 (avoid Taxiing Aircraft)
+				for(AVehicle loopBlockingAC : aAircraft.getPreDefinedTaxiRoute().get(1).getVehicleWillUseList()) {
+					double lReminingDistance = loopBlockingAC.calculateRemainingRouteDistance(aAircraft.getPreDefinedTaxiRoute().get(1));
+					if(lReminingDistance<300 && ((CAircraft)loopBlockingAC).getMovementMode() == EAircraftMovementMode.TAXIING) {
+						return;
+					}
+				}
+				for(AVehicle loopBlockingAC : aAircraft.getPreDefinedTaxiRoute().get(2).getVehicleWillUseList()) {
+					double lReminingDistance = loopBlockingAC.calculateRemainingRouteDistance(aAircraft.getPreDefinedTaxiRoute().get(2));
+					if(lReminingDistance<100 && ((CAircraft)loopBlockingAC).getMovementMode() == EAircraftMovementMode.TAXIING) {
+						return;
+					}
+				}
+				for(AVehicle loopBlockingAC : lPushbackNode.getVehicleWillUseList()) {
+					double lReminingDistance = loopBlockingAC.calculateRemainingRouteDistance(aAircraft.getPreDefinedTaxiRoute().get(1));
+					if(lReminingDistance<150 && ((CAircraft)loopBlockingAC).getMovementMode() == EAircraftMovementMode.TAXIING) {
+						return;
+					}
+				}
+
+
+
+
+
+
+
 				// API : Pushback Issue
-				if(!new CPushbackInstructionIssueAPI().issuePushbackInstruction(aAircraft, iCurrentTimeInMilliSecond)) {
+				if(!new CPushbackInstructionIssueAPI().issuePushbackInstruction(aAircraft, iCurrentTimeInMilliSecond,iPushbackAircraftList)) {
 					return;
 				}
-				
-				
-				
+
+
+
 				// Set Route from SPOT to Pushback Node
 				lOD.clear();
 				lOD.add(((CSpot) lFlightPlan.getNode(0)).getTaxiwayNode()); // CurrentNode
 				lOD.add(((CAirport)lFlightPlan.getOriginationNode()).getTaxiwayNodeList().get(((CAirport)lFlightPlan.getOriginationNode()).getTaxiwayNodeList().indexOf(lPushbackNode))); // Destination Node				
 				lRouteList =  (LinkedList<CTaxiwayNode>) iRoutingAlgorithm.findShortedPath(lOD);
 				long lPushbackInstructionTimeMilliSec = calculatePushbackInstructionTime(aAircraft);
-				
+
 				// Set Route to Aircraft
 				lRouteList.remove(0);				
 				aAircraft.setRoutingInfo(lRouteList);
-				
+
 				// Notify Taxischedule to taxiway link
 				List<COccupyingInform> lTaxiwayUsageSchedule = CUnUniformModelPerformance.estimateTaxiingTime(aAircraft,0.01,iCurrentTimeInMilliSecond + lPushbackInstructionTimeMilliSec);
 				for(int loopSche = 0; loopSche < lTaxiwayUsageSchedule.size(); loopSche++) {
 					lTaxiwayUsageSchedule.get(loopSche).getLink().addToOccupyingSchedule(lTaxiwayUsageSchedule.get(loopSche));
 				}
-				
-				
+
+
 				// Create Plan List				
 				for(int loopR = lRouteList.size()-1; loopR>=0; loopR--) {
 					Calendar cal = Calendar.getInstance();
 					cal.setTimeInMillis(0);
 					lFlightPlan.insertPlanItem(1, lRouteList.get(loopR), cal, new CAltitude(0, EGEOUnit.FEET));
 				}
-				
+
 				// Reconstruct Flight Plan and Aircraft Status
 				lFlightPlan.removePlanItem(lFlightPlan.getNode(0)); // Remove Spot
 				aAircraft.setCurrentNode((ANode) lFlightPlan.getNode(0));
 				aAircraft.setCurrentLink(aAircraft.getRoutingLinkInfoUsingNode((ANode) lFlightPlan.getNode(0)));
 				System.out.println("Pushback Route : " + lFlightPlan.getNodeList());
-				
+
 				// Set Aircraft Status
 				aAircraft.setMovementMode(EAircraftMovementMode.PUSHBACK);
 				aAircraft.setMoveState(new CAircraftTaxiingMoveState());
-				
+
 				// Set Event Time to Aircraft and This(Controller)				
 				aAircraft.setNextEventTime(iCurrentTimeInMilliSecond + lPushbackInstructionTimeMilliSec);
 				this.setNextEventTime(iCurrentTimeInMilliSecond + lPushbackInstructionTimeMilliSec);
-				
+				iPushbackAircraftList.add(aAircraft);
 
-				
 			}
-			
+
 		}
 	}
-	
+
 	public synchronized void requestTaxiToRunway(CAircraft aAircraft) {
 		CFlightPlan lFlightPlan = (CFlightPlan) aAircraft.getCurrentPlan();
-		
+
 		// Find Route
 		List<CTaxiwayNode> lOD = new ArrayList<CTaxiwayNode>();
 		lOD.add(((CTaxiwayNode) lFlightPlan.getNode(0))); // CurrentNode
@@ -274,7 +358,7 @@ public class CGroundController extends AATCController {
 
 		// Calculate Instruction and Read back Time				
 		long lTaxiInstructionTimeMilliSec = calculateTaxiInstructionTime(lRouteList,aAircraft);
-		
+
 		/*
 		 * verify Opposite direction traffic 
 		 */				
@@ -286,78 +370,83 @@ public class CGroundController extends AATCController {
 				System.err.println("In CGroundController : You shall make re-routing to avoid opposit direction");
 				break;
 			}
-				
+
 		}
-		
+
 		// Set Route to Aircraft
 		lRouteList.remove(0);				
 		aAircraft.setRoutingInfo(lRouteList);
-		
+
 		// Notify Taxischedule to taxiway link
 		for(int loopSche = 0; loopSche < lTaxiwayUsageSchedule.size(); loopSche++) {
 			lTaxiwayUsageSchedule.get(loopSche).getLink().addToOccupyingSchedule(lTaxiwayUsageSchedule.get(loopSche));
 		}
-		
-		
+
+
 		// Create Plan List				
 		for(int loopR = lRouteList.size()-1; loopR>=0; loopR--) {
 			Calendar cal = Calendar.getInstance();
 			cal.setTimeInMillis(0);
 			lFlightPlan.insertPlanItem(1, lRouteList.get(loopR), cal, new CAltitude(0, EGEOUnit.FEET));
 		}
-		
+
+		aAircraft.getCurrentNode().getVehicleWillUseList().remove(aAircraft);
+		aAircraft.getCurrentLink().removeFromOccupyingSchedule(aAircraft);
+
 		// Reconstruct Flight Plan and Aircraft Status
 		lFlightPlan.removePlanItem(lFlightPlan.getNode(0)); // Remove Spot
 		aAircraft.setCurrentNode((ANode) lFlightPlan.getNode(0));
 		aAircraft.setCurrentLink(aAircraft.getRoutingLinkInfoUsingNode((ANode) lFlightPlan.getNode(0)));
 
-		
+
 		// Set Aircraft State
 		aAircraft.setMovementMode(EAircraftMovementMode.TAXIING);
 		aAircraft.setMoveState(new CAircraftTaxiingMoveState());
-		
+
 		// Set Event Time to Aircraft and This(Controller)
 		aAircraft.setNextEventTime(iCurrentTimeInMilliSecond + lTaxiInstructionTimeMilliSec);
 		this.setNextEventTime(iCurrentTimeInMilliSecond + lTaxiInstructionTimeMilliSec);
+		iPushbackAircraftList.remove(aAircraft);
+		lFlightPlan.getDepartureSpot().getVehicleWillUseList().remove(aAircraft);
 	}
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
 	public synchronized void controlAircraftBackup() {
 		// TODO Auto-generated method stub
-//		System.out.println(this.iAircraftList);
-		
-		
-		
+		//		System.out.println(this.iAircraftList);
+
+
+
 		// Testing Aircraft whether it need to be Controlled or not
 		// First Come First Serve
 		for(int loopAC = 0; loopAC < iAircraftList.size(); loopAC++) {
 			CAircraft lAircraft = iAircraftList.get(loopAC);
 			CFlightPlan lFlightPlan = (CFlightPlan) lAircraft.getCurrentPlan();
 			long lTimeSTDThis = lFlightPlan.getScheduleTimeList().get(0).getTimeInMillis();
-			
-			
+
+
 			// Pushback
 			if(!(lAircraft.getMoveState() instanceof CAircraftTaxiingMoveState) && lAircraft.getMode() == EMode.DEP && iCurrentTimeInMilliSecond>lTimeSTDThis && iNextEventTime<0) {
-				
+
 				// Assign Runway for Departure
 				CRunway lAssignedRunway = assignRunwayDeparture(lAircraft, lFlightPlan);
 				lAircraft.setDepartureRunway(lAssignedRunway);
-				
-				
+
+
 				// Find Runway entring Node
 				ANode lRunwayEnteringNode = lAircraft.getDepartureRunway().findEnteringNodeForDeparture();
-				
+
 				// Calculate pre-Routing to decide pushback direction
 				List<CTaxiwayNode> lOD = new ArrayList<CTaxiwayNode>();
 				lOD.add(((CSpot) lFlightPlan.getNode(0)).getTaxiwayNode()); // CurrentNode
 				lOD.add(((CAirport)lFlightPlan.getOriginationNode()).getTaxiwayNodeList().get(((CAirport)lFlightPlan.getOriginationNode()).getTaxiwayNodeList().indexOf(lRunwayEnteringNode))); // Destination Node				
 				LinkedList<CTaxiwayNode> lRouteList =  (LinkedList<CTaxiwayNode>) iRoutingAlgorithm.findShortedPath(lOD);
-				
+
 				// Decide Pushback Direction
 				ANode lPushbackNode = null;
 				ALink lPushbackLink = null;
@@ -379,62 +468,62 @@ public class CGroundController extends AATCController {
 								break;
 							}
 						}
-						
+
 					}
 					if(lPushbackLink!=null) {
 						break;
 					}
 				}
-				
-				
+
+
 				// Set Route from SPOT to Pushback Node
 				lOD.clear();
 				lOD.add(((CSpot) lFlightPlan.getNode(0)).getTaxiwayNode()); // CurrentNode
 				lOD.add(((CAirport)lFlightPlan.getOriginationNode()).getTaxiwayNodeList().get(((CAirport)lFlightPlan.getOriginationNode()).getTaxiwayNodeList().indexOf(lPushbackNode))); // Destination Node				
 				lRouteList =  (LinkedList<CTaxiwayNode>) iRoutingAlgorithm.findShortedPath(lOD);
 				long lPushbackInstructionTimeMilliSec = calculatePushbackInstructionTime(lAircraft);
-				
+
 				// Set Route to Aircraft
 				lRouteList.remove(0);				
 				lAircraft.setRoutingInfo(lRouteList);
-				
+
 				// Notify Taxischedule to taxiway link
 				List<COccupyingInform> lTaxiwayUsageSchedule = CUnUniformModelPerformance.estimateTaxiingTime(lAircraft,0.01,iCurrentTimeInMilliSecond + lPushbackInstructionTimeMilliSec);
 				for(int loopSche = 0; loopSche < lTaxiwayUsageSchedule.size(); loopSche++) {
 					lTaxiwayUsageSchedule.get(loopSche).getLink().addToOccupyingSchedule(lTaxiwayUsageSchedule.get(loopSche));
 				}
-				
-				
+
+
 				// Create Plan List				
 				for(int loopR = lRouteList.size()-1; loopR>=0; loopR--) {
 					Calendar cal = Calendar.getInstance();
 					cal.setTimeInMillis(0);
 					lFlightPlan.insertPlanItem(1, lRouteList.get(loopR), cal, new CAltitude(0, EGEOUnit.FEET));
 				}
-				
+
 				// Reconstruct Flight Plan and Aircraft Status
 				lFlightPlan.removePlanItem(lFlightPlan.getNode(0)); // Remove Spot
 				lAircraft.setCurrentNode((ANode) lFlightPlan.getNode(0));
 				lAircraft.setCurrentLink(lAircraft.getRoutingLinkInfoUsingNode((ANode) lFlightPlan.getNode(0)));
 
-				
+
 				// Set Aircraft Status
 				lAircraft.setMovementMode(EAircraftMovementMode.PUSHBACK);
 				lAircraft.setMoveState(new CAircraftTaxiingMoveState());
-				
+
 				// Set Event Time to Aircraft and This(Controller)				
 				lAircraft.setNextEventTime(iCurrentTimeInMilliSecond + lPushbackInstructionTimeMilliSec);
 				this.setNextEventTime(iCurrentTimeInMilliSecond + lPushbackInstructionTimeMilliSec);
-				
 
-				
+
+
 			}
-			
-			
-			
-			
-			
-			
+
+
+
+
+
+
 
 			// Taxiing Departure
 			if(!(lAircraft.getMoveState() instanceof CAircraftTaxiingMoveState) && lAircraft.getMode() == EMode.DEP && iCurrentTimeInMilliSecond>lTimeSTDThis && iNextEventTime<0) {				
@@ -443,28 +532,28 @@ public class CGroundController extends AATCController {
 				// Break loop to prevent that controller consider the other aircraft
 				break;
 			}
-			
-			
-			
-			
-		}
-		
-		
-		
 
-		
+
+
+
+		}
+
+
+
+
+
 
 	}
-	
-	
-	
+
+
+
 	public synchronized CRunway assignRunwayDeparture(CAircraft aAircraft, CFlightPlan aFlightPlan) {
-		
+
 		// When the aircraft doesn't have departure runway
 		if( aFlightPlan.getDepartureRunway() == null && aAircraft.getCurrentNode().getOwnerObject() instanceof CAirport) {
 			// Get airport info
 			CAirport lAirport = (CAirport) aAircraft.getCurrentNode().getOwnerObject();
-			
+
 			// Search Runway for Departure minimum Q
 			CRunway lCandidateRunway = null;
 			int 	lRunwayQ      = 99999;
@@ -476,25 +565,25 @@ public class CGroundController extends AATCController {
 					}
 				}
 			} //for(CRunway loopRunway : lAirport.getRunwayList()) {
-			
-			
-			
+
+
+
 			// Run User API
 			CAssignRunwayAPI lUserAPI = new CAssignRunwayAPI();
 			CRunway lRunwayFromAPI = lUserAPI.assignRunway(iCurrentTimeInMilliSecond, aAircraft, aFlightPlan, lAirport);
 			if(lRunwayFromAPI!=null) {
 				lCandidateRunway = lRunwayFromAPI;
 			}
-			
+
 			return lCandidateRunway;
 		}else if(aFlightPlan.getDepartureRunway() != null){
 			return aFlightPlan.getDepartureRunway();
 		}else {
 			return null;
 		}
-		
+
 	}
-	
+
 	public synchronized void issueTaxiingInstruction(CAircraft aAircraft, CFlightPlan aFlightPlan, ANode aDestinationNode) {
 		// Find Route
 		List<CTaxiwayNode> lOD = new ArrayList<CTaxiwayNode>();
@@ -505,7 +594,7 @@ public class CGroundController extends AATCController {
 
 		// Calculate Instruction and Read back Time				
 		long lTaxiInstructionTimeMilliSec = calculateTaxiInstructionTime(lRouteList,aAircraft);
-		
+
 		/*
 		 * verify Opposite direction traffic 
 		 */				
@@ -517,90 +606,90 @@ public class CGroundController extends AATCController {
 				System.err.println("In CGroundController : You shall make re-routing to avoid opposit direction");
 				break;
 			}
-				
+
 		}
-		
+
 		// Set Route to Aircraft
 		lRouteList.remove(0);				
 		aAircraft.setRoutingInfo(lRouteList);
-		
+
 		// Notify Taxischedule to taxiway link
 		for(int loopSche = 0; loopSche < lTaxiwayUsageSchedule.size(); loopSche++) {
 			lTaxiwayUsageSchedule.get(loopSche).getLink().addToOccupyingSchedule(lTaxiwayUsageSchedule.get(loopSche));
 		}
-		
-		
+
+
 		// Create Plan List				
 		for(int loopR = lRouteList.size()-1; loopR>=0; loopR--) {
 			Calendar cal = Calendar.getInstance();
 			cal.setTimeInMillis(0);
 			aFlightPlan.insertPlanItem(1, lRouteList.get(loopR), cal, new CAltitude(0, EGEOUnit.FEET));
 		}
-		
+
 		// Reconstruct Flight Plan and Aircraft Status
 		aFlightPlan.removePlanItem(aFlightPlan.getNode(0)); // Remove Spot
 		aAircraft.setCurrentNode((ANode) aFlightPlan.getNode(0));
 		aAircraft.setCurrentLink(aAircraft.getRoutingLinkInfoUsingNode((ANode) aFlightPlan.getNode(0)));
 
-		
+
 		// Set Aircraft State
 		aAircraft.setMovementMode(EAircraftMovementMode.TAXIING);
 		aAircraft.setMoveState(new CAircraftTaxiingMoveState());
-		
+
 		// Set Event Time to Aircraft and This(Controller)
 		aAircraft.setNextEventTime(iCurrentTimeInMilliSecond + lTaxiInstructionTimeMilliSec);
 		this.setNextEventTime(iCurrentTimeInMilliSecond + lTaxiInstructionTimeMilliSec);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
 	@Override
 	public synchronized void initializeAircraft(CAircraft aAircraft) {
 
 		// Get Plan and Airport
 		CFlightPlan lFlightPlan = (CFlightPlan)aAircraft.getCurrentPlan();
-		
+
 		CAirport lAirportControl = null;
 		for(AFacility loopFa : iOwnedFacilty) {
 			if(loopFa instanceof CAirport) {
 				lAirportControl= (CAirport)loopFa;
 			}
 		}
-		
-		
+
+
 		// Verify Arrival or departure		
 		if(lFlightPlan.getOriginationAirport().equalsIgnoreCase(lAirportControl.getAirportICAO())) { // Departure
 			// Validate Departure Spot
 			CSpot lSpotAssigned = assignSpot(aAircraft, lFlightPlan.getDepartureSpot());			
 			lSpotAssigned.getVehicleWillUseList().add(aAircraft);
-			
+
 			// Set Departure Spot
 			lFlightPlan.insertPlanItem(0, lSpotAssigned, lFlightPlan.getScheduleTimeList().get(0), new CAltitude(0,EGEOUnit.FEET));
-			
+
 			// Remove Departure Airport
 			lFlightPlan.removePlanItem(lFlightPlan.getNode(1));
-			
+
 			// Set Aircraft Current Position
 			aAircraft.getCurrentPosition().setXYCoordination(lSpotAssigned.getTaxiwayNode().getCoordination().getXCoordination(), lSpotAssigned.getTaxiwayNode().getCoordination().getYCoordination());
 			aAircraft.setCurrentNode(lSpotAssigned.getTaxiwayNode());
 			// Set Aircraft Mode
 			aAircraft.setMode(EMode.DEP);
-			
+
 			// Set Departure Turnaround Time
 			aAircraft.setNextEventTime(iCurrentTimeInMilliSecond + new CTurnaroundTime().getBeforeDepartureTurnaroundTimeInSeconds(aAircraft, lAirportControl)*1000); 
-			
+
 		}else if(aAircraft.getMode() == EMode.ARR) { // Arrival
-			
+
 			// When Local controller toss this aircraft (Arrival)
 			// Taxi instruction from current node to spot
 			long instructionTime = calculateTaxiInstructionTime(aAircraft.getRoutingInfo(), aAircraft);
-			
+
 			// Set Communication
 			if(aAircraft.getNextEventTime()<=0) {
 				aAircraft.setNextEventTime(iCurrentTimeInMilliSecond + instructionTime);	
@@ -612,23 +701,23 @@ public class CGroundController extends AATCController {
 			}else {
 				this.setNextEventTime(this.getNextEventTime() + instructionTime);
 			}
-			
-			
+
+
 		}else {
 			System.err.println("Ground Controller : Hand on and Assign Spot and reconstruct Flight Plan is not developed");
 		}
-		
-		
 
-		
-		
+
+
+
+
 	}
 
 
 	public CSpot assignSpot(CAircraft aAircraft, CSpot aOriginSpot) {
 		// Set Output
 		CSpot lAssignSpotResult = null;
-		
+
 		CAirport lAirportControlled = null;
 		for(AFacility loopFa : iOwnedFacilty) {
 			if(loopFa instanceof CAirport) {
@@ -636,12 +725,12 @@ public class CGroundController extends AATCController {
 			}
 		}
 		CAircraftPerformance lPerformance = (CAircraftPerformance) ((CAircraftType)aAircraft.getVehcleType()).getPerformance();
-		
+
 		// Validate CSpot is available wingspan and empty
 		if(aOriginSpot.getACTypeADG().get(lPerformance.getADG().toString()) && aOriginSpot.getVehicleWillUseList().size()==0) {
 			lAssignSpotResult = aOriginSpot; // 
 		}else { // if not
-			
+
 			// Search All Feasible Spot			
 			Collections.shuffle(lAirportControlled.getSpotList(),new Random(92545153));
 
@@ -653,41 +742,49 @@ public class CGroundController extends AATCController {
 					break;
 				}
 			}
-			
+
 			CSpot lSpotAPI = new CAssignSpotAPI().assignSpot(aAircraft, (CAirport)iOwnedFacilty);
 			if(lSpotAPI!=null) {
 				lAssignSpotResult = lSpotAPI;
 			}
 		}
-		
-		
+
+
 		return lAssignSpotResult; 
 	}
 
 
+	public List<CAircraft> getPushbackAircraftList(){
+		return iPushbackAircraftList;
+	}
+	public void requestRecheckTaxiToRunway(CAircraft aCAircraft) {
+
+
+	}
+
 
 
 	/*
 	================================================================
-	
+
 						Methods Section
-	
+
 	================================================================
 	 */
 
 	/*
 	================================================================
-	
+
 						Listeners Section
-	
+
 	================================================================
 	 */
 
 	/*
 	================================================================
-	
+
 							The Others
-	
+
 	================================================================
 	 */
 }

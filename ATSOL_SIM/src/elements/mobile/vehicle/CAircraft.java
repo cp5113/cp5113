@@ -1,5 +1,8 @@
 package elements.mobile.vehicle;
 
+import java.util.Collections;
+import java.util.LinkedList;
+
 import elements.facility.CRunway;
 import elements.facility.CTaxiwayNode;
 import elements.mobile.vehicle.AAircraft;
@@ -47,6 +50,8 @@ import elements.util.geo.CCoordination;
 
 public class CAircraft extends AAircraft {
 
+
+	private LinkedList<CTaxiwayNode> iPreDefinedTaxiRoute;
 
 	@Override
 	public double getCurrentVelocityMps() {
@@ -132,6 +137,16 @@ public class CAircraft extends AAircraft {
 		
 		long   lELDT				= iCurrentTimeInMilliSecond + (long)(lDistanceToThreshold/this.getCurrentVelocity().getVelocity() * 1000);
 		return lELDT;
+	}
+
+	public void setPreDefinedTaxiRoute(LinkedList<CTaxiwayNode> aRouteList) {
+		iPreDefinedTaxiRoute = aRouteList;
+		
+	}
+
+	public LinkedList<CTaxiwayNode> getPreDefinedTaxiRoute() {
+		// TODO Auto-generated method stub
+		return iPreDefinedTaxiRoute;
 	}
 
 

@@ -131,7 +131,7 @@ public class DijkstraAlgorithm implements IRoutingAlgorithm{
 				iOutput.clear();				
 			}			
 		}
-		System.out.println(iOutput);
+//		System.out.println(iOutput);
 		
 		
 		

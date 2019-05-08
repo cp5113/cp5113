@@ -445,6 +445,15 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 					
 				}
 				
+				// Request Re Route
+				if(this.getMovementMode() == EAircraftMovementMode.TAXIING &&
+						((CAircraft)this.iLeadingVehicle).getMovementMode() == EAircraftMovementMode.PUSHBACK &&
+						iATCController instanceof CGroundController) {
+					((CGroundController)iATCController).requestRecheckTaxiToRunway((CAircraft) this);
+				}
+				
+				
+				
 				// Request Lineup Clearance
 				if((this.getMoveState() instanceof CAircraftTaxiingMoveState) && 
 					this.getATCController() instanceof CLocalController &&

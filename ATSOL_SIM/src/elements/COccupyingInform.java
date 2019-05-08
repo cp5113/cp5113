@@ -1,5 +1,8 @@
 package elements;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import elements.network.ALink;
 import elements.network.ANode;
 
@@ -136,7 +139,7 @@ public class COccupyingInform implements Comparable<COccupyingInform>{
 
 
 	public String toString() {
-		return iThisLink.getName() + " : " + iStartTime + "~" + iEndTime + " by " + iOccupyingObject + " moving to "+ iDestination;
+		return iThisLink.getName() + " : " +  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(iStartTime)) + "~" +  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(iEndTime)) + " by " + iOccupyingObject + " moving to "+ iDestination + "\n";
 	}
 
 	/*

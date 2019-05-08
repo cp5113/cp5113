@@ -1,5 +1,7 @@
 package api.inf;
 
+import java.util.List;
+
 import elements.mobile.vehicle.CAircraft;
 
 /**
@@ -53,8 +55,6 @@ public interface IPushbackInstructionIssue {
 						Methods Section
 	
 	================================================================
-	 */
-	public boolean issuePushbackInstruction(CAircraft aAircraft, long aCurrentTimeInMilliSeconds);
 	/*
 	================================================================
 	
@@ -62,6 +62,9 @@ public interface IPushbackInstructionIssue {
 	
 	================================================================
 	 */
+
+	boolean issuePushbackInstruction(CAircraft aAircraft, long aCurrentTimeInMilliSeconds,
+			List<CAircraft> aPushbackAircraftList);
 
 	/*
 	================================================================

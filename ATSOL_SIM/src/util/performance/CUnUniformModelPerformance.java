@@ -197,8 +197,13 @@ public class CUnUniformModelPerformance {
 			} // while(true) {
 			
 			// Merge to Schedule
-			lSchedule.setEndTime((long)(lTimeDuration*1000) + eventStartT);
-			lUseSchedule.add(lSchedule);
+			if(loopLink == aAircraft.getRoutingInfoLink().size()-1) {				
+				lSchedule.setEndTime((long)(lTimeDuration*1000) + eventStartT + aAircraft.getPushbackPauseTimeInMilliSeconds());
+				lUseSchedule.add(lSchedule);
+			}else {
+				lSchedule.setEndTime((long)(lTimeDuration*1000) + eventStartT);
+				lUseSchedule.add(lSchedule);
+			}
 			
 		}// for(int loopLink = 0; loopLink < aAircraft.getRoutingInfoLink().size(); loopLink++) {
 		

@@ -679,8 +679,3 @@ public class CAircraftTaxiingMoveState implements IVehicleMoveState {
 	}
 }
 
-
-
-
-
-

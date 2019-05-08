@@ -293,8 +293,10 @@ public class CAircraftLandingMoveState implements IVehicleMoveState {
 			
 			
 			// Verify Next Node or not
-			if(lFlightPlan.getNode(0).getCoordination().getXCoordination() == lXCurrent && lFlightPlan.getNode(0).getCoordination().getYCoordination() == lYCurrent) {				
-				lAircraft.getCurrentNode().getVehicleWillUseList().remove(lAircraft);
+			if(lFlightPlan.getNode(0).getCoordination().getXCoordination() == lXCurrent && lFlightPlan.getNode(0).getCoordination().getYCoordination() == lYCurrent) {
+//				System.out.println(((CTaxiwayNode)lFlightPlan.getNode(0)).getVehicleWillUseList());
+				((CTaxiwayNode)lFlightPlan.getNode(0)).getVehicleWillUseList().remove(lAircraft);
+//				System.out.println(((CTaxiwayNode)lFlightPlan.getNode(0)).getVehicleWillUseList());
 				lAircraft.setCurrentNode((CTaxiwayNode)lFlightPlan.getNode(0));
 				lFlightPlan.removePlanItem(lFlightPlan.getNode(0));				
 			

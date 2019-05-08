@@ -484,24 +484,28 @@ public class CAtsolSimGuiControl {
 //					System.out.println(lTheObject);
 					gc = SimCanvas.getGraphicsContext2D();
 					gc.setStroke(Color.BLACK);
+					double lFactor = -SimCanvas.getHeight()*0.04;
 					if(lTheObject instanceof ANode) {
 						if(lTheObject instanceof CTaxiwayNode) {
 							if( ((CTaxiwayNode)lTheObject).getSpot() != null) {
-								gc.strokeText(lTheObject.toString() + "\n Node : "+((ANode)lTheObject).getVehicleWillUseList() + "\n Spot : " + ((CTaxiwayNode)lTheObject).getSpot().getVehicleWillUseList(), p1.getXCoordination(), p1.getYCoordination());
-							}
-						}else {
-							gc.strokeText(lTheObject.toString() + "\n"+((ANode)lTheObject).getVehicleWillUseList(), p1.getXCoordination(), p1.getYCoordination());
+								gc.strokeText(lTheObject.toString() + "\n Node : "+((ANode)lTheObject).getVehicleWillUseList() + "\n Spot : " + ((CTaxiwayNode)lTheObject).getSpot().getVehicleWillUseList(), p1.getXCoordination(), p1.getYCoordination()+lFactor);
+							}						
+								
+							gc.strokeText(lTheObject.toString() + "\n"+((ANode)lTheObject).getVehicleWillUseList(), p1.getXCoordination(), p1.getYCoordination()+lFactor);
 						}
 					}else if(lTheObject instanceof CAircraft){
 						CAircraft lAircraft = (CAircraft) lTheObject;
 						if(lAircraft.getLeadingVehicle() != null) {
-							gc.strokeText(lTheObject.toString() + " : " + lAircraft.getMoveState().getClass().getSimpleName() + " ->"+ lAircraft.getLeadingVehicle(), p1.getXCoordination(), p1.getYCoordination());
+							gc.strokeText(lTheObject.toString() + " : " + lAircraft.getMoveState().getClass().getSimpleName() + " ->"+ lAircraft.getLeadingVehicle(), p1.getXCoordination(), p1.getYCoordination()+lFactor);
 						}else {
-							gc.strokeText(lTheObject.toString() + " : " + lAircraft.getMoveState().getClass().getSimpleName(), p1.getXCoordination(), p1.getYCoordination());
+							gc.strokeText(lTheObject.toString() + " : " + lAircraft.getMoveState().getClass().getSimpleName(), p1.getXCoordination(), p1.getYCoordination()+lFactor);
 						}
 						
+					}else if(lTheObject instanceof CTaxiwayLink){
+						CTaxiwayLink lLink = (CTaxiwayLink) lTheObject;
+						gc.strokeText(lTheObject.toString() + " : " + lLink.getOccupyingSchedule(), p1.getXCoordination(), p1.getYCoordination()+lFactor);						
 					}else {
-						gc.strokeText(lTheObject.toString(), p1.getXCoordination(), p1.getYCoordination());
+						gc.strokeText(lTheObject.toString(), p1.getXCoordination(), p1.getYCoordination()+lFactor);
 					}
 										
 //					gc.setFill(Color.THISTLE);			

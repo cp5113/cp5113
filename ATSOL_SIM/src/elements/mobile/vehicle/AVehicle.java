@@ -81,7 +81,7 @@ import sim.gui.IDrawingObject;
  */
 public abstract class AVehicle extends AMobile implements ITableAble, IDrawingObject, IElementObservableClock, Runnable,IDrawingAreaObject{
 	
-	// Strategy Pattern°ú Observer PatternÀ» °øºÎÇØ¾ß ÇÔ
+	// Strategy PatternÂ°Ãº Observer PatternÃ€Â» Â°Ã¸ÂºÃŽÃ‡Ã˜Â¾ÃŸ Ã‡Ã”
 	// S : http://hyeonstorage.tistory.com/146
 	// S : http://flowarc.tistory.com/entry/1-Strategy-Pattern
 	// O : http://flowarc.tistory.com/entry/%EB%94%94%EC%9E%90%EC%9D%B8-%ED%8C%A8%ED%84%B4-%EC%98%B5%EC%A0%80%EB%B2%84-%ED%8C%A8%ED%84%B4Observer-Pattern
@@ -660,10 +660,3 @@ public abstract class AVehicle extends AMobile implements ITableAble, IDrawingOb
 	================================================================
 	 */
 }
-
-
-
-
-
-
-
