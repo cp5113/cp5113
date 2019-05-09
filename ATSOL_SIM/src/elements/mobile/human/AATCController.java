@@ -230,7 +230,22 @@ public abstract class AATCController extends AHuman implements IATCController, I
 		return instructionTimeMilliSeconds;
 	}	
 	
-	
+	protected long calculateRunwayCrossingInstructionTime(CAircraft aAircraft, CLocalController aCLocalController) {
+		
+		long instructionTimeMilliSeconds = 0;
+		// Korean air 1124, Cross runway 33L
+		// Cross runway 33L Korean air 1124 
+		// 12 words
+		// 150 words per minute (Medium speed ICAO 2006b 2-1)		
+		instructionTimeMilliSeconds = (12/150 * 60 + 3)*1000;
+		
+		long api = new CATCInstructionTimeAPI().calculateLandingInstructionTime(aAircraft, this);
+		if(api>=0) {
+			instructionTimeMilliSeconds = api;
+		}
+		
+		return instructionTimeMilliSeconds;
+	}
 	
 	
 	
@@ -435,7 +450,7 @@ public abstract class AATCController extends AHuman implements IATCController, I
 		// Assign Arrival Spot
 		CFlightPlan lFlightPlan = (CFlightPlan)aAircraft.getCurrentPlan();
 		CSpot lCandidateSpot    = lFlightPlan.getArrivalSpot() ;
-		
+		CAirport lAirport = (CAirport)aAircraft.getCurrentFlightPlan().getDestinationNode();
 		
 		// Find Next flight Spot	
 		if(lCandidateSpot == null) {
@@ -444,9 +459,10 @@ public abstract class AATCController extends AHuman implements IATCController, I
 					lCandidateSpot = ((CFlightPlan)loopPlan).getDepartureSpot(); 
 				}
 			}
-		}		
-		if(!lCandidateSpot.getACTypeADG().get(((CAircraftPerformance) (aAircraft.getPerformance())).getADG().toString())
-				|| (!lCandidateSpot.getVehicleWillUseList().contains(aAircraft) && lCandidateSpot.getVehicleWillUseList().size()>0) ) {
+		}	
+		
+		if(lCandidateSpot!=null && (!lCandidateSpot.getACTypeADG().get(((CAircraftPerformance) (aAircraft.getPerformance())).getADG().toString())
+				|| (!lCandidateSpot.getVehicleWillUseList().contains(aAircraft) && lCandidateSpot.getVehicleWillUseList().size()>0) )) {
 			lCandidateSpot = null;
 		}
 		
@@ -454,7 +470,7 @@ public abstract class AATCController extends AHuman implements IATCController, I
 		
 		//  random select
 		if(lCandidateSpot==null) {
-			CAirport lAirport = (CAirport)aAircraft.getCurrentFlightPlan().getDestinationNode();
+			lAirport = (CAirport)aAircraft.getCurrentFlightPlan().getDestinationNode();
 			// Search All Feasible Spot			
 			Collections.shuffle(lAirport.getSpotList(),new Random(92545153));
 			
@@ -478,7 +494,7 @@ public abstract class AATCController extends AHuman implements IATCController, I
 		
 		
 		// API
-		CSpot lSpotAPI = new CAssignSpotAPI().assignSpot(aAircraft, (CAirport)lFlightPlan.getDestinationNode());
+		CSpot lSpotAPI = new CAssignSpotAPI().assignSpot(aAircraft, lAirport);
 		if(lSpotAPI!=null) {
 			lCandidateSpot = lSpotAPI;
 		}

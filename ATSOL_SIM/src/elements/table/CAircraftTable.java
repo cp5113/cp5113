@@ -47,6 +47,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
@@ -142,7 +143,8 @@ public class CAircraftTable extends ATable {
 			CAircraft lAircraft	= (CAircraft) getElementTable().get(lRegistration);			
 			if(lAircraft == null) {
 				lAircraft = new CAircraft();
-				lAircraft.setRegistration(lRegistration);				
+				lAircraft.setRegistration(lRegistration);			
+				
 				CAircraftType lACTypeInTable = (CAircraftType) CAtsolSimMain.getInstance().getAircraftTypeTable().getElementTable().get(lAircraftType + "/" +lRange);
 				if(lACTypeInTable == null) {
 					System.out.println("Aircraft Type "+ lAircraftType +"/Range is not defined");

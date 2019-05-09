@@ -285,6 +285,8 @@ public class CAircraftOnRunwayAfterLandingMoveState implements IVehicleMoveState
 					
 					
 					// Change to Taxiing
+					lFlightPlan.getArrivalRunway().getOccupyingList().remove(lAircraft);
+					lFlightPlan.getArrivalRunway().getArrivalAircraftList().remove(lAircraft);
 					lAircraft.setMoveState(new CAircraftTaxiingMoveState());
 					lAircraft.setMovementMode(EAircraftMovementMode.TAXIING);
 					lAircraft.setMovementStatus(EAircraftMovementStatus.TAXIING_CONST);
@@ -294,13 +296,19 @@ public class CAircraftOnRunwayAfterLandingMoveState implements IVehicleMoveState
 				
 				// When reach end of taxiway link
 				// Remove this aircraft from taxiway Link shcedule
-				lAircraft.getCurrentNode().getVehicleWillUseList().remove(lAircraft.getCurrentNode().getVehicleWillUseList().indexOf(lAircraft));
+				if(lAircraft.getCurrentNode().getVehicleWillUseList().contains(lAircraft)) {
+					lAircraft.getCurrentNode().getVehicleWillUseList().remove(lAircraft.getCurrentNode().getVehicleWillUseList().indexOf(lAircraft));
+				}
 			
 				lFlightPlan.removePlanItem(lFlightPlan.getNode(0));
-				lAircraft.removeRoutingInfo(0);
-
+				if(lAircraft.getRoutingInfo()!=null && lAircraft.getRoutingInfo().size()>0) {
+					lAircraft.removeRoutingInfo(0);
+				}
+//				System.out.println();
 				// Update Current Location
-				lAircraft.setCurrentLink(lAircraft.getRoutingLinkInfoUsingNode((ANode) lFlightPlan.getNode(0)));
+				if(lAircraft.getRoutingInfo()!=null) {
+					lAircraft.setCurrentLink(lAircraft.getRoutingLinkInfoUsingNode((ANode) lFlightPlan.getNode(0)));
+				}
 				lAircraft.setCurrentNode((ANode) lFlightPlan.getNode(0));
 				
 				

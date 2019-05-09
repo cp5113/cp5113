@@ -44,7 +44,7 @@ public class CPushBackPauseTimeAPI implements IPushbackPauseTime{
 	@Override
 	public long calculatePushbackPauseTimeInMilliseconds(long aCurrentTimeInMilliSeconds,CAircraft aAircraft) {
 		// TODO Auto-generated method stub
-		return -9999999;
+		return 3*60*1000;//3 minutes
 	}
 	/*
 	================================================================

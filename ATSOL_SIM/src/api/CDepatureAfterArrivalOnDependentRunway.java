@@ -1,9 +1,9 @@
 package api;
 
-import api.inf.IAssignSpot;
-import elements.facility.CAirport;
-import elements.facility.CSpot;
+import api.inf.IDepatureAfterArrivalOnDependentRunway;
+import elements.facility.CRunway;
 import elements.mobile.vehicle.CAircraft;
+import elements.mobile.vehicle.state.CAircraftLandingMoveState;
 
 /**
  * 
@@ -32,21 +32,27 @@ import elements.mobile.vehicle.CAircraft;
  * </p>
  * 
  * 
- * @date : 2019. 5. 1.
+ * @date : 2019. 5. 9.
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * 2019. 5. 1. : Coded by S. J. Yun.
+ * 2019. 5. 9. : Coded by S. J. Yun.
  *
  *
  */
 
-public class CAssignSpotAPI implements IAssignSpot {
+public class CDepatureAfterArrivalOnDependentRunway implements IDepatureAfterArrivalOnDependentRunway{
 
-	@Override
-	public CSpot assignSpot(CAircraft aAircraft, CAirport aAirport) {
-	
-		return null;
+	public boolean issueTakeoffClearance(CRunway aDependentRunway, CAircraft aDepartureAircraft, CAircraft aArrivalAircraft) {
+		
+		// Takeoff after touchdown
+		if(!(aArrivalAircraft.getMoveState() instanceof CAircraftLandingMoveState)) {
+			return false;
+		}
+		
+		
+		
+		return true;
 	}
 	/*
 	================================================================

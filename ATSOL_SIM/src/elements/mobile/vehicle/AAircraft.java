@@ -92,7 +92,7 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 	
 	private ArrayList<CTaxiwayNode> iCrossingRunwayNodeList = new ArrayList<CTaxiwayNode>();
 	private ArrayList<CRunway> 		iCrossingRunwayList 	= new ArrayList<CRunway>();
-	
+	private double					iTimeFromThresholdInSeconds		= -9999;
 	private		String							iRegistration;	
 	private 	CAirline						iAirline;
 	protected		EAircraftMovementStatus			iMovementStatus;
@@ -118,6 +118,14 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 	
 	
 	
+	public synchronized double getTimeFromThreshold() {
+		return iTimeFromThresholdInSeconds;
+	}
+
+	public synchronized void setTimeFromThreshold(double aTimeFromThreshold) {
+		iTimeFromThresholdInSeconds = aTimeFromThreshold;
+	}
+
 	@Override
 	public String toString() {
 		return iRegistration;
@@ -493,7 +501,7 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 					this.iConflictVehicle = null;
 					this.iLeadingVehicle  = null;
 					iSimClockObserver.deleteFromClock(this);
-					notifyToClockImDone();		
+//					notifyToClockImDone();		
 					// Escape thread
 					break;
 				}
@@ -563,8 +571,7 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 					
 					// Add Taxiing Instruction
 					iATCController.handOffAircraft(this.getCurrentLink().getATCController(), (CAircraft) this);
-					
-					
+										
 				}
 				
 				
@@ -584,6 +591,9 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 					this.setMovementMode(EAircraftMovementMode.NOTHING);
 					this.setMovementStatus(EAircraftMovementStatus.NOTHING);
 					
+					if(!this.getCurrentFlightPlan().getArrivalSpot().getVehicleWillUseList().contains(this)) {
+						this.getCurrentFlightPlan().getArrivalSpot().getVehicleWillUseList().add(this);
+					}
 					// Set Turnaround Time
 					iNextEventTime = iCurrentTimeInMilliSecond + new CTurnaroundTime().getAfterArrivalTurnaroundTimeInSeconds((CAircraft) this, (CAirport)this.getCurrentNode().getOwnerObject()) * 1000;
 					
@@ -603,26 +613,26 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 						iNextEventTime<=iCurrentTimeInMilliSecond){
 					
 					// Clear Spot and Node
-					this.getCurrentNode().setIsOccuping(false);
-					this.getCurrentNode().getVehicleWillUseList().remove(this);					
-					((CTaxiwayNode)this.getCurrentNode()).getSpot().setIsOccuping(false);
-					((CTaxiwayNode)this.getCurrentNode()).getSpot().getVehicleWillUseList().remove(this);
+//					this.getCurrentNode().setIsOccuping(false);
+//					this.getCurrentNode().getVehicleWillUseList().remove(this);					
+//					((CTaxiwayNode)this.getCurrentNode()).getSpot().setIsOccuping(false);
+//					((CTaxiwayNode)this.getCurrentNode()).getSpot().getVehicleWillUseList().remove(this);
 					
 					// Escape Thread
 					// Notify to Clock
-					notifyToClockImDone();
+//					notifyToClockImDone();
 					((CSimClockOberserver) iSimClockObserver).deleteFromClock(this);
 					iPreviousTimeInMilliSecond = iCurrentTimeInMilliSecond;
 					break;
 				}
 				
 				
-				// Move This Aircraft
-				doMoveVehicle();
+				
 				
 			};//if(iNextEventTime<0 || iNextEventTime<=iCurrentTimeInMilliSecond) {
 			
-			
+			// Move This Aircraft
+			doMoveVehicle();
 			
 			
 			
@@ -630,6 +640,7 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 			
 			// Debugging
 			if(iCurrentTimeInMilliSecond != ((CSimClockOberserver) iSimClockObserver).getCurrentTIme().getTimeInMillis()) {
+				System.out.println("AC Current Time : " + iCurrentTimeInMilliSecond + " / Clock : " + ((CSimClockOberserver) iSimClockObserver).getCurrentTIme().getTimeInMillis());
 				try {
 					throw new Exception();
 				} catch (Exception e) {

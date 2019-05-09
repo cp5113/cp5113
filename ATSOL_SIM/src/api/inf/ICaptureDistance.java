@@ -57,6 +57,7 @@ public interface ICaptureDistance {
 	================================================================
 	 */
 	public double assignCaptureDistanceToLineup(CRunway aRunway, IATCController aController, CAircraft aFollowingAircraft);
+	public double assignCaptureDistanceToCrossing(CRunway aRunway, IATCController aController, CAircraft aFollowingAircraft) ;
 	/*
 	================================================================
 	

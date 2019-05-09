@@ -1,9 +1,8 @@
 package api;
 
-import api.inf.IAssignSpot;
+import api.inf.IDependentRunway;
 import elements.facility.CAirport;
-import elements.facility.CSpot;
-import elements.mobile.vehicle.CAircraft;
+import elements.facility.CRunway;
 
 /**
  * 
@@ -32,20 +31,33 @@ import elements.mobile.vehicle.CAircraft;
  * </p>
  * 
  * 
- * @date : 2019. 5. 1.
+ * @date : 2019. 5. 9.
  * @author : S. J. Yun - cp5113@naver.com, +82-10-9254-5153
  *
  * @version : 
- * 2019. 5. 1. : Coded by S. J. Yun.
+ * 2019. 5. 9. : Coded by S. J. Yun.
  *
  *
  */
 
-public class CAssignSpotAPI implements IAssignSpot {
+public class CDependentRunwayAPI implements IDependentRunway{
 
 	@Override
-	public CSpot assignSpot(CAircraft aAircraft, CAirport aAirport) {
-	
+	public CRunway getDependentRunway(CRunway aRunway) {
+		if(aRunway.getName().equalsIgnoreCase("33R")){
+			for(CRunway loopRwy : ((CAirport)aRunway.getOwnerObject()).getRunwayList()) {
+				if(loopRwy.getName().equalsIgnoreCase("33L")) {
+					return loopRwy;
+				}
+			}
+		}
+		if(aRunway.getName().equalsIgnoreCase("33L")){
+			for(CRunway loopRwy : ((CAirport)aRunway.getOwnerObject()).getRunwayList()) {
+				if(loopRwy.getName().equalsIgnoreCase("33R")) {
+					return loopRwy;
+				}
+			}
+		}
 		return null;
 	}
 	/*

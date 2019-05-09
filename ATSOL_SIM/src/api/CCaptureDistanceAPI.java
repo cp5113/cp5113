@@ -47,6 +47,11 @@ public class CCaptureDistanceAPI implements ICaptureDistance {
 	public double assignCaptureDistanceToLineup(CRunway aRunway, IATCController aController, CAircraft aFollowingAircraft) {
 		return 3*1852;
 	}
+	
+	
+	public double assignCaptureDistanceToCrossing(CRunway aRunway, IATCController aController, CAircraft aFollowingAircraft) {
+		return 2*1852;
+	}
 	/*
 	================================================================
 	

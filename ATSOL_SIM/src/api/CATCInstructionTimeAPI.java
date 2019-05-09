@@ -4,6 +4,7 @@ import java.util.List;
 
 import api.inf.IATCInstructionTime;
 import elements.mobile.human.AATCController;
+import elements.mobile.human.CLocalController;
 import elements.mobile.vehicle.CAircraft;
 import elements.network.ANode;
 
@@ -84,6 +85,11 @@ public class CATCInstructionTimeAPI implements IATCInstructionTime {
 	*/
 
 	public long calculateLandingInstructionTime(CAircraft aAircraft, AATCController aAatcController) {
+		// TODO Auto-generated method stub
+		return -9999999;
+	}
+
+	public long calculateRunwayCrossingInstructionTime(CAircraft aAircraft, CLocalController aCLocalController) {
 		// TODO Auto-generated method stub
 		return -9999999;
 	}

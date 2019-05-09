@@ -1,0 +1,6 @@
+Callsign,AircraftType,Registration,Origin,Destination,CrusingAltitude,ScheduleTimeDeparture,ScheduleTimeArrival,SpotArrival,SpotDeparture,DepartureRunway,ArrivalRunway,Airline,Route
+1,B737,HL1,RJGG,RKSI,,2014-08-03 08:58:00,,35,,,33R,SJS,PULUN_RKSI
+2,B737,HL2,RJGG,RKSI,,2014-08-03 08:58:00,,35,,,33R,SJS,PULUN_RKSI
+3,B737,HL3,RJGG,RKSI,,2014-08-03 08:58:00,,35,,,33R,SJS,PULUN_RKSI
+4,B737,HL4,RJGG,RKSI,,2014-08-03 08:58:00,,35,,,33R,SJS,PULUN_RKSI
+5,B737,HL5,RJGG,RKSI,,2014-08-03 10:00:00,,35,,,33R,SJS,PULUN_RKSI

@@ -107,6 +107,9 @@ public class CAircraftLandingMoveState implements IVehicleMoveState {
 		double lAmountTime = ((double)lCurrentTime-(double)lCurrentTimeFirstTime)/(double)aIncrementTimeStep; 
 		
 		
+
+		
+		
 		
 		// Get Initial Information
 		CAircraft   	lAircraft   		= (CAircraft) aThisVechicle;
@@ -116,6 +119,12 @@ public class CAircraftLandingMoveState implements IVehicleMoveState {
 		CCoordination lThresholdCoord 		= lRunway.getTaxiwayNodeList().get(0).getCoordination();
 		CLandingPerformanceAPI lLandingPerformance = new CLandingPerformanceAPI();
 		lAircraft.setMovementStatus(EAircraftMovementStatus.LANDING_DECEL);
+
+		
+		// Start Time Count
+		if (lAircraft.getTimeFromThreshold() <=0) {
+			lAircraft.setTimeFromThreshold(0);
+		}
 		
 
 //		System.out.println("Land Time : " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(aCurrentTime)));
@@ -203,7 +212,7 @@ public class CAircraftLandingMoveState implements IVehicleMoveState {
 //				System.out.println(lAmountTime*1000);
 //				System.out.println(lCurrentTimeFirstTime);
 //				System.out.println(lAircraft.getRunwayEntryTime());
-				lAccelCurrent  = lLandingPerformance.calculateTargetAcceleration(lPerformance.getWTC(), lSpeedCurrent, lAircraft.getRandomNumber(),  ((long)(lAmountTime*1000 + lCurrentTimeFirstTime) - (lAircraft.getRunwayEntryTime()))/1000.0);
+				lAccelCurrent  = lLandingPerformance.calculateTargetAcceleration(lPerformance.getWTC(), lSpeedCurrent, lAircraft.getRandomNumber(),  lAircraft.getTimeFromThreshold());
 //				}
 
 
@@ -244,7 +253,7 @@ public class CAircraftLandingMoveState implements IVehicleMoveState {
 				
 				// Update Time
 				lAmountTime += deltaT;
-				
+				lAircraft.setTimeFromThreshold(lAircraft.getTimeFromThreshold() + deltaT);
 				
 				
 				// Verify next Point overshoot next node
@@ -283,9 +292,10 @@ public class CAircraftLandingMoveState implements IVehicleMoveState {
 				
 			
 				// Escape when decision speed
-				if(lSpeedCurrent <= lExitDecisionSpeed) {					
+				if(lSpeedCurrent <= lExitDecisionSpeed) {				
+					lAircraft.setTimeFromThreshold(-9999);
 					lAircraft.setMoveState(new CAircraftOnRunwayAfterLandingMoveState());
-					lAircraft.doMoveVehicle((long)(lAmountTime*1000));
+					lAircraft.doMoveVehicle((long)(lAmountTime*1000));					
 					return;
 				}
 				

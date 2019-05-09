@@ -487,13 +487,13 @@ public abstract class AVehicle extends AMobile implements ITableAble, IDrawingOb
 		double lStoppingDist;
 		double lLengthAndStoppingDist;
 		if(aIsIncludingSafeArea) {
-			lWidth = this.iVehcleType.getSafetyDistanceWidth();
+			lWidth = this.iVehcleType.getSafetyDistanceWidth()/2;
 			lLength = this.iVehcleType.getSafetyDistanceLength();
 			lStoppingDist = this.calculateStoppingDistance(this.getCurrentVelocity().getVelocity(), this.getPerformance().getDecelerationOnGroundMax());
 
 			lLengthAndStoppingDist = lLength + lStoppingDist + lStoppingDist*0.1;
 		}else {
-			lWidth = this.iVehcleType.getSafetyDistanceWidth();
+			lWidth = this.iVehcleType.getSafetyDistanceWidth()/2;
 			lLength = this.iVehcleType.getSafetyDistanceLength();
 			lStoppingDist = 0;
 

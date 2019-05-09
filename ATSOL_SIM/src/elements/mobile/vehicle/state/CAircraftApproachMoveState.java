@@ -163,6 +163,7 @@ public class CAircraftApproachMoveState implements IVehicleMoveState {
 				lAircraft.setCurrentNode((ANode) lFlightPlan.getNode(0));
 				lFlightPlan.removePlanItem(lFlightPlan.getNode(0));
 				if(lFlightPlan.getNode(0) instanceof CAirport) {
+					lFlightPlan.getArrivalRunway().getOccupyingList().add(lAircraft);
 					lAircraft.setMovementMode(EAircraftMovementMode.LANDING);
 					lAircraft.setMovementStatus(EAircraftMovementStatus.LANDING);
 					lAircraft.setMoveState(new CAircraftLandingMoveState());

@@ -162,8 +162,9 @@ public class CGroundConflictDetectionAndResolution {
 
 				// When the other aircraft's routing has my link
 				// I have a priority
-				if(loopOther.getRoutingInfoLink().contains(lAircraft.getCurrentLink()) && loopOther.getMovementMode() != EAircraftMovementMode.PUSHBACK) continue;
-
+				if(loopOther.getRoutingInfoLink().size()>0 && loopOther.getRoutingInfoLink().contains(lAircraft.getCurrentLink()) && loopOther.getMovementMode() != EAircraftMovementMode.PUSHBACK) continue;
+				
+				
 				// Departure Priority
 				// If other aircraft is arrival,
 				// I have a priority
