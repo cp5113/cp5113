@@ -15,6 +15,7 @@ import elements.airspace.CWaypoint;
 import elements.area.ASector;
 import elements.facility.CAirport;
 import elements.facility.CRunway;
+import elements.facility.CSpot;
 import elements.facility.CTaxiwayNode;
 import elements.mobile.human.AATCController;
 import elements.mobile.human.CApproachController;
@@ -423,7 +424,8 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 			iImDone = 0;
 		
 			
-	
+			// Debugging
+			
 			
 			
 ////			System.out.println(iCurrentTimeInMilliSecond + " : " + ((CFlightPlan)this.getCurrentPlan()).getCallsign() + "'s Controller Status is " + ((AATCController)this.iATCController).isThreadContinueableAtInitialState());
@@ -464,15 +466,19 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 				    this.getPushbackPausedTimeInMilliSeconds()>=this.getPushbackPauseTimeInMilliSeconds()) {
 					System.out.println(this + " : Request Taxi after pushback");
 					((CGroundController)iATCController).requestTaxiToRunway((CAircraft) this);
+				
 					
 				}
-				
+	
 				// Request Re Route
 				if(this.getMovementMode() == EAircraftMovementMode.TAXIING &&
 						this.iLeadingVehicle != null &&
 						((CAircraft)this.iLeadingVehicle).getMovementMode() == EAircraftMovementMode.PUSHBACK &&
 						iATCController instanceof CGroundController) {
 					((CGroundController)iATCController).requestRecheckTaxiToRunway((CAircraft) this);
+					if(this.getCurrentFlightPlan().getNode(0) instanceof CSpot) {
+						System.err.println("AAircraft  : After Rerouting, Spot is alive" );
+					}
 				}
 				
 				
@@ -631,13 +637,36 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 				
 			};//if(iNextEventTime<0 || iNextEventTime<=iCurrentTimeInMilliSecond) {
 			
+			
+			
+			
+			
+			
+			
+			// Debugging After runway Exit, aircraft move state is not changed
+			if(this.getCurrentNode() != null &&
+					this.getCurrentNode() instanceof CTaxiwayNode &&
+					((CTaxiwayNode)this.getCurrentNode()).getRunway() == null &&
+					this.getMode() == EMode.ARR &&
+							!(this.getMoveState() instanceof CAircraftNothingMoveState) &&
+					!(this.getMoveState() instanceof CAircraftTaxiingMoveState)) {
+				System.err.println("AAircraft : What the");
+				System.out.println("");
+			}
+			
+			// Debugging Flight Plan(0) has Spot information during Departure Taxiing
+			if(this.getMode() == EMode.DEP &&
+					this.getMoveState() instanceof CAircraftTaxiingMoveState &&
+					this.getCurrentFlightPlan().getNode(0) instanceof CSpot) {
+				System.err.println("AAircraft : Flight Plan(0) has Spot information during Departure Taxiing");
+				System.out.println();
+			}
+			
+		
+			
 			// Move This Aircraft
 			doMoveVehicle();
-			
-			
-			
-			
-			
+						
 			// Debugging
 			if(iCurrentTimeInMilliSecond != ((CSimClockOberserver) iSimClockObserver).getCurrentTIme().getTimeInMillis()) {
 				System.out.println("AC Current Time : " + iCurrentTimeInMilliSecond + " / Clock : " + ((CSimClockOberserver) iSimClockObserver).getCurrentTIme().getTimeInMillis());
@@ -654,7 +683,7 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 			// Notify to Clock
 			notifyToClockImDone();
 			iPreviousTimeInMilliSecond = iCurrentTimeInMilliSecond;
-		}
+		} // while( ((CSimClockOberserver) iSimClockObserver).isRunning()) {
 	}
 	
 	@Override

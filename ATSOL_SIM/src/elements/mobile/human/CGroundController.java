@@ -51,7 +51,6 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-
 import api.CAssignRunwayAPI;
 import api.CAssignSpotAPI;
 import api.CPushbackDirectionAPI;
@@ -118,7 +117,6 @@ public class CGroundController extends AATCController {
 	@Override
 	public synchronized void controlAircraft() {
 		// First Come First Serve
-		synchronized (iAircraftList) {
 
 
 			for(int loopAC = 0; loopAC < iAircraftList.size(); loopAC++) {
@@ -134,7 +132,9 @@ public class CGroundController extends AATCController {
 					handOffAircraft(lAircraft.getDepartureRunway().getATCController(), lAircraft);				
 				}
 				if((CAircraft)lAircraft.getLeadingVehicle() !=null 
-						&& ((CAircraft)lAircraft.getLeadingVehicle()).getATCController() instanceof CLocalController) {
+						&& ((CAircraft)lAircraft.getLeadingVehicle()).getATCController() instanceof CLocalController &&
+						lAircraft.getMode() == EMode.DEP &&
+						!(lAircraft.getCurrentLink().getATCController() instanceof CGroundController)) {
 					handOffAircraft(lAircraft.getDepartureRunway().getATCController(), lAircraft);					
 				}
 
@@ -157,7 +157,7 @@ public class CGroundController extends AATCController {
 
 			}	// for(int loopAC = 0; loopAC < iAircraftList.size(); loopAC++) {		
 
-		}
+
 
 	} // public synchronized void controlAircraft() {
 
@@ -398,12 +398,26 @@ public class CGroundController extends AATCController {
 
 		aAircraft.getCurrentNode().getVehicleWillUseList().remove(aAircraft);
 		aAircraft.getCurrentLink().removeFromOccupyingSchedule(aAircraft);
+		
+		
+		// Debugging
+				if(lFlightPlan.getNode(0) instanceof CSpot) {
+					System.err.println("CGroundController : FlihgtPlan(0) is CSpot after Request Taxiing after Pushback");
+					System.out.println();
+				}
+		
 
 		// Reconstruct Flight Plan and Aircraft Status
 		lFlightPlan.removePlanItem(lFlightPlan.getNode(0)); // Remove Spot
 		aAircraft.setCurrentNode((ANode) lFlightPlan.getNode(0));
 		aAircraft.setCurrentLink(aAircraft.getRoutingLinkInfoUsingNode((ANode) lFlightPlan.getNode(0)));
 
+		
+		// Debugging
+		if(lFlightPlan.getNode(0) instanceof CSpot) {
+			System.err.println("CGroundController : FlihgtPlan(0) is CSpot after Request Taxiing after Pushback");
+			System.out.println();
+		}
 
 		// Set Aircraft State
 		aAircraft.setMovementMode(EAircraftMovementMode.TAXIING);

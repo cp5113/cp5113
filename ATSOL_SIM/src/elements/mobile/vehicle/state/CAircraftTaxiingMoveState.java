@@ -146,6 +146,9 @@ public class CAircraftTaxiingMoveState implements IVehicleMoveState {
 			}catch(Exception e) {
 				System.err.println("CAircraftTaxiingMoveState : It seems that the aircraft enter Runway");
 			}
+			
+			
+			
 			// Set Target Taxiing Speed
 			double lSpeedTarget = 10;
 			if(lTaxiwayLink.getSpeedLimitMps()>0 && lTaxiwayLink.getSpeedLimitMps()<=lPerformance.getTaxiingSpeedMax()) {

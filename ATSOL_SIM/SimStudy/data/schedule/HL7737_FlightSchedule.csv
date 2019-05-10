@@ -1,0 +1,2 @@
+Callsign,AircraftType,Registration,Origin,Destination,CrusingAltitude,ScheduleTimeDeparture,ScheduleTimeArrival,SpotArrival,SpotDeparture,DepartureRunway,ArrivalRunway,Airline,Route
+AAR8531,A320,HL7737,RKSI,RKPK,25000,2012-05-13 07:28:00,,,2,,,AAR,RKSI_PULUN

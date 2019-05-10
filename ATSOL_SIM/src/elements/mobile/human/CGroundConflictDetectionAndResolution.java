@@ -1,5 +1,7 @@
 package elements.mobile.human;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import elements.mobile.vehicle.CAircraft;
@@ -162,8 +164,19 @@ public class CGroundConflictDetectionAndResolution {
 
 				// When the other aircraft's routing has my link
 				// I have a priority
-				if(loopOther.getRoutingInfoLink().size()>0 && loopOther.getRoutingInfoLink().contains(lAircraft.getCurrentLink()) && loopOther.getMovementMode() != EAircraftMovementMode.PUSHBACK) continue;
-				
+				try {
+					if(loopOther.getRoutingInfoLink() != null &&
+							loopOther.getRoutingInfoLink().size()>0 && 
+							loopOther.getRoutingInfoLink().contains(lAircraft.getCurrentLink()) && 
+							loopOther.getMovementMode() != EAircraftMovementMode.PUSHBACK) continue;
+				}catch(Exception e) {
+					System.err.println("Runway Collision");
+					System.out.println(lAircraft + " Landing : " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(lAircraft.getETA())));
+					System.out.println(lAircraft + " Speed : " + lAircraft.getCurrentVelocity().getVelocity());
+					System.out.println(loopOther + " Landing : " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(loopOther.getETA())));
+					System.out.println(loopOther + " Speed : " + loopOther.getCurrentVelocity().getVelocity());
+					System.out.println();
+				}
 				
 				// Departure Priority
 				// If other aircraft is arrival,

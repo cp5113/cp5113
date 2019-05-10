@@ -99,6 +99,8 @@ public class CLocalController extends AATCController {
 	
 	public CLocalController(String aName, int aAge, int aExperienceDay, ESkill aNSkill, EGender aNGender) {
 		super(aName, aAge, aExperienceDay, aNSkill, aNGender);
+		
+		synchronized (iAircraftList) {
 		// First Come First Serve
 		for(int loopAC = 0; loopAC < iAircraftList.size(); loopAC++) {
 			CAircraft lAircraft = iAircraftList.get(loopAC);
@@ -116,7 +118,7 @@ public class CLocalController extends AATCController {
 
 
 		}	// for(int loopAC = 0; loopAC < iAircraftList.size(); loopAC++) {				
-		
+		}
 	}
 
 	/*
@@ -131,6 +133,7 @@ public class CLocalController extends AATCController {
 	 */
 	@Override
 	public synchronized void controlAircraft() {
+		synchronized (iAircraftList) {
 		for(int loopAC = 0; loopAC < iAircraftList.size(); loopAC++) {
 			CAircraft lAircraft = iAircraftList.get(loopAC);
 			CFlightPlan lFlightPlan = (CFlightPlan) lAircraft.getCurrentPlan();
@@ -150,6 +153,7 @@ public class CLocalController extends AATCController {
 
 
 		}//for(int loopAC = 0; loopAC < iAircraftList.size(); loopAC++) {
+		}
 	}
 	
 	
@@ -326,6 +330,7 @@ public class CLocalController extends AATCController {
 	
 	
 	public synchronized void requestLanding(CAircraft aAircraft) {
+		aAircraft.setExitTaxiwayNode(null);		
 		if (iNextEventTime<0) {
 			long instructionTime = calculateLandingInstructionTime(aAircraft);
 			aAircraft.setNextEventTime(iCurrentTimeInMilliSecond + instructionTime);

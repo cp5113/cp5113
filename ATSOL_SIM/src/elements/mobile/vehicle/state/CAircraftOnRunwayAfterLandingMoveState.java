@@ -79,7 +79,9 @@ public class CAircraftOnRunwayAfterLandingMoveState implements IVehicleMoveState
 		CLandingPerformanceAPI 	lLandingPerformance = new CLandingPerformanceAPI();
 		double          		lAccelerationMax    = lPerformance.getDecelerationOnGroundMax();
 		
-		
+		if(lAircraft.toString().equalsIgnoreCase("HL7798")) {
+//			System.out.println("CAircraftOnRunwayAfterLandingMoveState : Debug Here");
+		}
 		
 		// Move While until amountTime reach incrementTimeStep
 		while(lAmountTime*1000<aIncrementTimeStep) {
@@ -170,7 +172,9 @@ public class CAircraftOnRunwayAfterLandingMoveState implements IVehicleMoveState
 			}//if(lAircraft.getExitTaxiwayNode() == null) {
 //			System.out.println();
 			
-			
+			if(lFlightPlan.getNodeList().size()<2) {
+				System.err.println("CAircraftOnRunwayAfterLandingMoveState : No Flight Plan After Landing");
+			}
 			
 			
 			/*
@@ -284,9 +288,17 @@ public class CAircraftOnRunwayAfterLandingMoveState implements IVehicleMoveState
 
 					
 					
-					// Change to Taxiing
-					lFlightPlan.getArrivalRunway().getOccupyingList().remove(lAircraft);
-					lFlightPlan.getArrivalRunway().getArrivalAircraftList().remove(lAircraft);
+					// Clear Runway
+					lFlightPlan.getArrivalRunway().getRunwayOccupyingList().remove(lAircraft);
+					lFlightPlan.getArrivalRunway().getArrivalAircraftList().remove(lAircraft);					
+					for(CTaxiwayLink loopLink : lFlightPlan.getArrivalRunway().getTaxiwayLink()) {
+						loopLink.removeFromOccupyingSchedule(lAircraft);
+					}
+					for(CTaxiwayNode loopNode : lFlightPlan.getArrivalRunway().getTaxiwayNodeList()) {
+						loopNode.getVehicleWillUseList().remove(lAircraft);
+					}
+					
+					// Change to Taxiing Mode
 					lAircraft.setMoveState(new CAircraftTaxiingMoveState());
 					lAircraft.setMovementMode(EAircraftMovementMode.TAXIING);
 					lAircraft.setMovementStatus(EAircraftMovementStatus.TAXIING_CONST);

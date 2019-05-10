@@ -496,14 +496,14 @@ public class CAtsolSimGuiControl {
 					}else if(lTheObject instanceof CAircraft){
 						CAircraft lAircraft = (CAircraft) lTheObject;
 						if(lAircraft.getLeadingVehicle() != null) {
-							gc.strokeText(lTheObject.toString() + " : " + lAircraft.getMoveState().getClass().getSimpleName() + " ->"+ lAircraft.getLeadingVehicle(), p1.getXCoordination(), p1.getYCoordination()+lFactor);
+							gc.strokeText(lTheObject.toString() + "(" +lAircraft.getATCController() + ") : " + lAircraft.getMoveState().getClass().getSimpleName() + " ->"+ lAircraft.getLeadingVehicle(), p1.getXCoordination(), p1.getYCoordination()+lFactor);
 						}else {
-							gc.strokeText(lTheObject.toString() + " : " + lAircraft.getMoveState().getClass().getSimpleName(), p1.getXCoordination(), p1.getYCoordination()+lFactor);
+							gc.strokeText(lTheObject.toString() + "(" +lAircraft.getATCController() + ") : " + lAircraft.getMoveState().getClass().getSimpleName(), p1.getXCoordination(), p1.getYCoordination()+lFactor);
 						}
 						
 					}else if(lTheObject instanceof CTaxiwayLink){
 						CTaxiwayLink lLink = (CTaxiwayLink) lTheObject;
-						gc.strokeText(lTheObject.toString() + " : " + lLink.getOccupyingSchedule(), p1.getXCoordination(), p1.getYCoordination()+lFactor);						
+						gc.strokeText(lTheObject.toString() +"(" +lLink.getATCController() + ") : " + lLink.getOccupyingSchedule(), p1.getXCoordination(), p1.getYCoordination()+lFactor);						
 					}else {
 						gc.strokeText(lTheObject.toString(), p1.getXCoordination(), p1.getYCoordination()+lFactor);
 					}

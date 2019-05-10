@@ -255,14 +255,20 @@ public abstract class AATCController extends AHuman implements IATCController, I
 	
 	
 	protected void addAircraft(CAircraft aAircraft) {
+		synchronized (iAircraftList) {
 		iAircraftList.add(aAircraft);
+		}
 	}
 	public CAircraft getAircraft(int aIndex){
+		synchronized (iAircraftList) {
 		return iAircraftList.get(aIndex);
+		}
 	}
 	
 	public List<CAircraft> getAircraftList(){
+		synchronized (iAircraftList) {
 		return iAircraftList;
+		}
 	}
 	
 	public void addFacility(AFacility aFacility) {
@@ -298,6 +304,7 @@ public abstract class AATCController extends AHuman implements IATCController, I
 	@Override
 	public synchronized void handOffAircraft(IATCController aToController, CAircraft aAircraft) {
 		
+
 		// Remove From This Aircraft
 		iAircraftList.remove(iAircraftList.indexOf(aAircraft));
 		
@@ -313,7 +320,7 @@ public abstract class AATCController extends AHuman implements IATCController, I
 		if(aToController != null) {
 			aToController.handOnAircraft(this, aAircraft);
 		}
-		
+
 		// Thread
 		
 	}

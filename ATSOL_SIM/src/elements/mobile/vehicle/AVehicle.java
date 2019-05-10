@@ -46,6 +46,7 @@ import java.util.List;
 
 import elements.IElementObservableClock;
 import elements.mobile.AMobile;
+import elements.mobile.human.CLocalController;
 import elements.mobile.human.IATCController;
 import elements.mobile.vehicle.state.CAircraftApproachMoveState;
 import elements.mobile.vehicle.state.CAircraftLandingMoveState;
@@ -161,6 +162,7 @@ public abstract class AVehicle extends AMobile implements ITableAble, IDrawingOb
 		return iATCController;
 	}
 	public synchronized void setATCController(IATCController aATCController) {
+		
 		iATCController = aATCController;
 	}
 	public synchronized AVehicle getLeadingVehicle() {
