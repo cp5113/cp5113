@@ -203,6 +203,9 @@ public class CAirportTable extends ATable {
 			String lTaxiwayNodeConnected2 = lData.get("EndNode");
 			String lAirportStr = lData.get("Airport");
 			String lSpeedLimitStr = lData.get("TaxiingSpeed");
+			int lArrivalPreference = parseDouble(lData.get("ArrivalPreference")).intValue();
+			int lDeparturePreference = parseDouble(lData.get("DeparturePreference")).intValue();
+			
 			
 			HashMap<String,Boolean> lADGAvailable = new HashMap<String,Boolean>();
 			lADGAvailable.put("A",lData.get("A").equalsIgnoreCase("TRUE"));
@@ -231,6 +234,8 @@ public class CAirportTable extends ATable {
 			lTaxiwayLink.getNodeList().add(lEndNode);
 			lTaxiwayLink.setOwnerObject(lTargetAirport);
 			lTaxiwayLink.setSpeedLimitKts(parseDouble(lSpeedLimitStr));
+			lTaxiwayLink.setArrivalPreference(lArrivalPreference);
+			lTaxiwayLink.setDeparturePreference(lDeparturePreference);
 			
 			lStartNode.addOwnerLink(lTaxiwayLink);
 			lEndNode.addOwnerLink(lTaxiwayLink);

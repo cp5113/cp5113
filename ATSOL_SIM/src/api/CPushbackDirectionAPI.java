@@ -1,9 +1,11 @@
 package api;
 
 import api.inf.IPushbackDirection;
+import elements.facility.CAirport;
 import elements.facility.CTaxiwayNode;
 import elements.mobile.human.AATCController;
 import elements.mobile.vehicle.CAircraft;
+import elements.mobile.vehicle.CFlightPlan;
 
 /**
  * 
@@ -45,7 +47,19 @@ public class CPushbackDirectionAPI implements IPushbackDirection {
 
 	@Override
 	public CTaxiwayNode assingPushbackDirection(CAircraft aAircraft, long aCurrentTimeInMilliSeconds) {
-
+		if(aAircraft.getCurrentFlightPlan().getDepartureSpot().toString().equals("103")) {
+			CFlightPlan lFlightPlan = aAircraft.getCurrentFlightPlan();
+			CAirport	lAirport    = (CAirport) lFlightPlan.getDepartureSpot().getOwnerObject();
+			
+			CTaxiwayNode lOutput = null;
+			for(CTaxiwayNode loopNode : lAirport.getTaxiwayNodeList()) {
+				if(loopNode.toString().equalsIgnoreCase("AS_16_1")) {
+					lOutput = loopNode;
+					return lOutput;
+				}
+			}
+		}
+		
 		return null;
 	}
 	/*

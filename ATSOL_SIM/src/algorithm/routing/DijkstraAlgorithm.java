@@ -10,8 +10,10 @@ import java.util.Set;
 
 import elements.facility.CTaxiwayLink;
 import elements.facility.CTaxiwayNode;
+import elements.mobile.vehicle.CAircraft;
 import elements.network.ALink;
 import elements.network.ANode;
+import elements.property.EMode;
 
 public class DijkstraAlgorithm implements IRoutingAlgorithm{
 
@@ -81,7 +83,7 @@ public class DijkstraAlgorithm implements IRoutingAlgorithm{
 	 * 
 	 * Coded by S. J. Yun
 	 */
-	public LinkedList<? extends ANode> findShortedPath(List<? extends ANode> aNodeStartMiddleEnd){
+	public synchronized LinkedList<? extends ANode> findShortedPath(CAircraft aAircraft, List<? extends ANode> aNodeStartMiddleEnd){
 		iOutput = new LinkedList<ANode>();
 		
 		double l_TotalDistance = 0;
@@ -110,7 +112,7 @@ public class DijkstraAlgorithm implements IRoutingAlgorithm{
 				ANode node = findMinCostNode(iQofNodes);
 				iUsedNodes.add(node);
 				iQofNodes.remove(node);
-				insertNodeIntoQ(node);	
+				insertNodeIntoQ(aAircraft,node);	
 			}
 
 			/**
@@ -144,8 +146,8 @@ public class DijkstraAlgorithm implements IRoutingAlgorithm{
 	
 	
 	
-	private ANode findMinCostNode(Set<ANode> aQofNodes){
-		ANode l_MinCostNode = null;
+	private synchronized ANode findMinCostNode(Set<ANode> aQofNodes){
+		ANode l_MinCostNode = null;		
 		for (ANode loopNode : aQofNodes){
 			if(l_MinCostNode==null){l_MinCostNode = loopNode;};
 
@@ -158,7 +160,7 @@ public class DijkstraAlgorithm implements IRoutingAlgorithm{
 		return l_MinCostNode;
 	}
 
-	private void insertNodeIntoQ(ANode aNode){
+	private synchronized void insertNodeIntoQ(CAircraft aAircraft,ANode aNode){
 		for(ALink loopLink : iLink){
 			// Skip Link
 			if(iLinkIgnore.contains(loopLink)) continue;
@@ -184,6 +186,17 @@ public class DijkstraAlgorithm implements IRoutingAlgorithm{
 				l_AdjacentCost = l_AdjacentCost * 1.5;
 			}
 			
+			// Preference
+			if(aAircraft.getMode()==EMode.DEP) {
+				if(loopLink.getDeparturePreference() == 1) {
+					l_AdjacentCost = 0;
+				}
+			}
+			if(aAircraft.getMode()==EMode.ARR) {
+				if(loopLink.getArrivalPreference() == 1) {
+					l_AdjacentCost = 0;
+				}
+			}
 			
 			
 			
@@ -218,7 +231,7 @@ public class DijkstraAlgorithm implements IRoutingAlgorithm{
 	}
 
 
-	private double calculateHeading(ANode aOrigin, ANode aDestin){
+	private synchronized double calculateHeading(ANode aOrigin, ANode aDestin){
 		
 		double[] pt1 = { aOrigin.getCoordination().getXCoordination(), aOrigin.getCoordination().getYCoordination()};
 		double[] pt2 = { aDestin.getCoordination().getXCoordination(), aOrigin.getCoordination().getYCoordination()};
@@ -241,7 +254,7 @@ public class DijkstraAlgorithm implements IRoutingAlgorithm{
 	}
 
 	@Override
-	public LinkedList<? extends ANode> findShortedPathIgnoreNodeList(List<? extends ANode> aNodeStartMiddleEnd,
+	public synchronized LinkedList<? extends ANode> findShortedPathIgnoreNodeList(CAircraft aAircraft,List<? extends ANode> aNodeStartMiddleEnd,
 			List<? extends ALink> aIgnoredLinkList) {
 		
 		iLinkIgnore.clear();
@@ -251,7 +264,7 @@ public class DijkstraAlgorithm implements IRoutingAlgorithm{
 		}
 		
 		// Run Algorithm
-		 LinkedList<? extends ANode> output =  findShortedPath(aNodeStartMiddleEnd);
+		 LinkedList<? extends ANode> output =  findShortedPath(aAircraft,aNodeStartMiddleEnd);
 		
 		
 		// Restore Ignore List

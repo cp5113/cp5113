@@ -74,14 +74,16 @@ public abstract class ALink extends AFacility {
 	protected 	ArrayList<ALink>		iAdjacentLink 			= new ArrayList<ALink>();
 	protected	double					iDistance				=	0.0;
 	protected 	CDegree					iHeading;
-	protected	CDegree					iOppositeHeading;
-	protected	ArrayList<AElement>		iOccupyingList			= new ArrayList<AElement>();	
+	protected	CDegree							iOppositeHeading;
+	protected	ArrayList<AElement>				iOccupyingList			= new ArrayList<AElement>();	
 	protected	ArrayList<COccupyingInform>		iOccupyingSchedule	    = new ArrayList<COccupyingInform>();
 	
-	protected	boolean					iIsRunway = false;
+	protected	boolean							iIsRunway = false;
 	
-	protected double					iSpeedLimitKts          = 15;
+	protected double							iSpeedLimitKts          = 15;
 	
+	protected	int							iArrivalPreference 		= 0; // 0 : no matter, 1 : Prefered, 2 : no use
+	protected	int							iDeparturePreference    = 0; // 0 : no matter, 1 : Prefered, 2 : no use
 	/*
 	================================================================
 
@@ -89,8 +91,22 @@ public abstract class ALink extends AFacility {
 
 	================================================================
 	 */
+	
+	
 	public void enteringLink(AElement aElement) {
 		iOccupyingList.add(aElement);
+	}
+	public synchronized int getArrivalPreference() {
+		return iArrivalPreference;
+	}
+	public synchronized void setArrivalPreference(int aArrivalPreference) {
+		iArrivalPreference = aArrivalPreference;
+	}
+	public synchronized int getDeparturePreference() {
+		return iDeparturePreference;
+	}
+	public synchronized void setDeparturePreference(int aDeparturePreference) {
+		iDeparturePreference = aDeparturePreference;
 	}
 	public void exitingLink(AElement aElement) {
 		iOccupyingList.remove(aElement);

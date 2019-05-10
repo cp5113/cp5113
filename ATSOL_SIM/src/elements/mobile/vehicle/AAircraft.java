@@ -23,6 +23,7 @@ import elements.mobile.human.CGroundController;
 import elements.mobile.human.CLocalController;
 import elements.mobile.human.IATCController;
 import elements.mobile.vehicle.state.CAircraftApproachMoveState;
+import elements.mobile.vehicle.state.CAircraftGroundConflictStopMoveState;
 import elements.mobile.vehicle.state.CAircraftLandingMoveState;
 import elements.mobile.vehicle.state.CAircraftLineUpMoveState;
 import elements.mobile.vehicle.state.CAircraftNothingMoveState;
@@ -443,6 +444,13 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 //			}
 ////			System.out.println(iCurrentTimeInMilliSecond + " : " + ((CFlightPlan)this.getCurrentPlan()).getCallsign() + " waiting is done..");
 			
+			if(this.toString().equalsIgnoreCase("BMAL") &&
+					iCurrentTimeInMilliSecond >= 1336858404000L) {
+//				System.err.println("AAircraft : Exit Why???");
+//				System.out.println();
+			}
+			
+			
 			
 			// Do Move Aircraft
 			if(iNextEventTime<0 || iNextEventTime<=iCurrentTimeInMilliSecond) {
@@ -618,17 +626,28 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 						this.getMoveState() instanceof CAircraftNothingMoveState &&
 						iNextEventTime<=iCurrentTimeInMilliSecond){
 					
-					// Clear Spot and Node
-//					this.getCurrentNode().setIsOccuping(false);
-//					this.getCurrentNode().getVehicleWillUseList().remove(this);					
-//					((CTaxiwayNode)this.getCurrentNode()).getSpot().setIsOccuping(false);
-//					((CTaxiwayNode)this.getCurrentNode()).getSpot().getVehicleWillUseList().remove(this);
+					
 					
 					// Escape Thread
 					// Notify to Clock
 //					notifyToClockImDone();
 					((CSimClockOberserver) iSimClockObserver).deleteFromClock(this);
 					iPreviousTimeInMilliSecond = iCurrentTimeInMilliSecond;
+					
+					
+					// Escape aircraft Data
+					if(this.getPlanList().size()==0) {
+						this.setCurrentPostion(new CCoordination(-999999, -9999999));
+						// Clear Spot and Node
+						this.getCurrentNode().setIsOccuping(false);
+						this.getCurrentNode().getVehicleWillUseList().remove(this);					
+						((CTaxiwayNode)this.getCurrentNode()).getSpot().setIsOccuping(false);
+						((CTaxiwayNode)this.getCurrentNode()).getSpot().getVehicleWillUseList().remove(this);
+						
+						// Erase Safety Area						;
+						this.setCurrentVelocity(this.getCurrentVelocity().getVelocity()*0.0);
+					}
+					
 					break;
 				}
 				
@@ -649,8 +668,9 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 					((CTaxiwayNode)this.getCurrentNode()).getRunway() == null &&
 					this.getMode() == EMode.ARR &&
 							!(this.getMoveState() instanceof CAircraftNothingMoveState) &&
-					!(this.getMoveState() instanceof CAircraftTaxiingMoveState)) {
-				System.err.println("AAircraft : What the");
+					!(this.getMoveState() instanceof CAircraftTaxiingMoveState) && 
+					!(this.getMoveState() instanceof CAircraftGroundConflictStopMoveState)) {
+				System.err.println("AAircraft : After runway Exit, aircraft move state is not changed");
 				System.out.println("");
 			}
 			

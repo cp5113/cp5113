@@ -360,7 +360,7 @@ public class CLocalController extends AATCController {
 		lOD.add(lFlightPlan.getArrivalSpot().getTaxiwayNode());
 		
 		// Find Route
-		LinkedList<CTaxiwayNode> lRouteList =  (LinkedList<CTaxiwayNode>) iRoutingAlgorithm.findShortedPath(lOD);				
+		LinkedList<CTaxiwayNode> lRouteList =  (LinkedList<CTaxiwayNode>) iRoutingAlgorithm.findShortedPath(aAircraft,lOD);				
 		aAircraft.setRoutingInfo(lRouteList);
 
 		

@@ -438,7 +438,7 @@ public class CAircraftTaxiingMoveState implements IVehicleMoveState {
 		ArrayList<AVehicle>      lSameNodeACListV = new ArrayList<AVehicle>();
 		double lRemainingDistance = 999999999999.0;
 		
-//		if(aAircraft.toString().equalsIgnoreCase("HL9606")) {
+//		if(aAircraft.toString().equalsIgnoreCase("HL8225")) {
 //			System.out.println();
 //		}
 		// Search next nodes

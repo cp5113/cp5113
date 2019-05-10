@@ -185,7 +185,7 @@ public class CGroundController extends AATCController {
 				List<CTaxiwayNode> lOD = new ArrayList<CTaxiwayNode>();
 				lOD.add(((CSpot) lFlightPlan.getNode(0)).getTaxiwayNode()); // CurrentNode
 				lOD.add((CTaxiwayNode) lRunwayEnteringNode); // Destination Node				
-				LinkedList<CTaxiwayNode> lRouteList =  (LinkedList<CTaxiwayNode>) iRoutingAlgorithm.findShortedPath(lOD);
+				LinkedList<CTaxiwayNode> lRouteList =  (LinkedList<CTaxiwayNode>) iRoutingAlgorithm.findShortedPath(aAircraft,lOD);
 				aAircraft.setPreDefinedTaxiRoute(lRouteList);
 
 
@@ -310,7 +310,7 @@ public class CGroundController extends AATCController {
 				lOD.clear();
 				lOD.add(((CSpot) lFlightPlan.getNode(0)).getTaxiwayNode()); // CurrentNode
 				lOD.add(((CAirport)lFlightPlan.getOriginationNode()).getTaxiwayNodeList().get(((CAirport)lFlightPlan.getOriginationNode()).getTaxiwayNodeList().indexOf(lPushbackNode))); // Destination Node				
-				lRouteList =  (LinkedList<CTaxiwayNode>) iRoutingAlgorithm.findShortedPath(lOD);
+				lRouteList =  (LinkedList<CTaxiwayNode>) iRoutingAlgorithm.findShortedPath(aAircraft,lOD);
 				long lPushbackInstructionTimeMilliSec = calculatePushbackInstructionTime(aAircraft);
 
 				// Set Route to Aircraft
@@ -359,7 +359,7 @@ public class CGroundController extends AATCController {
 		lOD.add(((CTaxiwayNode) lFlightPlan.getNode(0))); // CurrentNode
 		lOD.add(aAircraft.getDirectionTaxwayNodeAfterPushBack()); // Direction after pushback
 		lOD.add((CTaxiwayNode) aAircraft.getRunwayEntryPoint()); // Destination Node				
-		LinkedList<CTaxiwayNode> lRouteList =  (LinkedList<CTaxiwayNode>) iRoutingAlgorithm.findShortedPath(lOD);				
+		LinkedList<CTaxiwayNode> lRouteList =  (LinkedList<CTaxiwayNode>) iRoutingAlgorithm.findShortedPath(aAircraft,lOD);				
 		aAircraft.setRoutingInfo(lRouteList);
 
 		// Calculate Instruction and Read back Time				
@@ -465,7 +465,7 @@ public class CGroundController extends AATCController {
 				List<CTaxiwayNode> lOD = new ArrayList<CTaxiwayNode>();
 				lOD.add(((CSpot) lFlightPlan.getNode(0)).getTaxiwayNode()); // CurrentNode
 				lOD.add(((CAirport)lFlightPlan.getOriginationNode()).getTaxiwayNodeList().get(((CAirport)lFlightPlan.getOriginationNode()).getTaxiwayNodeList().indexOf(lRunwayEnteringNode))); // Destination Node				
-				LinkedList<CTaxiwayNode> lRouteList =  (LinkedList<CTaxiwayNode>) iRoutingAlgorithm.findShortedPath(lOD);
+				LinkedList<CTaxiwayNode> lRouteList =  (LinkedList<CTaxiwayNode>) iRoutingAlgorithm.findShortedPath(lAircraft,lOD);
 
 				// Decide Pushback Direction
 				ANode lPushbackNode = null;
@@ -500,7 +500,7 @@ public class CGroundController extends AATCController {
 				lOD.clear();
 				lOD.add(((CSpot) lFlightPlan.getNode(0)).getTaxiwayNode()); // CurrentNode
 				lOD.add(((CAirport)lFlightPlan.getOriginationNode()).getTaxiwayNodeList().get(((CAirport)lFlightPlan.getOriginationNode()).getTaxiwayNodeList().indexOf(lPushbackNode))); // Destination Node				
-				lRouteList =  (LinkedList<CTaxiwayNode>) iRoutingAlgorithm.findShortedPath(lOD);
+				lRouteList =  (LinkedList<CTaxiwayNode>) iRoutingAlgorithm.findShortedPath(lAircraft,lOD);
 				long lPushbackInstructionTimeMilliSec = calculatePushbackInstructionTime(lAircraft);
 
 				// Set Route to Aircraft
@@ -609,7 +609,7 @@ public class CGroundController extends AATCController {
 		List<CTaxiwayNode> lOD = new ArrayList<CTaxiwayNode>();
 		lOD.add(((CSpot) aFlightPlan.getNode(0)).getTaxiwayNode()); // CurrentNode
 		lOD.add(((CAirport)aFlightPlan.getOriginationNode()).getTaxiwayNodeList().get(258)); // Destination Node				
-		LinkedList<CTaxiwayNode> lRouteList =  (LinkedList<CTaxiwayNode>) iRoutingAlgorithm.findShortedPath(lOD);				
+		LinkedList<CTaxiwayNode> lRouteList =  (LinkedList<CTaxiwayNode>) iRoutingAlgorithm.findShortedPath(aAircraft,lOD);				
 		aAircraft.setRoutingInfo(lRouteList);
 
 		// Calculate Instruction and Read back Time				
@@ -805,7 +805,7 @@ public class CGroundController extends AATCController {
 		List<CTaxiwayNode> lOD = new ArrayList<CTaxiwayNode>();
 		lOD.add(((CTaxiwayNode) lFlightPlan.getNode(0))); // CurrentNode
 		lOD.add((CTaxiwayNode) aAircraft.getRunwayEntryPoint()); // Destination Node		
-		LinkedList<CTaxiwayNode> lRouteList =  (LinkedList<CTaxiwayNode>) iRoutingAlgorithm.findShortedPathIgnoreNodeList(lOD,lOtherACRoute);	
+		LinkedList<CTaxiwayNode> lRouteList =  (LinkedList<CTaxiwayNode>) iRoutingAlgorithm.findShortedPathIgnoreNodeList(aAircraft,lOD,lOtherACRoute);	
 		
 		
 		// Calculate Distance
