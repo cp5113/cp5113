@@ -69,7 +69,13 @@ public class CAircraftLineUpMoveState implements IVehicleMoveState{
 		if(lFlightPlan.getNodeList().size()==0) {
 			return;
 		}
-
+//		if(lAircraft.toString().equalsIgnoreCase("B6317")) {
+//			System.out.println(lAircraft.getRoutingInfo());
+//			System.out.println(lAircraft.getCurrentFlightPlan().getNodeList());
+//			System.out.println(lAircraft.getConflictVehicle());
+//			System.out.println(lAircraft.getCurrentVelocity().getVelocity());
+//			System.out.println();
+//		}
 
 		// Move While until amountTime reach incrementTimeStep
 		while(lAmountTime*1000<aIncrementTimeStep) {

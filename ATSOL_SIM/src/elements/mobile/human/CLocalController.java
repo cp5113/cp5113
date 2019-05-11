@@ -40,6 +40,7 @@ package elements.mobile.human;
  *
  */
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -60,6 +61,7 @@ import elements.AElement;
 import elements.COccupyingInform;
 import elements.facility.CAirport;
 import elements.facility.CRunway;
+import elements.facility.CTaxiwayLink;
 import elements.facility.CTaxiwayNode;
 import elements.mobile.vehicle.CAircraft;
 import elements.mobile.vehicle.CFlightPlan;
@@ -71,11 +73,13 @@ import elements.mobile.vehicle.state.CAircraftTakeoffMoveState;
 import elements.mobile.vehicle.state.CAircraftTaxiingMoveState;
 import elements.mobile.vehicle.state.EAircraftMovementMode;
 import elements.mobile.vehicle.state.EAircraftMovementStatus;
+import elements.network.ALink;
 import elements.network.ANode;
 import elements.network.INode;
 import elements.property.EMode;
 import elements.util.geo.CAltitude;
 import elements.util.geo.EGEOUnit;
+import sim.CAtsolSimMain;
 import sim.clock.ISimClockOberserver;
 import util.performance.CLineupPerformance;
 import util.performance.CUnUniformModelPerformance;
@@ -277,6 +281,19 @@ public class CLocalController extends AATCController {
 			// Runway Control
 			lRunway.getDepartureAircraftList().add(aAircraft);
 			lRunway.getRunwayOccupyingList().add(aAircraft);
+			
+			
+			// Write
+			try {
+				CAtsolSimMain.getOutputFileATCWriter().write(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(iCurrentTimeInMilliSecond)) + "," + 
+						this.toString()+ "," + 
+						lFlightPlan.getCallsign()+ "," + 
+						"Lineup"+ "," + 
+						(long)(instructionTime/1000) + "\n");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 		}
 		
@@ -321,6 +338,20 @@ public class CLocalController extends AATCController {
 			aAircraft.setMovementMode(EAircraftMovementMode.TAKEOFF);
 			aAircraft.setMovementStatus(EAircraftMovementStatus.TAKEOFF);
 			aAircraft.setMoveState(new CAircraftTakeoffMoveState());
+			
+			
+			// Write
+			try {
+				CAtsolSimMain.getOutputFileATCWriter().write(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(iCurrentTimeInMilliSecond)) + "," + 
+						this.toString()+ "," + 
+						aAircraft.getCurrentFlightPlan().getCallsign()+ "," + 
+						"Takeoff"+ "," + 
+						(long)(instructionTime/1000) + "\n");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		}
 				
 	}
@@ -335,6 +366,21 @@ public class CLocalController extends AATCController {
 			long instructionTime = calculateLandingInstructionTime(aAircraft);
 			aAircraft.setNextEventTime(iCurrentTimeInMilliSecond + instructionTime);
 			this.setNextEventTime(iCurrentTimeInMilliSecond + instructionTime);
+			
+			
+			// Write
+			try {
+				CAtsolSimMain.getOutputFileATCWriter().write(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(iCurrentTimeInMilliSecond)) + "," + 
+						this.toString()+ "," + 
+						aAircraft.getCurrentFlightPlan().getCallsign()+ "," + 
+						"Landing"+ "," + 
+						(long)(instructionTime/1000) + "\n");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
 		}
 	}
 	
@@ -359,8 +405,25 @@ public class CLocalController extends AATCController {
 		}
 		lOD.add(lFlightPlan.getArrivalSpot().getTaxiwayNode());
 		
+		if(aAircraft.toString().equalsIgnoreCase("BMAL")) {
+			System.out.println();
+		}
+	
+		// Ignore Link
+		CTaxiwayNode lCurrentNode = (CTaxiwayNode) aAircraft.getCurrentNode();
+		List<CTaxiwayLink> lIgnoreLink = new ArrayList<CTaxiwayLink>();
+		if(!lCurrentNode.equals(aAircraft.getExitTaxiwayNode())) {
+			for(ALink loopLink : lCurrentNode.getOwnerLinkList()) {
+				if(!loopLink.isRunnway()) {
+					lIgnoreLink.add((CTaxiwayLink) loopLink);
+				}
+			}
+			
+		}
+		
+		
 		// Find Route
-		LinkedList<CTaxiwayNode> lRouteList =  (LinkedList<CTaxiwayNode>) iRoutingAlgorithm.findShortedPath(aAircraft,lOD);				
+		LinkedList<CTaxiwayNode> lRouteList =  (LinkedList<CTaxiwayNode>) iRoutingAlgorithm.findShortedPathIgnoreNodeList(aAircraft,lOD,lIgnoreLink);				
 		aAircraft.setRoutingInfo(lRouteList);
 
 		
@@ -435,6 +498,20 @@ public class CLocalController extends AATCController {
 		// Set Event Time to Aircraft and This(Controller)
 		aAircraft.setNextEventTime(iCurrentTimeInMilliSecond + lTaxiInstructionTimeMilliSec);
 		this.setNextEventTime(iCurrentTimeInMilliSecond + lTaxiInstructionTimeMilliSec);
+		
+		
+		
+		// Write
+		try {
+			CAtsolSimMain.getOutputFileATCWriter().write(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(iCurrentTimeInMilliSecond)) + "," + 
+					this.toString()+ "," + 
+					aAircraft.getCurrentFlightPlan().getCallsign()+ "," + 
+					"Taxi"+ "," + 
+					(long)(lTaxiInstructionTimeMilliSec/1000) + "\n");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 
@@ -535,6 +612,18 @@ public class CLocalController extends AATCController {
 			long lTaxiInstructionTimeMilliSec = calculateRunwayCrossingInstructionTime(aAircraft, this);
 			aAircraft.setNextEventTime(iCurrentTimeInMilliSecond + lTaxiInstructionTimeMilliSec);
 			this.setNextEventTime(iCurrentTimeInMilliSecond + lTaxiInstructionTimeMilliSec);
+			
+			// Write
+			try {
+				CAtsolSimMain.getOutputFileATCWriter().write(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(iCurrentTimeInMilliSecond)) + "," + 
+						this.toString()+ "," + 
+						aAircraft.getCurrentFlightPlan().getCallsign()+ "," + 
+						"Crossing"+ "," + 
+						(long)(lTaxiInstructionTimeMilliSec/1000) + "\n");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 		}
 

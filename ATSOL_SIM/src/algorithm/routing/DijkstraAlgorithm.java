@@ -11,6 +11,9 @@ import java.util.Set;
 import elements.facility.CTaxiwayLink;
 import elements.facility.CTaxiwayNode;
 import elements.mobile.vehicle.CAircraft;
+import elements.mobile.vehicle.state.CAircraftApproachMoveState;
+import elements.mobile.vehicle.state.CAircraftLandingMoveState;
+import elements.mobile.vehicle.state.CAircraftOnRunwayAfterLandingMoveState;
 import elements.network.ALink;
 import elements.network.ANode;
 import elements.property.EMode;
@@ -198,7 +201,28 @@ public class DijkstraAlgorithm implements IRoutingAlgorithm{
 				}
 			}
 			
-			
+//			// RunwayLink?
+//			if(loopLink.isRunnway() && 
+//					!(aAircraft.getMoveState() instanceof CAircraftLandingMoveState) &&    // To Prevent Find Exit Routing on Runway
+//					!(aAircraft.getMoveState() instanceof CAircraftApproachMoveState) &&
+//					!(aAircraft.getMoveState() instanceof CAircraftOnRunwayAfterLandingMoveState)) {
+//				l_AdjacentCost = l_AdjacentCost * 1.5;
+//			}
+//			
+//			// Preference
+//			if(aAircraft.getMode()==EMode.DEP) {
+//				if(loopLink.getDeparturePreference() == 1) {
+//					l_AdjacentCost = 0;
+//				}
+//			}
+//			if(aAircraft.getMode()==EMode.ARR && 
+//					!(aAircraft.getMoveState() instanceof CAircraftLandingMoveState) && // To Prevent Find Exit Routing on Runway
+//					!(aAircraft.getMoveState() instanceof CAircraftApproachMoveState) &&
+//					!(aAircraft.getMoveState() instanceof CAircraftOnRunwayAfterLandingMoveState)) {
+//				if(loopLink.getArrivalPreference() == 1) {
+//					l_AdjacentCost = 0;
+//				}
+//			}
 			
 		
 			

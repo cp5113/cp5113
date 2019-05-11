@@ -39,8 +39,11 @@ package elements.mobile.human;
  *
  */
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Random;
@@ -59,6 +62,7 @@ import elements.mobile.vehicle.CFlightPlan;
 import elements.network.ANode;
 import elements.property.CAircraftPerformance;
 import elements.table.ITableAble;
+import sim.CAtsolSimMain;
 import sim.clock.CSimClockOberserver;
 import sim.clock.ISimClockOberserver;
 
@@ -129,7 +133,7 @@ public abstract class AATCController extends AHuman implements IATCController, I
 				lRouteUniqueName.add(aRoute.get(loopR).getNameGroup());
 			}
 
-			instructionTimeMilliSeconds = (lRouteUniqueName.size()*500 + 1500);
+			instructionTimeMilliSeconds = (lRouteUniqueName.size()*60/150 + 8*60/150);
 		}catch(Exception e) {
 			instructionTimeMilliSeconds = 0;
 		}
@@ -152,7 +156,7 @@ public abstract class AATCController extends AHuman implements IATCController, I
 		
 		// 24 words
 		// 150 words per minute (Medium speed ICAO 2006b 2-1)
-		instructionTimeMilliSeconds = (24/150 * 60 + 3)*1000;
+		instructionTimeMilliSeconds = (24*60/150)*1000;
 		
 		
 		long api = new CATCInstructionTimeAPI().calculatePushbackInstructionTime(aAircraft, this);
@@ -171,7 +175,7 @@ public abstract class AATCController extends AHuman implements IATCController, I
 
 		// 21 words
 		// 150 words per minute (Medium speed ICAO 2006b 2-1)		
-		instructionTimeMilliSeconds = (21/150 * 60 + 3)*1000;
+		instructionTimeMilliSeconds = (21*60/150+ 3)*1000;
 		
 		long api = new CATCInstructionTimeAPI().calculateFrequencyChangeInstructionTime(aAircraft, this);
 		if(api>=0) {
@@ -188,7 +192,7 @@ public abstract class AATCController extends AHuman implements IATCController, I
 
 		// 16 words
 		// 150 words per minute (Medium speed ICAO 2006b 2-1)		
-		instructionTimeMilliSeconds = (16/150 * 60 + 3)*1000;
+		instructionTimeMilliSeconds = (16*60/150+ 3)*1000;
 		
 		long api = new CATCInstructionTimeAPI().calculateLinupInstructionTime(aAircraft, this);
 		if(api>=0) {
@@ -204,7 +208,7 @@ public abstract class AATCController extends AHuman implements IATCController, I
 		// Runway 33L Cleared for Takeoff Korean air 1124, 
 		// 22 words
 		// 150 words per minute (Medium speed ICAO 2006b 2-1)		
-		instructionTimeMilliSeconds = (22/150 * 60 + 3)*1000;
+		instructionTimeMilliSeconds = (22*60/150 + 3)*1000;
 		
 		long api = new CATCInstructionTimeAPI().calculateTakeOffInstructionTime(aAircraft, this);
 		if(api>=0) {
@@ -220,7 +224,7 @@ public abstract class AATCController extends AHuman implements IATCController, I
 		// Runway 33L Cleared to Land Korean air 1124, 
 		// 22 words
 		// 150 words per minute (Medium speed ICAO 2006b 2-1)		
-		instructionTimeMilliSeconds = (22/150 * 60 + 3)*1000;
+		instructionTimeMilliSeconds = (22*60/150 + 3)*1000;
 		
 		long api = new CATCInstructionTimeAPI().calculateLandingInstructionTime(aAircraft, this);
 		if(api>=0) {
@@ -237,7 +241,7 @@ public abstract class AATCController extends AHuman implements IATCController, I
 		// Cross runway 33L Korean air 1124 
 		// 12 words
 		// 150 words per minute (Medium speed ICAO 2006b 2-1)		
-		instructionTimeMilliSeconds = (12/150 * 60 + 3)*1000;
+		instructionTimeMilliSeconds = (12*60/150 + 3)*1000;
 		
 		long api = new CATCInstructionTimeAPI().calculateLandingInstructionTime(aAircraft, this);
 		if(api>=0) {
@@ -256,7 +260,9 @@ public abstract class AATCController extends AHuman implements IATCController, I
 	
 	protected void addAircraft(CAircraft aAircraft) {
 		synchronized (iAircraftList) {
-		iAircraftList.add(aAircraft);
+			if(!iAircraftList.contains(aAircraft)) {
+				iAircraftList.add(aAircraft);
+			}
 		}
 	}
 	public CAircraft getAircraft(int aIndex){
@@ -306,7 +312,9 @@ public abstract class AATCController extends AHuman implements IATCController, I
 		
 
 		// Remove From This Aircraft
-		iAircraftList.remove(iAircraftList.indexOf(aAircraft));
+		if(iAircraftList.contains(aAircraft)) {
+			iAircraftList.remove(iAircraftList.indexOf(aAircraft));
+		}
 		
 		// Hand off
 		aAircraft.setATCController(aToController);
@@ -322,7 +330,17 @@ public abstract class AATCController extends AHuman implements IATCController, I
 		}
 
 		// Thread
-		
+		// Write
+		try {
+			CAtsolSimMain.getOutputFileATCWriter().write(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(iCurrentTimeInMilliSecond)) + "," + 
+					this.toString()+ "," + 
+					aAircraft.getCurrentFlightPlan().getCallsign()+ "," + 
+					"FreqencyChange"+ "," + 
+					(long)(calculateFrequencyChangeInstructionTime(aAircraft)/1000) + "\n");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	
@@ -504,6 +522,18 @@ public abstract class AATCController extends AHuman implements IATCController, I
 		CSpot lSpotAPI = new CAssignSpotAPI().assignSpot(aAircraft, lAirport);
 		if(lSpotAPI!=null) {
 			lCandidateSpot = lSpotAPI;
+		}
+		
+		
+		// Write
+		try {
+			CAtsolSimMain.getOutputFileATCWriter().write(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(iCurrentTimeInMilliSecond)) + "," + 
+					this.toString()+ "," + 
+					aAircraft.getCurrentFlightPlan().getCallsign()+ "," + 
+					"AssignSpot(NonWork)->" + lCandidateSpot+ "," + 
+					(long)(0) + "\n");
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		
 		return lCandidateSpot;

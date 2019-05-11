@@ -69,15 +69,18 @@ public class CGroundConflictDetectionAndResolution {
 	
 	================================================================
 	 */
-	public static void groundConflictDetectionAndResolution(CAircraft lAircraft, List<CAircraft> lOtherACList) {
-		lOtherACList.remove(lAircraft);
+	public static void groundConflictDetectionAndResolution(CAircraft lAircraft, List<CAircraft> lOtherACList) {		
+		while(lOtherACList.contains(lAircraft)) {
+			lOtherACList.remove(lAircraft);
+		}
+		
 		if(!(lAircraft.getMoveState() instanceof CAircraftNothingMoveState)) {
 			
 //			// Ignore already stopping
 //			if(lAircraft.getMoveState() instanceof CAircraftGroundConflictStopMoveState) continue;
 			
 			// Detect and resolution Conflict
-			for(CAircraft loopOther : lOtherACList) {
+			for(CAircraft loopOther : lOtherACList) {				
 				if((loopOther.getMoveState() instanceof CAircraftNothingMoveState)) continue;
 				Polygon lthisACSafety = lAircraft.getSafetyPolygonInform();
 				Polygon lthisACShape = lAircraft.getShapePolygonInform();
@@ -125,9 +128,11 @@ public class CGroundConflictDetectionAndResolution {
 				}
 
 				
-//				if(lAircraft.getCurrentFlightPlan().toString().equalsIgnoreCase("AAR124")) {
+//				if(lAircraft.toString().equalsIgnoreCase("B6317")) {
 //					System.out.println(lAircraft.getRoutingInfo());
 //					System.out.println(lAircraft.getCurrentFlightPlan().getNodeList());
+//					System.out.println(lAircraft.getConflictVehicle());
+//					System.out.println(lAircraft.getCurrentVelocity().getVelocity());
 //					System.out.println();
 //				}
 				
@@ -153,6 +158,23 @@ public class CGroundConflictDetectionAndResolution {
 					continue;
 				}
 					
+				// Ignore already follow
+				if(lAircraft.getLeadingVehicle()!=null &&
+						lAircraft.getConflictVehicle() !=null &&
+						lAircraft.getLeadingVehicle().equals(loopOther)&&
+						lAircraft.getConflictVehicle().equals(loopOther)) {					
+					lAircraft.setConflictVehicle(null);
+					lAircraft.setMoveState(new CAircraftTaxiingMoveState());
+					continue;
+				}
+				if(loopOther.getLeadingVehicle()!=null &&
+						lAircraft.getConflictVehicle() !=null &&
+						loopOther.getLeadingVehicle().equals(lAircraft)&&
+						lAircraft.getConflictVehicle().equals(loopOther)) {					
+					lAircraft.setConflictVehicle(null);
+					lAircraft.setMoveState(new CAircraftTaxiingMoveState());
+					continue;
+				}
 					
 					
 				// Ignore when other aircraft has this aircraft as conflict vehicle					

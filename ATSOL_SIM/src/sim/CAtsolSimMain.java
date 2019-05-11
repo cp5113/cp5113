@@ -1,6 +1,7 @@
 package sim;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.lang.reflect.Field;
@@ -99,7 +100,12 @@ public class CAtsolSimMain {
 	private static CAirspaceTable			iAirspaceTable  	= new CAirspaceTable();
 	private static List<IDrawingObject> iDrawingObjectList = Collections.synchronizedList(new ArrayList<IDrawingObject>());
 	
+	private static BufferedWriter			iOutputFileTrajectoryWriter   = null;
+	private static BufferedWriter			iOutputFileATCWriter   = null;
+	
 	private static String					iProjectFileName   = null;
+	private static String					iOutputFileTrajectory			= null;
+	private static String					iOutputFileATC		= null;
 	
 	// Graphic Control
 	private static CCoordination iViewPoint;	
@@ -126,9 +132,10 @@ public class CAtsolSimMain {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		iProjectFileName = "C:\\\\Users\\\\cp511\\\\git\\\\cp5113\\\\ATSOL_SIM\\\\SimStudy\\\\Test001_Project.txt";
+		iProjectFileName 	= "C:\\\\Users\\\\cp511\\\\git\\\\cp5113\\\\ATSOL_SIM\\\\SimStudy\\\\Test001_Project.txt";
 		System.out.println("Loading Project : " + iProjectFileName);
-		
+		iOutputFileTrajectory 		= "C:\\\\Users\\\\cp511\\\\git\\\\cp5113\\\\ATSOL_SIM\\\\SimStudy\\\\reports\\\\Test001_Project_Trajectory.csv";
+		iOutputFileATC		 		= "C:\\\\Users\\\\cp511\\\\git\\\\cp5113\\\\ATSOL_SIM\\\\SimStudy\\\\reports\\\\Test001_Project_ATC.csv";
 		CAtsolSimMain.getInstance().connectTable();
 		CAtsolSimMain.getInstance().loadEnvironment(new File(iProjectFileName));		
 		CAtsolSimMain.getInstance().createDrawingObjectList();
@@ -384,6 +391,30 @@ public class CAtsolSimMain {
 		return iAirspaceTable;
 	}
 	
+	public static synchronized String getOutputFileTrajectory() {
+		return iOutputFileTrajectory;
+	}
+	public static synchronized void setOutputFileTrajectory(String aIOutputFileLocation) {
+		iOutputFileTrajectory = aIOutputFileLocation;
+	}
+	public static synchronized String getOutputFileATC() {
+		return iOutputFileATC;
+	}
+	public static synchronized void setOutputFileATC(String aIOutputFileLocation) {
+		iOutputFileATC = aIOutputFileLocation;
+	}
+	public static synchronized BufferedWriter getOutputFileTrajectoryWriter() {
+		return iOutputFileTrajectoryWriter;
+	}
+	public static synchronized void setOutputFileTrajectoryWriter(BufferedWriter aIOutputFileTrajectoryWriter) {
+		iOutputFileTrajectoryWriter = aIOutputFileTrajectoryWriter;
+	}
+	public static synchronized BufferedWriter getOutputFileATCWriter() {
+		return iOutputFileATCWriter;
+	}
+	public static synchronized void setOutputFileATCWriter(BufferedWriter aIOutputFileATCWriter) {
+		iOutputFileATCWriter = aIOutputFileATCWriter;
+	}
 	
 	/*
 	================================================================

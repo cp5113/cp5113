@@ -5,7 +5,10 @@
  */
 package elements.mobile.vehicle;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import api.CAircraftMoveStateAPI;
 import api.CChangeAircraftMoveState;
@@ -495,7 +498,8 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 				if((this.getMoveState() instanceof CAircraftTaxiingMoveState) && 
 					this.getATCController() instanceof CLocalController &&
 					this.getMovementMode() == EAircraftMovementMode.TAXIING	&& this.getMode() == EMode.DEP &&					
-					this.calculateRemainingRouteDistance(this.getDepartureRunway().findEnteringNodeForDeparture()) < 150) {					
+					this.calculateRemainingRouteDistance(this.getDepartureRunway().findEnteringNodeForDeparture()) < 150 &&
+					this.getLeadingVehicle() == null) {					
 					((CLocalController)iATCController).requestLineUp((CAircraft) this);
 				}
 				
@@ -686,6 +690,26 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 			
 			// Move This Aircraft
 			doMoveVehicle();
+			
+			// Write to file
+			if(!(this.getMoveState() instanceof CAircraftNothingMoveState)) {
+				try {				
+					CAtsolSimMain.getOutputFileTrajectoryWriter().write(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(iCurrentTimeInMilliSecond)) + "," + 
+							this.getCurrentFlightPlan().getCallsign() + "," + 
+							this.toString() + "," + 
+							this.getMode()  + "," + 
+							this.getMovementMode()  + "," + 
+							this.getMovementStatus() + "," +
+							this.getMoveState().getClass().getSimpleName() + "," + 
+							this.getCurrentLink() + "," + 
+							this.getCurrentNode() + "," + 
+							this.getCurrentPosition() + "," + 
+							this.getCurrentAltitude().getAltitude()  + "," + 
+							this.getCurrentVelocity().getVelocity() + "\n");
+				} catch (IOException e1) {
+					System.err.println("AAircraft : Writing Error");
+				}
+			}
 						
 			// Debugging
 			if(iCurrentTimeInMilliSecond != ((CSimClockOberserver) iSimClockObserver).getCurrentTIme().getTimeInMillis()) {

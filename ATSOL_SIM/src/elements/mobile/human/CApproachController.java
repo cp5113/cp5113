@@ -41,8 +41,11 @@ package elements.mobile.human;
  */
 
 import java.awt.Graphics2D;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Random;
 
 import api.CAssignRunwayAPI;
@@ -66,6 +69,7 @@ import elements.util.geo.CCoordination;
 import elements.util.geo.EGEOUnit;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import sim.CAtsolSimMain;
 import sim.clock.ISimClockOberserver;
 import sim.gui.control.CAtsolSimGuiControl;
 import util.performance.CApproachAircraftPerformance;
@@ -190,6 +194,22 @@ public class CApproachController extends AATCController {
 		lFlightPlan.setArrivalSpot(lCandidateSpot);
 		lCandidateSpot.getVehicleWillUseList().add(aAircraft);
 		aAircraft.setMoveState(new CAircraftApproachMoveState());
+		
+		long lLandingInstructionTime = calculateLandingInstructionTime(aAircraft);
+		this.setNextEventTime(iCurrentTimeInMilliSecond+lLandingInstructionTime);
+		aAircraft.setNextEventTime(iCurrentTimeInMilliSecond+lLandingInstructionTime);
+		
+		// Write
+		try {
+			CAtsolSimMain.getOutputFileATCWriter().write(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(iCurrentTimeInMilliSecond)) + "," + 
+					this.toString()+ "," + 
+					lFlightPlan.getCallsign()+ "," + 
+					"Landing"+ "," + 
+					(long)(lLandingInstructionTime/1000) + "\n");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	

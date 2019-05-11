@@ -41,9 +41,12 @@ package elements.mobile.human;
  */
 
 import java.awt.Graphics2D;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -345,10 +348,26 @@ public class CGroundController extends AATCController {
 				aAircraft.setNextEventTime(iCurrentTimeInMilliSecond + lPushbackInstructionTimeMilliSec);
 				this.setNextEventTime(iCurrentTimeInMilliSecond + lPushbackInstructionTimeMilliSec);
 				iPushbackAircraftList.add(aAircraft);
+				
+				
+				// Write
+				try {
+					CAtsolSimMain.getOutputFileATCWriter().write(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(iCurrentTimeInMilliSecond)) + "," + 
+							this.toString()+ "," + 
+							lFlightPlan.getCallsign()+ "," + 
+							"Pushback"+ "," + 
+							(long)(lPushbackInstructionTimeMilliSec/1000) + "\n");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
 			}
 
 		}
+		
+		
+		
 	}
 
 	public synchronized void requestTaxiToRunway(CAircraft aAircraft) {
@@ -428,6 +447,21 @@ public class CGroundController extends AATCController {
 		this.setNextEventTime(iCurrentTimeInMilliSecond + lTaxiInstructionTimeMilliSec);
 		iPushbackAircraftList.remove(aAircraft);
 		lFlightPlan.getDepartureSpot().getVehicleWillUseList().remove(aAircraft);
+		
+		
+		
+		// Write
+		try {
+			CAtsolSimMain.getOutputFileATCWriter().write(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(iCurrentTimeInMilliSecond)) + "," + 
+					this.toString()+ "," + 
+					lFlightPlan.getCallsign()+ "," + 
+					"Taxi"+ "," + 
+					(long)(lTaxiInstructionTimeMilliSec/1000) + "\n");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 
@@ -684,7 +718,7 @@ public class CGroundController extends AATCController {
 
 
 		// Verify Arrival or departure		
-		if(lFlightPlan.getOriginationAirport().equalsIgnoreCase(lAirportControl.getAirportICAO())) { // Departure
+		if(lFlightPlan.getOriginationAirport().equalsIgnoreCase(lAirportControl.getAirportICAO()) && (aAircraft.getMoveState() instanceof CAircraftNothingMoveState)) { // Departure
 			// Validate Departure Spot
 			CSpot lSpotAssigned = assignSpot(aAircraft, lFlightPlan.getDepartureSpot());
 			if(lSpotAssigned!=null) {
@@ -708,7 +742,19 @@ public class CGroundController extends AATCController {
 			aAircraft.setMode(EMode.DEP);
 
 			// Set Departure Turnaround Time
-			aAircraft.setNextEventTime(iCurrentTimeInMilliSecond + new CTurnaroundTime().getBeforeDepartureTurnaroundTimeInSeconds(aAircraft, lAirportControl)*1000); 
+			aAircraft.setNextEventTime(iCurrentTimeInMilliSecond + new CTurnaroundTime().getBeforeDepartureTurnaroundTimeInSeconds(aAircraft, lAirportControl)*1000);
+			
+			
+			// Write
+			try {
+				CAtsolSimMain.getOutputFileATCWriter().write(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(iCurrentTimeInMilliSecond)) + "," + 
+						this.toString()+ "," + 
+						aAircraft.getCurrentFlightPlan().getCallsign()+ "," + 
+						"AssignSpot(NonWork)->" + lFlightPlan.getDepartureSpot()+ "," + 
+						(long)(0) + "\n");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 
 		}else if(aAircraft.getMode() == EMode.ARR) { // Arrival
 
@@ -727,7 +773,16 @@ public class CGroundController extends AATCController {
 			}else {
 				this.setNextEventTime(this.getNextEventTime() + instructionTime);
 			}
-
+			// Write
+			try {
+				CAtsolSimMain.getOutputFileATCWriter().write(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(iCurrentTimeInMilliSecond)) + "," + 
+						this.toString()+ "," + 
+						aAircraft.getCurrentFlightPlan().getCallsign()+ "," + 
+						"Taxi"+ "," + 
+						(long)(instructionTime/1000) + "\n");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 
 		}else {
 			System.err.println("Ground Controller : Hand on and Assign Spot and reconstruct Flight Plan is not developed");
@@ -803,8 +858,14 @@ public class CGroundController extends AATCController {
 		
 		// Find Route
 		List<CTaxiwayNode> lOD = new ArrayList<CTaxiwayNode>();
-		lOD.add(((CTaxiwayNode) lFlightPlan.getNode(0))); // CurrentNode
-		lOD.add((CTaxiwayNode) aAircraft.getRunwayEntryPoint()); // Destination Node		
+		if(aAircraft.getMode() == EMode.DEP) {
+			lOD.add(((CTaxiwayNode) lFlightPlan.getNode(0))); // CurrentNode
+			lOD.add((CTaxiwayNode) aAircraft.getRunwayEntryPoint()); // Destination Node			
+		}else {
+			lOD.add(((CTaxiwayNode) lFlightPlan.getNode(0))); // CurrentNode
+			lOD.add((CTaxiwayNode) lFlightPlan.getArrivalSpot().getTaxiwayNode()); // Destination Node
+		}
+				
 		LinkedList<CTaxiwayNode> lRouteList =  (LinkedList<CTaxiwayNode>) iRoutingAlgorithm.findShortedPathIgnoreNodeList(aAircraft,lOD,lOtherACRoute);	
 		
 		

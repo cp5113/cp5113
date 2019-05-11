@@ -403,8 +403,9 @@ public class CAircraftTaxiingMoveState implements IVehicleMoveState {
 				//				if(lAircraft.getMovementMode() != EAircraftMovementMode.PUSHBACK) {
 				lTaxiwayLink.removeFromOccupyingSchedule(lAircraft);
 				//				}
-
-				lAircraft.getCurrentNode().getVehicleWillUseList().remove(lAircraft.getCurrentNode().getVehicleWillUseList().indexOf(lAircraft));
+				if(lAircraft.getCurrentNode().getVehicleWillUseList().contains(lAircraft)) {
+					lAircraft.getCurrentNode().getVehicleWillUseList().remove(lAircraft);
+				}
 				// When reach end of taxiway link
 				// Remove this node from flight plan
 				lFlightPlan.removePlanItem(lFlightPlan.getNode(0));
@@ -437,6 +438,8 @@ public class CAircraftTaxiingMoveState implements IVehicleMoveState {
 		ArrayList<ACuseSameNode> lSameNodeACList = new ArrayList<ACuseSameNode>();
 		ArrayList<AVehicle>      lSameNodeACListV = new ArrayList<AVehicle>();
 		double lRemainingDistance = 999999999999.0;
+		CAirport lAirport = (CAirport) ((ANode)aAircraft.getCurrentFlightPlan().getNode(0)).getOwnerObject();
+		double lLonggestDistance = lAirport.getLonggestLinkLength();
 		
 //		if(aAircraft.toString().equalsIgnoreCase("HL8225")) {
 //			System.out.println();
@@ -591,8 +594,9 @@ public class CAircraftTaxiingMoveState implements IVehicleMoveState {
 					loopSameNodeAC.iDistanceBtwAircraft = aAircraft.calculateRemainingRouteDistance(loopSameNodeAC.iNode)-loopSameNodeAC.iAircraft.calculateRemainingRouteDistance(loopSameNodeAC.iNode);
 //					System.out.println(loopSameNodeAC.iDistanceBtwAircraft);
 //					System.out.println(aAircraft.getVehcleType().getSafetyDistanceLength() + lMaximumStoppingDistanceThisAC*2 + lMaximumStoppingDistanceThisAC*0.1);
-					if(loopSameNodeAC.iDistanceBtwAircraft <=  aAircraft.getVehcleType().getSafetyDistanceLength() + lMaximumStoppingDistanceThisAC*2 + lMaximumStoppingDistanceThisAC*0.1) {
-
+//					if(loopSameNodeAC.iDistanceBtwAircraft <=  aAircraft.getVehcleType().getSafetyDistanceLength() + lMaximumStoppingDistanceThisAC*2 + lMaximumStoppingDistanceThisAC*0.1) {
+					if(loopSameNodeAC.iDistanceBtwAircraft <=  aAircraft.getVehcleType().getSafetyDistanceLength() + lLonggestDistance) {
+						
 						if(loopSameNodeAC.iAircraft.getLeadingVehicle()==null || !loopSameNodeAC.iAircraft.getLeadingVehicle().equals(aAircraft)) {	
 							aAircraft.setLeadingVehicle(loopSameNodeAC.iAircraft);
 							return loopSameNodeAC.iDistanceBtwAircraft;	

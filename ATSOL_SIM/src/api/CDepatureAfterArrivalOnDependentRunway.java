@@ -45,8 +45,12 @@ public class CDepatureAfterArrivalOnDependentRunway implements IDepatureAfterArr
 
 	public boolean issueTakeoffClearance(CRunway aDependentRunway, CAircraft aDepartureAircraft, CAircraft aArrivalAircraft) {
 		
-		// Takeoff after touchdown
-		if(!(aArrivalAircraft.getMoveState() instanceof CAircraftLandingMoveState)) {
+		// Calculate Remaining Aircraft
+		double lRemainingDistanceArrival = aArrivalAircraft.calculateDistanceBtwCoordination(aArrivalAircraft.getCurrentPosition(), aDependentRunway.getTaxiwayNodeList().get(0).getCoordination());
+		
+		
+		// Takeoff after touchdown		
+		if(!(aArrivalAircraft.getMoveState() instanceof CAircraftLandingMoveState) && lRemainingDistanceArrival<=1852*2) {
 			return false;
 		}
 		
