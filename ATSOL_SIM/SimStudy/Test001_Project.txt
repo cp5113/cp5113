@@ -15,6 +15,6 @@
 @Aircraft
 \data\aircraft\AircraftType.csv
 @FlightSchedule
-\data\schedule\RKSI_20120513_06001200_FlightSchedule.csv
+\data\schedule\RKSI_20120513_06001200_withRunway_FlightSchedule.csv
 @Controller
 \data\controller\Controller.csv
