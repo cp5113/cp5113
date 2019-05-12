@@ -229,7 +229,9 @@ public class CSimClockOberserver implements ISimClockObserverable, ISimClockOber
 			notifyTimeIncrementToElement();
 			
 			
-			
+//			if(("Current Time : " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(iCurrentTIme.getTimeInMillis()))).equalsIgnoreCase("Current Time : 2012-05-13 08:56:58")) {
+//				System.out.println();
+//			}
 			
 			// Draw Map
 			CAtsolSimGuiControl.getInstance().drawDrawingObjectList();

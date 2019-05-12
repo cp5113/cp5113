@@ -14,6 +14,7 @@ import elements.facility.CTaxiwayNode;
 import elements.mobile.vehicle.AVehicle;
 import elements.mobile.vehicle.CAircraft;
 import elements.mobile.vehicle.CFlightPlan;
+import elements.network.ALink;
 import elements.network.ANode;
 import elements.property.CAircraftPerformance;
 import elements.property.CAircraftType;
@@ -153,10 +154,11 @@ public class CAircraftTaxiingMoveState implements IVehicleMoveState {
 			double lSpeedTarget = 10;
 			if(lTaxiwayLink.getSpeedLimitMps()>0 && lTaxiwayLink.getSpeedLimitMps()<=lPerformance.getTaxiingSpeedMax()) {
 				lSpeedTarget = lTaxiwayLink.getSpeedLimitMps();
-			}if(lAircraft.getMovementMode()==EAircraftMovementMode.PUSHBACK){
-				lSpeedTarget = 3.0*0.514444;
 			}else {
 				lSpeedTarget = lPerformance.getTaxiingSpeedNorm();
+			}
+			if(lAircraft.getMovementMode()==EAircraftMovementMode.PUSHBACK){
+				lSpeedTarget = 3.0*0.514444;
 			}
 			
 			double lSpeedCurrent = lAircraft.getCurrentVelocity().getVelocity();
@@ -441,7 +443,7 @@ public class CAircraftTaxiingMoveState implements IVehicleMoveState {
 		CAirport lAirport = (CAirport) ((ANode)aAircraft.getCurrentFlightPlan().getNode(0)).getOwnerObject();
 		double lLonggestDistance = lAirport.getLonggestLinkLength();
 		
-//		if(aAircraft.toString().equalsIgnoreCase("HL8225")) {
+//		if(aAircraft.toString().equalsIgnoreCase("HL7736")) {
 //			System.out.println();
 //		}
 		// Search next nodes
@@ -605,6 +607,23 @@ public class CAircraftTaxiingMoveState implements IVehicleMoveState {
 					}
 				}
 
+				// Leading/Following 2-3(Chasing from Difference Taxiway) - Triangle Problem
+//				for(ALink loopLink : loopSameNodeAC.iAircraft.getRoutingInfoLink()) {
+//					if(aAircraft.getRoutingInfoLink().contains(loopLink)) {
+//						loopSameNodeAC.iDistanceBtwAircraft = aAircraft.calculateRemainingRouteDistance(loopSameNodeAC.iNode)-loopSameNodeAC.iAircraft.calculateRemainingRouteDistance(loopSameNodeAC.iNode);
+////						System.out.println(loopSameNodeAC.iDistanceBtwAircraft);
+////						System.out.println(aAircraft.getVehcleType().getSafetyDistanceLength() + lMaximumStoppingDistanceThisAC*2 + lMaximumStoppingDistanceThisAC*0.1);
+////						if(loopSameNodeAC.iDistanceBtwAircraft <=  aAircraft.getVehcleType().getSafetyDistanceLength() + lMaximumStoppingDistanceThisAC*2 + lMaximumStoppingDistanceThisAC*0.1) {
+//						if(loopSameNodeAC.iDistanceBtwAircraft <=  aAircraft.getVehcleType().getSafetyDistanceLength() + lLonggestDistance) {
+//							
+//							if(loopSameNodeAC.iAircraft.getLeadingVehicle()==null || !loopSameNodeAC.iAircraft.getLeadingVehicle().equals(aAircraft)) {	
+//								aAircraft.setLeadingVehicle(loopSameNodeAC.iAircraft);
+//								return loopSameNodeAC.iDistanceBtwAircraft;	
+//							}
+//
+//						}
+//					}	
+//				}
 				
 			
 				

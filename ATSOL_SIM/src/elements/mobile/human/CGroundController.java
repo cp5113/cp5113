@@ -123,7 +123,12 @@ public class CGroundController extends AATCController {
 
 
 			for(int loopAC = 0; loopAC < iAircraftList.size(); loopAC++) {
-				CAircraft lAircraft = iAircraftList.get(loopAC);
+				CAircraft lAircraft;
+				try {
+					lAircraft = iAircraftList.get(loopAC);
+				}catch(Exception e) {
+					return;
+				}
 				CFlightPlan lFlightPlan = (CFlightPlan) lAircraft.getCurrentPlan();
 				long lTimeSTDThis = lFlightPlan.getScheduleTimeList().get(0).getTimeInMillis();
 

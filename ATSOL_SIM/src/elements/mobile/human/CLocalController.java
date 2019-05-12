@@ -408,17 +408,31 @@ public class CLocalController extends AATCController {
 		if(aAircraft.toString().equalsIgnoreCase("BMAL")) {
 			System.out.println();
 		}
+		
 	
 		// Ignore Link
 		CTaxiwayNode lCurrentNode = (CTaxiwayNode) aAircraft.getCurrentNode();
 		List<CTaxiwayLink> lIgnoreLink = new ArrayList<CTaxiwayLink>();
-		if(!lCurrentNode.equals(aAircraft.getExitTaxiwayNode())) {
-			for(ALink loopLink : lCurrentNode.getOwnerLinkList()) {
-				if(!loopLink.isRunnway()) {
-					lIgnoreLink.add((CTaxiwayLink) loopLink);
+//		if(!lCurrentNode.equals(aAircraft.getExitTaxiwayNode())) {
+//			for(ALink loopLink : lCurrentNode.getOwnerLinkList()) {
+//				if(!loopLink.isRunnway()) {
+//					lIgnoreLink.add((CTaxiwayLink) loopLink);
+//				}
+//			}
+//			
+//		}
+//		
+		
+		for(CTaxiwayNode loopNode : lOD) {
+			if(!loopNode.equals(aAircraft.getExitTaxiwayNode())) {
+				for(ALink loopLink : loopNode.getOwnerLinkList()) {
+					if(!loopLink.isRunnway()) {
+						lIgnoreLink.add((CTaxiwayLink) loopLink);
+					}
 				}
+			}else {
+				break;
 			}
-			
 		}
 		
 		
