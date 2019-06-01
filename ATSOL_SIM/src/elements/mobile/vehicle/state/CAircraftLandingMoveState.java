@@ -140,7 +140,7 @@ public class CAircraftLandingMoveState implements IVehicleMoveState {
 		// Exit Decision Speed
 		double lExitDecisionSpeed = new CRunwayExitDecisionSpeedAPI().calculateRunwayExitDecisionSpeed(lAircraft, lRunway);
 		if(lExitDecisionSpeed<=0) {
-			lExitDecisionSpeed = 20.5778; // m/s == 40kts
+			lExitDecisionSpeed = 50 * 0.514444; // m/s == 50kts
 		}
 		
 		

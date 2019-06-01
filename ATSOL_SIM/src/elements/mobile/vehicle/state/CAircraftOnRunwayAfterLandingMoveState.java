@@ -77,7 +77,7 @@ public class CAircraftOnRunwayAfterLandingMoveState implements IVehicleMoveState
 		CRunway					lRunway				= lAircraft.getArrivalRunway();
 		CCoordination			lThresholdCoord 	= lRunway.getTaxiwayNodeList().get(0).getCoordination();
 		CLandingPerformanceAPI 	lLandingPerformance = new CLandingPerformanceAPI();
-		double          		lAccelerationMax    = lPerformance.getDecelerationOnGroundMax();
+		double          		lAccelerationMax    = lPerformance.getDecelerationOnGroundMax()*2;
 		
 		if(lAircraft.toString().equalsIgnoreCase("HL7798")) {
 //			System.out.println("CAircraftOnRunwayAfterLandingMoveState : Debug Here");

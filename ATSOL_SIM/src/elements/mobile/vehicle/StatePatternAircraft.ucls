@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.2.3" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
+  realizations="true" associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
+  <class id="1" language="java" name="elements.mobile.vehicle.state.CAircraftLandingMoveState" project="ATSOL_SIM" 
+    file="/ATSOL_SIM/src/elements/mobile/vehicle/state/CAircraftLandingMoveState.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="554" y="395"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" sort-features="true" 
+      accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="elements.mobile.vehicle.state.CAircraftApproachMoveState" project="ATSOL_SIM" 
+    file="/ATSOL_SIM/src/elements/mobile/vehicle/state/CAircraftApproachMoveState.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="348" y="395"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" sort-features="true" 
+      accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="elements.mobile.vehicle.state.CAircraftGroundConflictStopMoveState" 
+    project="ATSOL_SIM" file="/ATSOL_SIM/src/elements/mobile/vehicle/state/CAircraftGroundConflictStopMoveState.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="374" y="513"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" sort-features="true" 
+      accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="elements.mobile.vehicle.state.CAircraftOnRunwayAfterLandingMoveState" 
+    project="ATSOL_SIM" file="/ATSOL_SIM/src/elements/mobile/vehicle/state/CAircraftOnRunwayAfterLandingMoveState.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="804" y="397"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" sort-features="true" 
+      accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="elements.mobile.vehicle.state.CAircraftLineUpMoveState" project="ATSOL_SIM" 
+    file="/ATSOL_SIM/src/elements/mobile/vehicle/state/CAircraftLineUpMoveState.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="761" y="283"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" sort-features="true" 
+      accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="elements.mobile.vehicle.state.CAircraftTakeoffMoveState" project="ATSOL_SIM" 
+    file="/ATSOL_SIM/src/elements/mobile/vehicle/state/CAircraftTakeoffMoveState.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="966" y="284"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" sort-features="true" 
+      accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="elements.mobile.vehicle.state.CAircraftNothingMoveState" project="ATSOL_SIM" 
+    file="/ATSOL_SIM/src/elements/mobile/vehicle/state/CAircraftNothingMoveState.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="347" y="281"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" sort-features="true" 
+      accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="elements.mobile.vehicle.state.CAircraftTerminationMoveState" project="ATSOL_SIM" 
+    file="/ATSOL_SIM/src/elements/mobile/vehicle/state/CAircraftTerminationMoveState.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="618" y="514"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" sort-features="true" 
+      accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="elements.mobile.vehicle.state.CAircraftTaxiingMoveState" project="ATSOL_SIM" 
+    file="/ATSOL_SIM/src/elements/mobile/vehicle/state/CAircraftTaxiingMoveState.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="553" y="282"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" sort-features="true" 
+      accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="10" language="java" name="elements.mobile.vehicle.state.IVehicleMoveState" project="ATSOL_SIM" 
+    file="/ATSOL_SIM/src/elements/mobile/vehicle/state/IVehicleMoveState.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="460" y="136"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" sort-features="true" 
+      accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="false" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="11" language="java" name="elements.mobile.vehicle.AVehicle" project="ATSOL_SIM" 
+    file="/ATSOL_SIM/src/elements/mobile/vehicle/AVehicle.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="157" y="136"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" sort-features="true" 
+      accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="12" language="java" name="elements.mobile.vehicle.AAircraft" project="ATSOL_SIM" 
+    file="/ATSOL_SIM/src/elements/mobile/vehicle/AAircraft.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="158" y="294"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" sort-features="true" 
+      accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="13" language="java" name="api.CAircraftMoveStateAPI" project="ATSOL_SIM" 
+    file="/ATSOL_SIM/src/api/CAircraftMoveStateAPI.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="829" y="512"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <realization id="14">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="10"/>  
+  </realization>  
+  <realization id="15">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="10"/>  
+  </realization>  
+  <realization id="16">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="10"/>  
+  </realization>  
+  <generalization id="17">    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="11"/>  
+  </generalization>  
+  <realization id="18">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="10"/>  
+  </realization>  
+  <realization id="19">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="10"/>  
+  </realization>  
+  <realization id="20">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="10"/>  
+  </realization>  
+  <realization id="21">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="10"/>  
+  </realization>  
+  <realization id="22">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="10"/>  
+  </realization>  
+  <association id="23">    
+    <end type="SOURCE" refId="11" navigable="false" variant="ASSOCIATION">      
+      <attribute id="24" name="iVehicleMoveState"/>      
+      <multiplicity id="25" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true" variant="ASSOCIATION"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="26">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="10"/>  
+  </realization>  
+  <realization id="27">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="10"/>  
+  </realization>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

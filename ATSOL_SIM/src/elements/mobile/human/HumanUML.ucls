@@ -1,143 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<class-diagram version="1.2.0" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
+<class-diagram version="1.2.3" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
   realizations="true" associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
   <class id="1" language="java" name="elements.mobile.human.CApproachController" project="ATSOL_SIM" 
     file="/ATSOL_SIM/src/elements/mobile/human/CApproachController.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="297" y="595"/>    
+    <position height="-1" width="-1" x="630" y="658"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="true" protected="true" private="true" static="true"/>    
+      <attributes public="true" package="false" protected="false" private="true" static="true"/>      
+      <operations public="false" package="true" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
   <class id="2" language="java" name="elements.mobile.human.CAreaController" project="ATSOL_SIM" 
     file="/ATSOL_SIM/src/elements/mobile/human/CAreaController.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="641" y="595"/>    
+    <position height="-1" width="-1" x="974" y="658"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="true" protected="true" private="true" static="true"/>    
+      <attributes public="true" package="false" protected="false" private="true" static="true"/>      
+      <operations public="false" package="true" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <interface id="3" language="java" name="elements.mobile.human.IATCController" project="ATSOL_SIM" 
-    file="/ATSOL_SIM/src/elements/mobile/human/IATCController.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="546" y="714"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </interface>  
-  <class id="4" language="java" name="elements.mobile.AMobile" project="ATSOL_SIM" 
-    file="/ATSOL_SIM/src/elements/mobile/AMobile.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="171" width="127" x="228" y="37"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="5" language="java" name="elements.mobile.human.CLocalController" project="ATSOL_SIM" 
+  <class id="3" language="java" name="elements.mobile.human.CLocalController" project="ATSOL_SIM" 
     file="/ATSOL_SIM/src/elements/mobile/human/CLocalController.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="808" y="595"/>    
+    <position height="-1" width="-1" x="1161" y="658"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="true" protected="true" private="true" static="true"/>    
+      <attributes public="true" package="false" protected="false" private="true" static="true"/>      
+      <operations public="false" package="true" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="6" language="java" name="elements.mobile.human.AATCController" project="ATSOL_SIM" 
+  <class id="4" language="java" name="elements.mobile.human.AATCController" project="ATSOL_SIM" 
     file="/ATSOL_SIM/src/elements/mobile/human/AATCController.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="524" y="461"/>    
+    <position height="-1" width="-1" x="876" y="509"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="true" protected="true" private="true" static="true"/>    
+      <attributes public="true" package="false" protected="false" private="true" static="true"/>      
+      <operations public="false" package="true" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="7" language="java" name="elements.mobile.human.AHuman" project="ATSOL_SIM" 
+  <class id="5" language="java" name="elements.mobile.human.AHuman" project="ATSOL_SIM" 
     file="/ATSOL_SIM/src/elements/mobile/human/AHuman.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="294" y="284"/>    
+    <position height="-1" width="-1" x="875" y="326"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="true" protected="true" private="true" static="true"/>    
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="true" package="false" protected="false" private="false" static="false"/>    
     </display>  
   </class>  
-  <class id="8" language="java" name="elements.mobile.human.CGroundController" project="ATSOL_SIM" 
+  <class id="6" language="java" name="elements.mobile.human.CGroundController" project="ATSOL_SIM" 
     file="/ATSOL_SIM/src/elements/mobile/human/CGroundController.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="473" y="595"/>    
+    <position height="-1" width="-1" x="806" y="658"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="true" protected="true" private="true" static="true"/>    
+      <attributes public="true" package="false" protected="false" private="true" static="true"/>      
+      <operations public="false" package="true" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="9" language="java" name="elements.mobile.human.CPilot" project="ATSOL_SIM" 
-    file="/ATSOL_SIM/src/elements/mobile/human/CPilot.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="289" y="466"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="10" language="java" name="elements.mobile.human.CGroundVehicleDriver" project="ATSOL_SIM" 
-    file="/ATSOL_SIM/src/elements/mobile/human/CGroundVehicleDriver.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="81" y="466"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <generalization id="11">    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="7"/>  
-  </generalization>  
-  <realization id="12">    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="3"/>  
-  </realization>  
-  <generalization id="13">    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="7"/>  
-  </generalization>  
-  <generalization id="14">    
-    <end type="SOURCE" refId="8"/>    
-    <end type="TARGET" refId="6"/>  
-  </generalization>  
-  <realization id="15">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="3"/>  
-  </realization>  
-  <generalization id="16">    
-    <end type="SOURCE" refId="9"/>    
-    <end type="TARGET" refId="7"/>  
-  </generalization>  
-  <realization id="17">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="3"/>  
-  </realization>  
-  <generalization id="18">    
-    <end type="SOURCE" refId="7"/>    
+  <generalization id="7">    
+    <end type="SOURCE" refId="3"/>    
     <end type="TARGET" refId="4"/>  
   </generalization>  
-  <realization id="19">    
-    <end type="SOURCE" refId="8"/>    
-    <end type="TARGET" refId="3"/>  
-  </realization>  
-  <generalization id="20">    
+  <generalization id="8">    
     <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="6"/>  
+    <end type="TARGET" refId="4"/>  
   </generalization>  
-  <generalization id="21">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="6"/>  
+  <generalization id="9">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="4"/>  
   </generalization>  
-  <generalization id="22">    
+  <generalization id="10">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="5"/>  
+  </generalization>  
+  <generalization id="11">    
     <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="6"/>  
+    <end type="TARGET" refId="4"/>  
   </generalization>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
     sort-features="false" accessors="false" visibility="true">    

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.2.3" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
+  realizations="true" associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
+  <package id="1" language="java" name="elements.mobile" project="ATSOL_SIM" file="/ATSOL_SIM/src/elements/mobile" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="321" y="258"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="2" language="java" name="util.file" project="ATSOL_SIM" file="/ATSOL_SIM/src/util/file" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="619" y="617"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="3" language="java" name="elements.facility" project="ATSOL_SIM" file="/ATSOL_SIM/src/elements/facility" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="454" y="258"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="4" language="java" name="elements.area" project="ATSOL_SIM" file="/ATSOL_SIM/src/elements/area" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="582" y="258"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="5" language="java" name="sim.gui.control" project="ATSOL_SIM" file="/ATSOL_SIM/src/sim/gui/control" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1255" y="256"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="6" language="java" name="sim" project="ATSOL_SIM" file="/ATSOL_SIM/src/sim" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1246" y="103"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="7" language="java" name="sim.gui" project="ATSOL_SIM" file="/ATSOL_SIM/src/sim/gui" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1174" y="185"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="8" language="java" name="elements.network" project="ATSOL_SIM" file="/ATSOL_SIM/src/elements/network" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="194" y="258"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="9" language="java" name="math.basic" project="ATSOL_SIM" file="/ATSOL_SIM/src/math/basic" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1199" y="622"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="10" language="java" name="api" project="ATSOL_SIM" file="/ATSOL_SIM/src/api" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1237" y="364"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="11" language="java" name="sim.gui.view" project="ATSOL_SIM" file="/ATSOL_SIM/src/sim/gui/view" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1131" y="259"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="12" language="java" name="algorithm.routing" project="ATSOL_SIM" file="/ATSOL_SIM/src/algorithm/routing" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="180" y="610"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="13" language="java" name="elements.mobile.vehicle.state" project="ATSOL_SIM" 
+    file="/ATSOL_SIM/src/elements/mobile/vehicle/state" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="412" y="413"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="14" language="java" name="api.inf" project="ATSOL_SIM" file="/ATSOL_SIM/src/api/inf" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1318" y="432"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="15" language="java" name="util.performance" project="ATSOL_SIM" file="/ATSOL_SIM/src/util/performance" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="754" y="614"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="16" language="java" name="elements.mobile.vehicle" project="ATSOL_SIM" 
+    file="/ATSOL_SIM/src/elements/mobile/vehicle" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="398" y="351"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="17" language="java" name="algorithm.separation" project="ATSOL_SIM" 
+    file="/ATSOL_SIM/src/algorithm/separation" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="329" y="609"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="18" language="java" name="elements" project="ATSOL_SIM" file="/ATSOL_SIM/src/elements" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="484" y="167"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="19" language="java" name="sim.clock" project="ATSOL_SIM" file="/ATSOL_SIM/src/sim/clock" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1335" y="191"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="20" language="java" name="elements.mobile.human" project="ATSOL_SIM" 
+    file="/ATSOL_SIM/src/elements/mobile/human" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="226" y="351"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="21" language="java" name="util" project="ATSOL_SIM" file="/ATSOL_SIM/src/util" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="676" y="545"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="22" language="java" name="elements.property" project="ATSOL_SIM" file="/ATSOL_SIM/src/elements/property" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="835" y="257"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="23" language="java" name="elements.table" project="ATSOL_SIM" file="/ATSOL_SIM/src/elements/table" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="706" y="258"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="24" language="java" name="api.user" project="ATSOL_SIM" file="/ATSOL_SIM/src/api/user" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1180" y="431"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="25" language="java" name="algorithm" project="ATSOL_SIM" file="/ATSOL_SIM/src/algorithm" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="242" y="539"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

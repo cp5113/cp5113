@@ -61,7 +61,12 @@ public class CATCInstructionTimeAPI implements IATCInstructionTime {
 
 	@Override
 	public long calculatePushbackInstructionTime(CAircraft aAircraft, AATCController aController) {
-		// TODO Auto-generated method stub
+		
+//		// If Callsign is WWW123
+//		// then communication time for pushback is 30 seconds
+//		if(aAircraft.getCurrentFlightPlan().getCallsign().equalsIgnoreCase( "WWW123")) {
+//			return 30*1000;
+//		}
 		return -9999999;
 	}
 

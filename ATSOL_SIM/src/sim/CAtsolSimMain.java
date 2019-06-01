@@ -132,10 +132,10 @@ public class CAtsolSimMain {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		iProjectFileName 	= "C:\\\\Users\\\\cp511\\\\git\\\\cp5113\\\\ATSOL_SIM\\\\SimStudy\\\\Test001_Project.txt";
+		iProjectFileName 	= "C:\\\\Users\\\\cp511\\\\git\\\\cp5113\\\\ATSOL_SIM\\\\SimStudy\\\\Test002_ROTA_Validation.txt";
 		System.out.println("Loading Project : " + iProjectFileName);
-		iOutputFileTrajectory 		= "C:\\\\Users\\\\cp511\\\\git\\\\cp5113\\\\ATSOL_SIM\\\\SimStudy\\\\reports\\\\Test001_Project_Trajectory.csv";
-		iOutputFileATC		 		= "C:\\\\Users\\\\cp511\\\\git\\\\cp5113\\\\ATSOL_SIM\\\\SimStudy\\\\reports\\\\Test001_Project_ATC.csv";
+		iOutputFileTrajectory 		= "C:\\\\Users\\\\cp511\\\\git\\\\cp5113\\\\ATSOL_SIM\\\\SimStudy\\\\reports\\\\Test002_ROTA_Validation_Trajectory.csv";
+		iOutputFileATC		 		= "C:\\\\Users\\\\cp511\\\\git\\\\cp5113\\\\ATSOL_SIM\\\\SimStudy\\\\reports\\\\Test002_ROTA_Validation_ATC.csv";
 		CAtsolSimMain.getInstance().connectTable();
 		CAtsolSimMain.getInstance().loadEnvironment(new File(iProjectFileName));		
 		CAtsolSimMain.getInstance().createDrawingObjectList();

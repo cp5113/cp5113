@@ -641,7 +641,8 @@ public abstract class AAircraft extends AVehicle implements IAircraft{
 					
 					// Escape aircraft Data
 					if(this.getPlanList().size()==0) {
-						this.setCurrentPostion(new CCoordination(-999999, -9999999));
+						this.getCurrentPosition().setXYCoordination(-99999999999.0, -999999999.0);
+						this.setCurrentVelocity(0);
 						// Clear Spot and Node
 						this.getCurrentNode().setIsOccuping(false);
 						this.getCurrentNode().getVehicleWillUseList().remove(this);					
